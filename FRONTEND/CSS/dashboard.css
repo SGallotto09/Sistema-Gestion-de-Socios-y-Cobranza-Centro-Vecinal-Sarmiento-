@@ -1,0 +1,245 @@
+:root {
+    /* FONDOS */
+    --bg-body: #F9FAFB; 
+    --bg-card: white;
+    --bg-input: white;
+
+    /* BOTONES */
+    --boton: #4CAF50;
+    --boton-hover: #43A047;
+
+    /* BORDES */
+    --border-color: #E5E7EB;
+
+    /* ICONOS */
+    --icono-azul: #2563EB;
+}
+
+.contenedor-dashboard {
+    grid-area: contenedor-general;
+
+    display: grid;
+    grid-template-areas:'header'
+                        'bimestre-actual'
+                        'datos-socios'
+                        'progreso-acceso';
+    grid-template-rows: 15% 20% 35% 30%;
+    
+    background-color: var(--bg-body);
+    padding: 20px 40px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    border-bottom: 1px solid var(--border-color);
+}
+
+.rol-usuario {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.rol-usuario svg {
+    width: 50px;
+    height: 50px;
+}
+
+.rol-usuario span {
+    font-size: 20px;
+}
+
+.bimestre-actual {
+    padding: 10px 0px;
+}
+
+.dato-bimestre {
+    width: 40%;
+    height: 100%;
+    background-color: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: 15px;
+
+    display: grid;
+    align-content: center;
+    padding: 0px 20px 0px 20px;
+}
+
+.dato-bimestre p {
+    margin: 0;
+    padding-bottom: 10px;
+}
+
+.dato-bimestre div {
+    display: flex;
+    justify-content: space-between;
+    font-size: 20px;
+}
+
+.datos-socios {
+    display: flex;
+    gap: 20px;
+}
+
+.total-socios,
+.pagaron-bimestre,
+.socios-visitados,
+.pendientes-pago {
+    width: 100%;
+    border: 2px solid var(--border-color);
+    border-radius: 15px;
+    background-color: var(--bg-card);
+
+    display: grid;
+    grid-template-areas:'icono'
+                        'h2'
+                        'parrafo';
+    grid-template-rows: 40% 40% auto;
+    padding: 25px;
+}
+
+.iconoDato {
+    grid-area: icono;
+    width: 65px;
+    height: 65px;
+    color: var(--icono-azul);
+}
+
+.cobrados {
+    color: green;
+}
+
+.pendiente {
+    color: red;
+}
+
+#h2TotalSocios,
+#h2PagaronBimestre,
+#h2SociosVisitados,
+#h2PendientesPago {
+    grid-area: h2;
+    margin: 0;
+    font-size: 40px;
+}
+
+.contenedor-parrafos {
+    grid-area: parrafo;
+    display: grid;
+    gap: 10px;
+}
+
+.contenedor-parrafos p {
+    margin: 0;
+}
+
+.progreso-acceso {
+    display: grid;
+    grid-template-areas:'progreso acceso';
+    grid-template-columns: 70% 1fr;
+    padding-top: 10px;
+    gap: 20px;
+}
+
+.progreso{
+    grid-area: progreso;
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: 15px;
+    padding: 30px;
+
+    display: grid;
+    grid-template-areas:'titulo titulo'
+                        'barra porcentaje'
+                        'parrafo parrafo';
+    grid-template-columns: 90% 10%;
+    align-items: center;
+}
+
+.titulo {
+    grid-area: titulo;
+    padding-bottom: 20px;
+    font-size: 25px;
+}
+
+.barra{
+    grid-area: barra;
+    width: 95%;
+    height: 25px;
+    background: var(--bg-body);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+}
+
+.barra-completa{
+    width: 80%;
+    height: 100%;
+    background: var(--boton);
+    border-radius: 20px;
+}
+
+#txtPorcentajeBarra {
+    grid-area: porcentaje;
+    font-size: 25px;
+}
+
+.parrafoBarra {
+    grid-area: parrafo;
+}
+
+.acceso {
+    grid-area: acceso;
+    background-color: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: 15px;
+    padding: 30px 30px 0px 30px;
+
+    display: grid;
+    grid-template-areas:'titulo'
+                        'botonSocio'
+                        'botonCobranza';
+    grid-template-rows: 20% 40% 1fr;
+}
+
+.boton-nuevoSocio,
+.boton-cobranza {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#btnNuevoSocioDashboard,
+#btnCobranzaDashboard {
+    width: 100%;
+    height: 80%;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+}
+
+#btnNuevoSocioDashboard {
+    background-color: var(--boton);
+    color: var(--bg-input);
+}
+
+#btnCobranzaDashboard {
+    background-color: var(--bg-card);
+    color: black;
+    border: 1px solid var(--boton);
+}
+
+#btnNuevoSocioDashboard:hover,
+#btnCobranzaDashboard:hover {
+    background-color: var(--boton-hover);
+    cursor: pointer;
+    color: var(--bg-input);
+    transition: 0.1s;
+}

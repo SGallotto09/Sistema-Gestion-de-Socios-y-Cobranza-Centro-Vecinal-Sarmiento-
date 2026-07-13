@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Socios</title>
+    <link rel="stylesheet" href="../CSS/style.css">
+    <link rel="stylesheet" href="../CSS/menu.css">
+    <link rel="stylesheet" href="../CSS/socios.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../JS/menu.js"></script>
+    <script src="../JS/socios.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="contenedor-general">
+        <div class="menu">
+            <div class="titulo-menu">
+                <div class="imagen">
+                    <img src="../Image/Logo Vecinal Barrio Sarmiento.png" alt="Logo Centro vecinal Sarmiento">
+                </div>
+                
+                <span>Centro Vecinal Sarmiento</span>
+            </div>
+
+            <div class="contenedor-botones-menu">
+                <div class="botones">
+                    <button class="boton" id="btnIrAHome">
+                        <div class="icono">
+                            <i data-lucide="home"></i>
+                        </div>
+                        
+                        <span>Inicio</span>
+                    </button>
+
+                    <button class="boton activo" id="btnIrASocios">
+                        <div class="icono">
+                            <i data-lucide="users"></i>
+                        </div>
+                        
+                        <span>Socios</span>
+                    </button>
+
+                    <button class="boton" id="btnIrACobranza">
+                        <div class="icono">
+                            <i data-lucide="credit-card"></i>
+                        </div>
+                        
+                        <span>Cobranza</span>
+                    </button>
+
+                    <button class="boton" id="btnIrAConfiguracion">
+                        <div class="icono">
+                            <i data-lucide="settings"></i>
+                        </div>
+                        
+                        <span>Configuración</span>
+                    </button>
+                </div>
+                
+                <div class="boton-cerrar-sesion">
+                    <button class="botonSesion" id="btnCerrarSesion">
+                        <div class="icono">
+                            <i data-lucide="log-out"></i>
+                        </div>
+                        
+                        <span>Cerrar sesión</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <section class="modal modal_cerrar_sesion" id="modalCerrarSesion">
+            <div class="modal_content_cerrar_sesion">
+                <div class="modal_header_cerrar_sesion">
+                    <h2 class="modal_title_header">Eliminar socio</h2>
+                    <h2 class="modal_close">X</h2>
+                </div>
+
+                <div class="modal_body_cerrar_sesion">
+                    <div><i data-lucide="log-out"></i></div>
+                    <h3 class="modal_title">¿Estás seguro que deseas cerrar sesión de tu cuenta?</h3>
+                </div>
+
+                <div class="modal_footer_cerrar_sesion">
+                    <button class="modal_boton_cancelar">Cancelar</button>
+                    <button class="modal_boton_accion" id="btnCerrarSesion">Cerrar sesión</button>
+                </div>
+            </div>
+        </section>
+
+        <div class="contenedor-socios">
+            <div class="header">
+                <h1>Socios</h1>
+                <button id="btnNuevoSocio">
+                    <i data-lucide="plus"></i>
+                    <span><b>Nuevo socio</b></span>
+                </button>
+            </div>
+
+            <div class="filtro-socios">
+                <div class="input-socio">
+                    <input type="text" placeholder="Buscar socio...">
+                    <div><i data-lucide="search"></i></div>
+                </div>
+                
+                <div class="select-filtro">
+                    <h2>Filtrar:</h2>
+                    <select id="selectFiltro">
+                        <option disabled selected>Filtros</option>
+                        <option>Pagados</option>
+                        <option>Visitados</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="tabla-socios">
+                <table>
+                    <tr>
+                        <th>Nº Socio</th>
+                        <th>Apellido</th>
+                        <th>Nombre</th>
+                        <th>DNI</th>
+                        <th>Telefono</th>
+                        <th>Barrio</th>
+                        <th>Calle</th>
+                        <th>Altura</th>
+                        <th>Acciones</th>
+                    </tr>
+                    <tr>
+                        <td>1001</td>
+                        <td>Gallotto</td>
+                        <td>Santiago</td>
+                        <td>47.823.673</td>
+                        <td>3562502652</td>
+                        <td>Gandolfo</td>
+                        <td>General la Valle</td>
+                        <td>153</td>
+                        <td>
+                            <i data-lucide="pencil" class="iconoTabla lapiz"></i>
+                            <i data-lucide="trash-2" class="iconoTabla tacho"></i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>1001</td>
+                        <td>Gallotto</td>
+                        <td>Santiago</td>
+                        <td>47.823.673</td>
+                        <td>3562502652</td>
+                        <td>Gandolfo</td>
+                        <td>General la Valle</td>
+                        <td>153</td>
+                        <td>
+                            <i data-lucide="pencil" class="iconoTabla lapiz"></i>
+                            <i data-lucide="trash-2" class="iconoTabla tacho"></i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>1001</td>
+                        <td>Gallotto</td>
+                        <td>Santiago</td>
+                        <td>47.823.673</td>
+                        <td>3562502652</td>
+                        <td>Gandolfo</td>
+                        <td>General la Valle</td>
+                        <td>153</td>
+                        <td>
+                            <i data-lucide="pencil" class="iconoTabla lapiz"></i>
+                            <i data-lucide="trash-2" class="iconoTabla tacho"></i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>1001</td>
+                        <td>Gallotto</td>
+                        <td>Santiago</td>
+                        <td>47.823.673</td>
+                        <td>3562502652</td>
+                        <td>Gandolfo</td>
+                        <td>General la Valle</td>
+                        <td>153</td>
+                        <td>
+                            <i data-lucide="pencil" class="iconoTabla lapiz"></i>
+                            <i data-lucide="trash-2" class="iconoTabla tacho"></i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>1001</td>
+                        <td>Gallotto</td>
+                        <td>Santiago</td>
+                        <td>47.823.673</td>
+                        <td>3562502652</td>
+                        <td>Gandolfo</td>
+                        <td>General la Valle</td>
+                        <td>153</td>
+                        <td>
+                            <i data-lucide="pencil" class="iconoTabla lapiz"></i>
+                            <i data-lucide="trash-2" class="iconoTabla tacho"></i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>1001</td>
+                        <td>Gallotto</td>
+                        <td>Santiago</td>
+                        <td>47.823.673</td>
+                        <td>3562502652</td>
+                        <td>Gandolfo</td>
+                        <td>General la Valle</td>
+                        <td>153</td>
+                        <td>
+                            <i data-lucide="pencil" class="iconoTabla lapiz"></i>
+                            <i data-lucide="trash-2" class="iconoTabla tacho"></i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>1001</td>
+                        <td>Gallotto</td>
+                        <td>Santiago</td>
+                        <td>47.823.673</td>
+                        <td>3562502652</td>
+                        <td>Gandolfo</td>
+                        <td>General la Valle</td>
+                        <td>153</td>
+                        <td>
+                            <i data-lucide="pencil" class="iconoTabla lapiz"></i>
+                            <i data-lucide="trash-2" class="iconoTabla tacho"></i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>1001</td>
+                        <td>Gallotto</td>
+                        <td>Santiago</td>
+                        <td>47.823.673</td>
+                        <td>3562502652</td>
+                        <td>Gandolfo</td>
+                        <td>General la Valle</td>
+                        <td>153</td>
+                        <td>
+                            <i data-lucide="pencil" class="iconoTabla lapiz"></i>
+                            <i data-lucide="trash-2" class="iconoTabla tacho"></i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>1001</td>
+                        <td>Gallotto</td>
+                        <td>Santiago</td>
+                        <td>47.823.673</td>
+                        <td>3562502652</td>
+                        <td>Gandolfo</td>
+                        <td>General la Valle</td>
+                        <td>153</td>
+                        <td>
+                            <i data-lucide="pencil" class="iconoTabla lapiz"></i>
+                            <i data-lucide="trash-2" class="iconoTabla tacho"></i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>1001</td>
+                        <td>Gallotto</td>
+                        <td>Santiago</td>
+                        <td>47.823.673</td>
+                        <td>3562502652</td>
+                        <td>Gandolfo</td>
+                        <td>General la Valle</td>
+                        <td>153</td>
+                        <td>
+                            <i data-lucide="pencil" class="iconoTabla lapiz"></i>
+                            <i data-lucide="trash-2" class="iconoTabla tacho"></i>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="footer">
+                <div class="texto-footer">
+                    <h3>Mostrando 1 a 10 de 350 socios</h2>
+                </div>
+
+                <div class="siguiente-pagina">
+                    <button class="btnPagina">
+                        ‹
+                    </button>
+
+                    <button class="btnPagina">
+                        1
+                    </button>
+
+                    <button class="btnPagina">
+                        2
+                    </button>
+
+                    <button class="btnPagina">
+                        3
+                    </button>
+
+                    <button class="btnPagina">
+                        ›
+                    </button>
+                </div>
+            </div>
+
+            <section class="modal modal_alta_socio" id="modalAltaSocio">
+                <div class="modal_content_alta_socio">
+                    <div class="modal_header_alta_socio">
+                        <h2 class="modal_title_header">Nuevo socio</h1>
+                        <h2 class="modal_close">X</h2>
+                    </div>
+
+                    <div class="modal_data_alta_socio">
+                        <p>Complete los siguientes campos requeridos para poder dar de alta un nuevo socio.</p>
+                    </div>
+
+                    <div class="modal_body_alta_socio">
+                        <div class="numero_socio">
+                            <h3 class="modal_title">NºSocio:</h3>
+                            <input class="input_form_alta_socio" type="text" disabled placeholder="Se genera automaticamente">
+                        </div>
+
+                        <div class="apellido_socio">
+                            <h3 class="modal_title">Apellido:</h3>
+                            <input class="input_form_alta_socio" type="text" placeholder="Ingrese el apellido">
+                        </div>
+
+                        <div class="nombre_socio">
+                            <h3 class="modal_title">Nombre:</h3>
+                            <input class="input_form_alta_socio" type="text" placeholder="Ingrese el nombre">
+                        </div>
+
+                        <div class="dni_socio">
+                            <h3 class="modal_title">DNI:</h3>
+                            <input class="input_form_alta_socio" type="text" placeholder="Ingrese el DNI">
+                        </div>
+
+                        <div class="telefono_socio">
+                            <h3 class="modal_title">Telefono:</h3>
+                            <input class="input_form_alta_socio" type="text" placeholder="Ingrese el telefono">
+                        </div>
+
+                        <div class="barrio_socio">
+                            <h3 class="modal_title">Barrio:</h3>
+                            <input class="input_form_alta_socio" type="text" placeholder="Ingrese el barrio">
+                        </div>
+
+                        <div class="calle_socio">
+                            <h3 class="modal_title">Calle:</h3>
+                            <input class="input_form_alta_socio" type="text" placeholder="Ingrese la calle">
+                        </div>
+
+                        <div class="altura_socio">
+                            <h3 class="modal_title">Altura:</h3>
+                            <input class="input_form_alta_socio" type="text" placeholder="Ingrese la altura">
+                        </div>
+                    </div>
+
+                    <div class="modal_footer_alta_socio">
+                        <button class="modal_boton_cancelar">Cancelar</button>
+                        <button class="modal_boton_accion" id="btnDarDeAltaSocio">
+                            <i data-lucide="user-round-plus"></i>
+                            Guardar socio
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="modal modal_eliminar_socio" id="modalEliminarSocio">
+                <div class="modal_content_eliminar_socio">
+                    <div class="modal_header_eliminar_socio">
+                        <h2 class="modal_title_header">Eliminar socio</h2>
+                        <h2 class="modal_close">X</h2>
+                    </div>
+
+                    <div class="modal_body_eliminar_socio">
+                        <i data-lucide="trash-2"></i>
+                        <h3 class="modal_title">¿Estás seguro que deseas eliminar este socio?</h3>
+                        <h3 class="modal_title">Esta acción no se puede deshacer.</h3>
+                    </div>
+
+                    <div class="modal_footer_eliminar_socio">
+                        <button class="modal_boton_cancelar">Cancelar</button>
+                        <button class="modal_boton_eliminar" id="btnEliminarSocio">Eliminar socio</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</body>
+</html>

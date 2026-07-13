@@ -1,0 +1,12 @@
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+.contenedor-general {
+    height: 100vh;
+
+    display: grid;
+    grid-template-areas:'menu contenedor-general';
+    grid-template-columns: 20% 1fr;
+}

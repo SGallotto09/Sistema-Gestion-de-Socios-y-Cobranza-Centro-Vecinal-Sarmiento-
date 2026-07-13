@@ -1,0 +1,471 @@
+:root {
+    /* FONDOS */
+    --bg-body: #F9FAFB; 
+    --bg-card: white;
+    --bg-input: white;
+    --bg-delete: #FCE6E4;
+    --bg-delete-hover: #F9D4CF;
+
+    /* BOTONES */
+    --boton: #4CAF50;
+    --boton-hover: #43A047;
+
+    /* LETRAS */
+    --placeholder: #4B5563; 
+
+    /* BORDES */
+    --border-color: #E5E7EB;
+
+    /* ICONOS */
+    --icon-delete: #FD2D22;
+    --icon-delete-hover: #E11D15;
+}
+
+.contenedor-socios {
+    display: grid;
+    grid-template-areas:'header'
+                        'filtro'
+                        'tabla'
+                        'footer';
+    grid-template-rows: 15% 15% 60% 10%;
+    padding: 20px 40px;
+    background-color: var(--bg-body);
+}
+
+.header {
+    grid-area: header;
+    border-bottom: 1px solid var(--border-color);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#btnNuevoSocio {
+    width: 25%;
+    height: 55%;
+    border: none;
+    outline: none;
+    background-color: var(--boton);
+    border-radius: 10px;
+    color: var(--bg-input);
+    font-size: 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+#btnNuevoSocio:hover {
+    background-color: var(--boton-hover);
+    cursor: pointer;
+    transition: 0.1s;
+}
+
+.filtro-socios {
+    grid-area: filtro;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.input-socio {
+    width: 60%;
+    height: 60%;
+    background-color: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: 15px;
+    padding-left: 10px;
+
+    display: flex;
+    align-items: center;
+}
+
+.input-socio input {
+    width: 90%;
+    height: 90%;
+
+    border: none;
+    outline: none;
+    font-size: 20px;
+}
+
+.input-socio div {
+    width: 10%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.input-socio svg {
+    width: 30px;
+    height: 30px;
+}
+
+.select-filtro {
+    width: 30%;
+    height: 60%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+#selectFiltro {
+    width: 100%;
+    height: 100%;
+    font-size: 20px;
+    background-color: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    text-align: center;
+    appearance: none;
+}
+
+.tabla-socios {
+    grid-area: tabla;
+    background-color: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: 15px;
+}
+
+.tabla-socios table {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+.tabla-socios td {
+    border-top: 1px solid var(--border-color);
+}
+
+.iconoTabla {
+    padding: 0px 15px;
+    height: 100%;
+}
+
+.iconoTabla:hover {
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+}
+
+.lapiz {
+    color: var(--boton);
+}
+
+.lapiz:hover {
+    background-color: var(--boton-hover);
+}
+
+.tacho {
+    color: red;
+}
+
+.tacho:hover {
+    background-color: rgb(255, 43, 43);
+}
+
+.footer {
+    grid-area: footer;
+
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    padding-right: 30px;
+}
+
+.texto-footer {
+    color: var(--placeholder);
+}
+
+.siguiente-pagina {
+    width: 30%;
+    display: flex;
+    justify-content: center;
+}
+
+.btnPagina {
+    font-size: 20px;
+    padding: 10px;
+    margin: 0px 10px;
+
+    border: none;
+    outline: none;
+    background-color: var(--bg-body);
+}
+
+.btnPagina:hover {
+    background-color: var(--boton-hover);
+    color: var(--bg-input);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.modal_alta_socio,
+.modal_eliminar_socio {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #111111bd;
+
+    height: auto;
+    padding: 30px;
+    gap: 25px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+}
+
+.modal--show {
+    opacity: 1;
+    pointer-events: unset;
+    transition: opacity 0.2s;
+}
+
+.modal_content_alta_socio,
+.modal_content_eliminar_socio {
+    width: 90%;
+    max-height: 100vh;
+    background-color: var(--bg-body);
+    border-radius: 10px;
+    padding: 20px 20px;
+}
+
+.modal_content_alta_socio {
+    height: 90%;
+    max-width: 800px;
+}
+
+.modal_content_eliminar_socio {
+    height: 50%;
+    max-width: 600px;
+}
+
+.modal_content_alta_socio {
+    display: grid;
+    grid-template-areas:'header'
+                        'data'
+                        'body'
+                        'footer';
+    grid-template-rows: 15% 10% 1fr 10%;
+
+    background-color: var(--bg-body);
+}
+
+.modal_header_alta_socio {
+    grid-area: header;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal_data_alta_socio {
+    grid-area: data;
+}
+
+.modal_body_alta_socio {
+    grid-area: body;
+    background-color: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+
+    display: grid;
+    grid-template-areas:'NSocio apellido nombre'
+                        'dni telefono barrio'
+                        'calle calle altura';
+    grid-template-columns: 30% 30% 30%;
+    grid-template-rows: 30% 30% 30%;
+
+    justify-content: center;
+    align-content: center;
+    gap: 0px 20px;
+
+    margin-bottom: 10px;
+}
+
+.numero_socio {
+    grid-area: NSocio;
+}
+
+.apellido_socio {
+    grid-area: apellido;
+}
+
+.nombre_socio {
+    grid-area: nombre;
+}
+
+.dni_socio {
+    grid-area: dni;
+}
+
+.telefono_socio {
+    grid-area: telefono;
+}
+
+.barrio_socio { 
+    grid-area: barrio;
+}
+
+.calle_socio {
+    grid-area: calle;
+}
+
+.altura_socio {
+    grid-area: altura;
+}
+
+.numero_socio,
+.apellido_socio,
+.nombre_socio,
+.dni_socio,
+.telefono_socio,
+.barrio_socio,
+.calle_socio,
+.altura_socio {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+}
+
+.input_form_alta_socio {
+    height: 40%;
+    font-size: 15px;
+    padding-left: 10px;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    background-color: var(--bg-body);
+}
+
+.modal_footer_alta_socio,
+.modal_footer_eliminar_socio {
+    grid-area: footer;
+
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 20px;
+}
+
+.modal_boton_cancelar,
+.modal_boton_accion,
+.modal_boton_eliminar {
+    width: 50%;
+    padding: 12px 30px;
+    font-size: 20px;
+    font-weight: 700;
+    border: none;
+    outline: none;
+}
+
+.modal_boton_cancelar {
+    background-color: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: 15px;
+}
+
+.modal_boton_cancelar:hover {
+    background-color: var(--border-color);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.modal_boton_accion {
+    background-color: var(--boton);
+    color: var(--bg-input);
+    border-radius: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.modal_boton_accion svg{
+    width: 30px;
+    height: 30px;
+}
+
+.modal_boton_accion:hover {
+    background-color: var(--boton-hover);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.modal_content_eliminar_socio {
+    display: grid;
+    grid-template-areas:'header'
+                        'body'
+                        'footer';
+    grid-template-rows: 15% 1fr 20%;
+
+    background-color: var(--bg-body);
+}
+
+.modal_header_eliminar_socio {
+    grid-area: header;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    border-bottom: 1px solid var(--border-color);
+}   
+
+.modal_body_eliminar_socio {
+    grid-area: body;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal_body_eliminar_socio svg {
+    padding: 35px;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background-color: var(--bg-delete);
+    color: var(--icon-delete);
+    margin-bottom: 15px;
+}
+
+.modal_body_eliminar_socio h3 {
+    color: var(--placeholder);
+}
+
+.modal_footer_eliminar_socio {
+    grid-area: footer;
+}
+
+.modal_boton_eliminar {
+    background-color: var(--bg-delete);
+    color: var(--icon-delete);
+    border: 2px solid var(--icon-delete);
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.modal_boton_eliminar:hover {
+    background-color: var(--bg-delete-hover);
+    color: var(--icon-delete-hover);
+    cursor: pointer;
+    transition: 0.2s;
+}

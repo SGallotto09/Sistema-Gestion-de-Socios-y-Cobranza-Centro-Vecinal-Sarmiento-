@@ -1,0 +1,168 @@
+:root {
+    /* FONDOS */
+    --bg-body: #F9FAFB; 
+    --bg-card: white;
+    --bg-input: white;
+
+    /* LETRAS */
+    --input: #111827;
+    --placeholder: #4B5563; 
+
+    /* BOTONES */
+    --boton: #4CAF50;
+    --boton-hover: #43A047;
+
+    /* BORDES */
+    --border-color: #E5E7EB;
+
+    /* ICONOS */
+    --icono-azul: #2563EB;
+}
+
+.contenedor-general-login {
+    height: 100vh;
+
+    display: grid;
+    grid-template-areas:'mensaje form'
+                        'footer footer';
+    grid-template-columns: 40% 1fr;
+    grid-template-rows: 90% 1fr;
+    background-color: var(--bg-body);
+}
+
+.contenedor-mensaje {
+    grid-area: mensaje;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.titulo-mensaje {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0px;
+    gap: 10px;
+
+    border-bottom: 1px solid var(--border-color);
+}
+
+.titulo-mensaje img {
+    width: 250px;
+    height: 250px;
+    color: var(--icono-azul);
+}
+
+.titulo-mensaje h2 {
+    margin: 0;
+    font-size: 40px;
+}
+
+.texto-mensaje {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.texto-mensaje h3 {
+    margin: 0;
+    font-size: 25px;
+    padding-top: 20px;
+}
+
+.texto-mensaje p {
+    font-size: 20px;
+}
+
+.contenedor-form {
+    grid-area: form;
+    align-content: center;
+    padding-right: 20px;
+}
+
+.form {
+    height: 60%;
+    background-color: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: 15px;
+
+    display: grid;
+    grid-template-areas:'titulo'
+                        'inputs'
+                        'boton';
+    grid-template-rows: 20% 60% 20%;
+    margin: 0px 20px 0px 20px;
+    padding: 30px;
+}
+
+.titulo-form {
+    display: flex;
+    align-items: center;
+    font-size: 25px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.inputs-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.input {
+    height: 50%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+}
+
+.input h4 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.input input {
+    height: 50%;
+    background-color: var(--bg-input);
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+
+    padding-left: 10px;
+    font-size: 20px;
+}
+
+.contenedor-boton-sesion {
+    display: flex;
+    justify-content: center;
+    align-items: end;
+}
+
+#btnIniciarSesion {
+    width: 100%;
+    height: 90%;
+    background-color: var(--boton);
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 25px;
+}
+
+#btnIniciarSesion:hover {
+    background-color: var(--boton-hover);
+    cursor: pointer;
+}
+
+.footer {
+    grid-area: footer;
+
+    text-align: center;
+    align-content: center;
+    color: var(--placeholder);
+}

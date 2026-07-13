@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Configuración</title>
+    <link rel="stylesheet" href="../CSS/style.css">
+    <link rel="stylesheet" href="../CSS/menu.css">
+    <link rel="stylesheet" href="../CSS/configuracion.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../JS/menu.js"></script>
+    <script src="../JS/configuracion.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="contenedor-general">
+        <div class="menu">
+            <div class="titulo-menu">
+                <div class="imagen">
+                    <img src="../Image/Logo Vecinal Barrio Sarmiento.png" alt="Logo Centro vecinal Sarmiento">
+                </div>
+                
+                <span>Centro Vecinal Sarmiento</span>
+            </div>
+
+            <div class="contenedor-botones-menu">
+                <div class="botones">
+                    <button class="boton" id="btnIrAHome">
+                        <div class="icono">
+                            <i data-lucide="home"></i>
+                        </div>
+                        
+                        <span>Inicio</span>
+                    </button>
+
+                    <button class="boton" id="btnIrASocios">
+                        <div class="icono">
+                            <i data-lucide="users"></i>
+                        </div>
+                        
+                        <span>Socios</span>
+                    </button>
+
+                    <button class="boton" id="btnIrACobranza">
+                        <div class="icono">
+                            <i data-lucide="credit-card"></i>
+                        </div>
+                        
+                        <span>Cobranza</span>
+                    </button>
+
+                    <button class="boton activo" id="btnIrAConfiguracion">
+                        <div class="icono">
+                            <i data-lucide="settings"></i>
+                        </div>
+                        
+                        <span>Configuración</span>
+                    </button>
+                </div>
+                
+                <div class="boton-cerrar-sesion" id="btnCerrarSesion">
+                    <button class="botonSesion">
+                        <div class="icono">
+                            <i data-lucide="log-out"></i>
+                        </div>
+                        
+                        <span>Cerrar sesión</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <section class="modal modal_cerrar_sesion" id="modalCerrarSesion">
+            <div class="modal_content_cerrar_sesion">
+                <div class="modal_header_cerrar_sesion">
+                    <h2 class="modal_title_header">Cerrar sesión</h2>
+                    <h2 class="modal_close">X</h2>
+                </div>
+
+                <div class="modal_body_cerrar_sesion">
+                    <div><i data-lucide="log-out"></i></div>
+                    <h3 class="modal_title">¿Estás seguro que deseas cerrar sesión de tu cuenta?</h3>
+                </div>
+
+                <div class="modal_footer_cerrar_sesion">
+                    <button class="modal_boton_cancelar">Cancelar</button>
+                    <button class="modal_boton_accion" id="btnCerrarSesion">Cerrar sesión</button>
+                </div>
+            </div>
+        </section>
+
+        <div class="contenedor-configuracion">
+            <div class="header">
+                <div class="titulo_header">
+                    <h2 class="title_header">Configuración</h2>
+                    <p class="parrafo_header">Gestioná las opciones y las preferencias de la aplicación.</p>
+                </div>
+
+                <div class="boton_header">
+                    <button id="btnGuardarCambios">
+                        <i data-lucide="save"></i>
+                        Guardar cambios
+                    </button>
+                </div>
+            </div>
+
+            <div class="body">
+                <div class="apariencia">
+                    <div class="header_apariencia">
+                        <h2 class="title">Apariencia</h2>
+                        <p class="parrafo_header">Personalizá el aspecto visual de la aplicación.</p>
+                    </div>
+
+                    <div class="data_apariencia">
+                        <h2 class="title">Tema de la aplicación</h2>
+                        <p class="parrafo_header">Elegí entre el modo claro o el modo oscuro</p>
+                    </div>
+
+                    <div class="contenedores_tema_apariencia">
+                        <input type="radio" id="claro" name="tema" checked>
+
+                        <label for="claro" class="tema_card" id="temaClaro">
+                            <img src="../Image/Imagen de configuracion. Tema claro.png" alt="Fondo claro">
+
+                            <div class="footer_tema">
+                                <span><b>Claro</b></span>
+
+                                <div class="radio">
+                                    ✓
+                                </div>
+                            </div>
+                        </label>
+
+                        <input type="radio" id="oscuro" name="tema">
+
+                        <label for="oscuro" class="tema_card" id="temaOscuro">
+                            <img src="../Image/Imagen de configuracion. Tema oscuro.png" alt="Fondo oscuro">
+
+                            <div class="footer_tema">
+                                <span><b>Oscuro</b></span>
+
+                                <div class="radio">
+                                    ✓
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="informacion">
+                    <div class="header_informacion">
+                        <h2 class="title">Información del sistema</h2>
+                        <p class="parrafo_header">Detalles generales de tu aplicación.</p>
+                    </div>
+
+                    <div class="body_informacion">
+                        <table>
+                            <tr>
+                                <td>
+                                    <p><b>Nombre del sistema:</b></p>
+                                    <p>Centro Vecinal Sarmiento - Sistema de Socios</p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <p><b>Versión:</b></p>
+                                    <p>1.0.0</p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <p><b>Entorno:</b></p>
+                                    <p>En desarrollo</p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <p><b>Última actualización:</b></p>
+                                    <p>07/07/2026 08:43 hs</p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <p><b>Desarrolado por:</b></p>
+                                    <p>Santiago Agustín Gallotto (UTN - San Francisco)</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
