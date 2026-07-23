@@ -1,9 +1,7 @@
 document.addEventListener('DOMContentLoaded', iniciarMenu);
 
 function iniciarMenu() {
-
     //                  VARIABLES
-
 
     // MODAL
     const modalCerrarSesion = document.getElementById('modalCerrarSesion');
@@ -16,8 +14,8 @@ function iniciarMenu() {
     const btnIrACobranza = document.getElementById('btnIrACobranza');
     const btnIrAConfiguracion = document.getElementById('btnIrAConfiguracion');
     const btnCerrarSesion = document.getElementById('btnCerrarSesion');
-
-
+    const btnCerrarSesionModal = document.getElementById('btnCerrarSesionModal');
+    
     //                  COMPORTAMIENTOS 
 
 
@@ -40,6 +38,11 @@ function iniciarMenu() {
         modalCerrarSesion.classList.add('modal--show');
     });
 
+    btnCerrarSesionModal.addEventListener('click', () => {
+        closeModal(modalCerrarSesion);
+        cerrarSesion();
+    })
+
     // TODOS LOS BOTONES PARA CANCELAR Y CERRAR MODALES
     botonesCancelar.forEach(boton => {
         boton.addEventListener('click', () => {
@@ -56,9 +59,12 @@ function iniciarMenu() {
 
     //                  FUNCIONES
 
-
     // CERRAR MODALES
     function closeModal(modal) {
         modal.classList.remove('modal--show');
+    }
+
+    function cerrarSesion() {
+        window.location.href = 'login.html';
     }
 }
