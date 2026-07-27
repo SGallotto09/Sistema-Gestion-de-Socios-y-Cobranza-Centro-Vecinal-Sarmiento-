@@ -56,7 +56,6 @@ function iniciarMenu() {
         })
     });
 
-
     //                  FUNCIONES
 
     // CERRAR MODALES

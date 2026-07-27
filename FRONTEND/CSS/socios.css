@@ -141,7 +141,7 @@
     border-collapse: collapse;
 }
 
-.tabla-socios td {
+.cuerpo_tabla td {
     border-top: 1px solid var(--border-color);
 }
 

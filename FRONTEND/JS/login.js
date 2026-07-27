@@ -25,7 +25,7 @@ function iniciarLogin() {
 
         const data = await response.json();
 
-        if (data.message === 'Acceso exitoso' && data.rol === 'administrador') {
+        if (data.message === true && data.rol === 'administrador') {
             window.location.href = 'dashboard.html';
         }
         else {
