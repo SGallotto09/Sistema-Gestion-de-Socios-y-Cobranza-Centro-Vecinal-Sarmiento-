@@ -11,6 +11,13 @@ $input = json_decode(file_get_contents('php://input'), true);
 if ($method === 'GET') {
     if (isset($_GET['accion']) && $_GET['accion'] === 'cantidad') {
         GetCantidadSocios($pdo);
+
+    } else if (isset($_GET['accion']) && $_GET['accion'] === 'nombreSocio') {
+        GetSocioPorNombre($pdo);
+
+    } else if (isset($_GET['parametro'])) {
+        GetSociosFitro($pdo, $_GET['parametro']);
+
     } else {
         GetSocios($pdo);
     }
@@ -25,7 +32,7 @@ match (($method)) {
 };
 
 function GetSocios($pdo) {
-    $query = "SELECT * FROM socio";
+    $query = "SELECT * FROM socio ORDER BY apellido ASC, nombre ASC";
 
     $stmt = $pdo->prepare($query);
 
@@ -34,6 +41,56 @@ function GetSocios($pdo) {
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     echo json_encode($result);
+}
+
+function GetSocioPorNombre($pdo) {
+    $busqueda = preg_replace('/\s+/', ' ', trim($_GET['buscar'] ?? ''));
+
+    if (empty($busqueda)) {
+        echo json_encode([]);
+        return;
+    }
+
+    $query = "SELECT * FROM socio WHERE nombre LIKE :busqueda 
+        OR apellido LIKE :busqueda
+        OR CONCAT(nombre, ' ', apellido) LIKE :busqueda
+        OR dni LIKE :busqueda
+        ORDER BY apellido ASC, nombre ASC";
+
+    $stmt = $pdo->prepare($query);
+
+    $stmt->execute([
+        ':busqueda' => "%$busqueda%"
+    ]);
+
+    $socios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    echo json_encode($socios);
+}
+
+function GetSociosFitro($pdo, $parametro) {
+    $columnasPermitidas = [
+        'id',
+        'dni',
+        'barrio',
+        'calle'
+    ];
+
+    // ESTA FUNCION COMPRUEBA SI EL VALOR DE $parametro ESTA DENTRO DEL ARRAY $columnasPermitidas
+    // LO NIEGO POR SI VALIDA Q EL VALOR ESTA DENTRO DEL ARRAY, NO ENTRE AL IF
+    if (!in_array($parametro, $columnasPermitidas, true)) {
+        $parametro = 'apellido ASC, nombre';
+    }
+
+    $query = "SELECT * FROM socio ORDER BY $parametro ASC";
+
+    $stmt = $pdo->prepare($query);
+
+    $stmt->execute();
+
+    $socios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    echo json_encode($socios);
 }
 
 function GetCantidadSocios($pdo) {
@@ -83,37 +140,46 @@ function PostSocio($pdo, $input) {
 }
 
 function PutSocio($pdo, $input) {
-    $id = validarId($input);
-    $datos = validarCampos($input);
+    try {
+        $id = validarId($input);
+        $datos = validarCampos($input);
 
-    $query = "UPDATE socio SET nombre = :nombre,
-                    apellido = :apellido,
-                    dni = :dni,
-                    telefono = :telefono,
-                    barrio = :barrio,
-                    calle = :calle,
-                    altura = :altura WHERE id = :id";
+        $query = "UPDATE socio SET nombre = :nombre,
+                        apellido = :apellido,
+                        dni = :dni,
+                        telefono = :telefono,
+                        barrio = :barrio,
+                        calle = :calle,
+                        altura = :altura WHERE id = :id";
 
-    $stmt = $pdo->prepare($query);
+        $stmt = $pdo->prepare($query);
 
-    $stmt->execute([
-        'id'       => $id,
-        'nombre'   => $datos['nombre'],
-        'apellido' => $datos['apellido'],
-        'dni'      => $datos['dni'],
-        'telefono' => $datos['telefono'],
-        'barrio'   => $datos['barrio'],
-        'calle'    => $datos['calle'],
-        'altura'   => $datos['altura'],
-    ]);
+        $stmt->execute([
+            'id'       => $id,
+            'nombre'   => $datos['nombre'],
+            'apellido' => $datos['apellido'],
+            'dni'      => $datos['dni'],
+            'telefono' => $datos['telefono'],
+            'barrio'   => $datos['barrio'],
+            'calle'    => $datos['calle'],
+            'altura'   => $datos['altura'],
+        ]);
 
-    // SI NO SE AFECTO NINGUNA FILA ES PORQUE EL SOCIO NO EXISTE O PORQUE NO SE REALIZO NINGUN CAMBIO
-    if ($stmt->rowCount() === 0) {
-        echo json_encode(['message' => 'No se realizaron cambios.']);
-        return;
+        // SI NO SE AFECTO NINGUNA FILA ES PORQUE EL SOCIO NO EXISTE O PORQUE NO SE REALIZO NINGUN CAMBIO
+        if ($stmt->rowCount() === 0) {
+            echo json_encode(['message' => 'No se realizaron cambios.']);
+            return;
+        }
+
+        echo json_encode(['message' => 'Socio actualizado correctamente.']);
+
+    } catch (Exception $e) {
+        http_response_code(400);
+
+        echo json_encode([
+            'message' => $e->getMessage()
+        ]);
     }
-
-    echo json_encode(['message' => 'Socio actualizado correctamente.']);
 }
 
 function DeleteSocio($pdo, $input) {

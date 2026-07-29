@@ -139,6 +139,14 @@
     height: 100%;
     text-align: center;
     border-collapse: collapse;
+    table-layout: fixed;
+}
+
+th,
+td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .cuerpo_tabla td {

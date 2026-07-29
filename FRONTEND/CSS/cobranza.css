@@ -147,6 +147,15 @@
     width: 100%;
     height: 100%;
     text-align: center;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+th,
+td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .tabla-socios td {
