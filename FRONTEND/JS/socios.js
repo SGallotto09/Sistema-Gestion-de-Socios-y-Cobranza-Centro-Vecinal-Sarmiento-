@@ -15,7 +15,6 @@ function iniciarSocios() {
     const btnDarDeAltaSocio = document.getElementById('btnDarDeAltaSocio');
     const btnEditarSocio = document.getElementById('btnEditarSocio');
     const btnEliminarSocio = document.getElementById('btnEliminarSocio');
-    const btnBuscarSocio = document.getElementById('btnBuscarSocio');
 
     // TABLA
     const tbodySocios = document.getElementById('tbodySocios');
@@ -30,6 +29,7 @@ function iniciarSocios() {
 
     // FILTRO
     let txtBuscarSocio = document.getElementById('txtBuscarSocio');
+    const btnBuscarSocio = document.getElementById('btnBuscarSocio');
     let txtSelectFiltro = document.getElementById('selectFiltro');
 
     // VARIABLES DE ALTA SOCIO
@@ -206,7 +206,6 @@ function iniciarSocios() {
         const totalPaginas = Math.ceil(socios.length / sociosPorPagina);
 
         for (let i = 1; i <= totalPaginas; i++) {
-
             const boton = document.createElement('button');
             boton.classList.add('btnPagina');
 
@@ -217,13 +216,10 @@ function iniciarSocios() {
             }
 
             boton.addEventListener('click', () => {
-
                 paginaActual = i;
 
                 mostrarPagina();
-
                 crearPaginacion();
-
             });
 
             contenedorPaginas.appendChild(boton);
