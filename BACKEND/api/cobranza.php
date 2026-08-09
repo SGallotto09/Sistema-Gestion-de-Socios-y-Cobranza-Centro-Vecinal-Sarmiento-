@@ -12,6 +12,17 @@ if ($method === 'GET') {
     GetSocios($pdo);
 }
 
+function GetSocios($pdo) {
+    $query = "  SELECT s.id, s.apellido, s.nombre, s.dni, s.telefono, c.estado FROM socio AS s 
+                JOIN cuota AS c ON s.id = c.id_socio";
 
+    $stmt = $pdo->prepare($query);
+
+    $stmt->execute();
+
+    $socios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    echo json_encode($socios);
+}
 
 ?>

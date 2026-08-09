@@ -115,9 +115,11 @@ function iniciarCobranza() {
 
         const sociosPagina = socios.slice(inicio, fin);
 
-        let filas = "";
+        let filas = '';
+        let divPagado = '';
 
         for (let i = 0; i < sociosPagina.length; i++) {
+
             filas += 
                 `<tr data-id="${sociosPagina[i].id}">
                     <td>${sociosPagina[i].id}</td>
@@ -132,11 +134,11 @@ function iniciarCobranza() {
                         </div>
                     </td>    
                     <td>
-                            <div class="estado">
-                                <span class="punto visitado"></span>
-                                <span>Visitado</span>
-                            </div>
-                        </td>
+                        <div class="estado">
+                            <span class="punto visitado"></span>
+                            <span>Visitado</span>
+                        </div>
+                    </td>
                     <td>
                         <i data-lucide="pencil" class="iconoTabla lapiz"></i>
                     </td>

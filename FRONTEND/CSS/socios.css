@@ -154,8 +154,9 @@ td {
 }
 
 .iconoTabla {
-    padding: 0px 15px;
+    padding: 0px 12px;
     height: 100%;
+    max-height: 40px;
 }
 
 .iconoTabla:hover {
@@ -295,7 +296,7 @@ td {
     display: grid;
     grid-template-areas:'NSocio apellido nombre'
                         'dni telefono barrio'
-                        'calle calle altura';
+                        'calle altura periodo';
     grid-template-columns: 30% 30% 30%;
     grid-template-rows: 30% 30% 30%;
 
@@ -338,6 +339,10 @@ td {
     grid-area: altura;
 }
 
+.periodo_socio {
+    grid-area: periodo;
+}
+
 .numero_socio,
 .apellido_socio,
 .nombre_socio,
@@ -345,7 +350,8 @@ td {
 .telefono_socio,
 .barrio_socio,
 .calle_socio,
-.altura_socio {
+.altura_socio,
+.periodo_socio {
     display: flex;
     flex-direction: column;
     justify-content: center;

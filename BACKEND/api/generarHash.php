@@ -1,5 +1,5 @@
 <?php
 
-echo password_hash("", PASSWORD_DEFAULT);
+echo password_hash("hola", PASSWORD_DEFAULT);
 
 ?>

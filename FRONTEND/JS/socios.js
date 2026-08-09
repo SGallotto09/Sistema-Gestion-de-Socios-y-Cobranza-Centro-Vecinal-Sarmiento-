@@ -50,6 +50,7 @@ function iniciarSocios() {
     const txtBarrioEditar = document.getElementById('txtBarrioSocioEditar');
     const txtCalleEditar = document.getElementById('txtCalleSocioEditar');
     const txtAlturaEditar = document.getElementById('txtAlturaSocioEditar');
+    const txtPeriodoEditar = document.getElementById('txtPeriodoSocioEditar');
 
     // ID PARA ELIMINAR SOCIO
     let idEliminar = '';
@@ -190,6 +191,7 @@ function iniciarSocios() {
                     <td>${sociosPagina[i].barrio}</td>
                     <td>${sociosPagina[i].calle}</td>
                     <td>${sociosPagina[i].altura}</td>
+                    <td>${sociosPagina[i].titulo}</td>
                     <td>
                         <i data-lucide="pencil" class="iconoTabla lapiz"></i>
                         <i data-lucide="trash-2" class="iconoTabla tacho"></i>
@@ -266,13 +268,15 @@ function iniciarSocios() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                nombre: txtNombreAlta.value,
                 apellido: txtApellidoAlta.value,
+                nombre: txtNombreAlta.value,
                 dni: txtDniAlta.value,
                 telefono: txtTelefonoAlta.value,
                 barrio: txtBarrioAlta.value,
                 calle: txtCalleAlta.value,
-                altura: txtAlturaAlta.value
+                altura: txtAlturaAlta.value,
+                estado: 1,
+                id_periodo: 1
             }),
         }) 
 
@@ -297,8 +301,8 @@ function iniciarSocios() {
             },
             body: JSON.stringify ({
                 id: txtIdSocioEditar.value,
-                nombre: txtNombreEditar.value,
                 apellido: txtApellidoEditar.value,
+                nombre: txtNombreEditar.value,
                 dni: txtDniEditar.value,
                 telefono: txtTelefonoEditar.value,
                 barrio: txtBarrioEditar.value,
@@ -315,6 +319,15 @@ function iniciarSocios() {
         }
 
         alert(data.message);
+
+        if (txtBuscarSocio.value !== '') {
+            txtBuscarSocio.value = '';
+        }
+
+        if (txtSelectFiltro.value !== 'Todos') {
+            txtSelectFiltro.value = 'Todos';
+        }
+
         return true;
     }
 
@@ -349,6 +362,7 @@ function iniciarSocios() {
         txtBarrioEditar.value = fila.cells[5].textContent;
         txtCalleEditar.value = fila.cells[6].textContent;
         txtAlturaEditar.value = fila.cells[7].textContent;
+        txtPeriodoEditar.value = fila.cells[8].textContent;
     }
 
     function validarCampos(nombre, apellido, dni, telefono, barrio, calle, altura) {
