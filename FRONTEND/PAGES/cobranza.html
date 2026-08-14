@@ -217,14 +217,15 @@
                     </div>
 
                     <div class="modal_body_generar_link_socio">
-                        <div class="modal_link_acceso_generar_link_socio">
-                            <h4 class="modal_title">Link de acceso (unico):</h4>
-                            <div class="modal_input_link_acceso_general_link_socio">
-                                <input type="text" id="txtAcceso" value="https://sistemasocios.com/cobro/a8f34dh2kLm" readonly>
-
-                                <button id="btnCopiar">
-                                    <i data-lucide="copy"></i>
-                                </button>
+                        <div class="modal_select_cobrador_generar_link_socio">
+                            <h4 class="modal_title">Seleccionar cobrador:</h4>
+                            <div class="modal_content_select_cobrador">
+                                <div class="select_cobrador">
+                                    <i data-lucide="user"></i>
+                                    <select id="selectCobrador">
+                                        <option value="">YAYU DJ</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
@@ -255,6 +256,92 @@
                     <div class="modal_footer_generar_link_socio">
                         <button class="modal_boton_cancelar">Cancelar</button>
                         <button class="modal_boton_accion" id="btnGenerarLink">Generar link</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="modal modal_link_generado" id="modalLinkGenerado">
+                <div class="modal_content_link_generado">
+                    <div class="modal_header_link_generado">
+                        <div class="modal_icono_check_header">
+                            <i data-lucide="circle-check-big" id="iconoCheck"></i>
+                        </div>
+                        <h2 class="modal_title_header">¡Link generado correctamente!</h1>
+                        <h2 class="modal_close">X</h2>
+                    </div>
+
+                    <div class="modal_data_link_generado">
+                        <p>El link de acceso fue generado con exito y está listo para compartir con el cobrador.</p>
+                    </div>
+
+                    <div class="modal_body_link_generado">
+                        <div class="modal_body_link_generado_cobrador_asignado">
+                            <div class="icono_info_cobrador">
+                                <i data-lucide="user" class="icono_cobrador"></i>
+                            </div>
+
+                            <div class="info_cobrador">
+                                <h4 class="modal_title">Cobrador asignado:</h4>
+                                <p class="p_texto_cobrador"><b>Santiago Gallotto</b></p>
+                                <p class="p_texto">DNI: 47.823.673</p>
+                            </div>
+                        </div>
+
+                        <div class="modal_body_link_generado_resumen">
+                            <div class="link_generado">
+                                <div class="icono_link_generado">
+                                    <i data-lucide="link" class="icono_link"></i>
+                                </div>
+                                
+                                <div class="content_link_generado">
+                                    <h4 class="modal_title">Link de acceso (unico):</h4>
+                                    <div class="modal_input_link_generado">
+                                        <input type="text" id="txtToken" value="https://sistemasocios.com/cobro/a8f34dh2kLm" readonly>
+
+                                        <button id="btnCopiar">
+                                            <i data-lucide="copy"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="valido_hasta">
+                                <div class="icono_valido_hasta">
+                                    <i data-lucide="clock" class="icono_valido"></i>
+                                </div>
+                                <div class="info_valido_hasta">
+                                    <h4 class="modal_title">Valido hasta:</h4>
+                                    <p class="p_texto">25/07/2026 18:30hs</p>
+                                </div>
+                            </div>
+
+                            <div class="duracion">
+                                <div class="icono_duracion_link">
+                                    <i data-lucide="shield" class="icono_duracion"></i>
+                                </div>
+
+                                <div class="info_duracion">
+                                    <h4 class="modal_title">Duración:</h4>
+                                    <p class="p_texto">24 horas</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal_body_link_generado_aviso">
+                            <div class="icono_aviso_link_generado">
+                                <i data-lucide="triangle-alert" class="icono_warning"></i>
+                            </div>
+
+                            <div class="aviso_link_generado">
+                                <p class="p_texto">Compartí este enlace únicamente con el cobrador asignado.</p>
+                                <p class="p_texto">Por seguridad, el link dejará de funcionar al vencer.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal_footer_link_generado">
+                        <button class="modal_boton_cancelar">Cancelar</button>
+                        <button class="modal_boton_accion" id="btnCopiarLink">Copiar link</button>
                     </div>
                 </div>
             </section>
