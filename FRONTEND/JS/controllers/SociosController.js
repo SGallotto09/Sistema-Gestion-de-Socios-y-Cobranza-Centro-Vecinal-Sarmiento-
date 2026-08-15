@@ -1,9 +1,14 @@
+import { SocioApi } from "../api/SociosApi";
+
 document.addEventListener('DOMContentLoaded', iniciarSocios);
 
 function iniciarSocios() {
     lucide.createIcons();
 
     // VARIABLES
+
+    // CLASE SocioApo
+    const socioApi = new SocioApi();
 
     // MODALES
     const modalAltaSocio = document.getElementById('modalAltaSocio');
@@ -65,7 +70,7 @@ function iniciarSocios() {
 
         if (creado) {
             closeModal(modalAltaSocio);
-            obtenerSocios();
+            cargarSocios();
         } 
     });
 
@@ -74,7 +79,7 @@ function iniciarSocios() {
 
         if (editado) {
             closeModal(modalEditarSocio);
-            obtenerSocios();
+            cargarSocios();;
         }
     });
 
@@ -83,7 +88,7 @@ function iniciarSocios() {
 
         if (eliminado) {
             closeModal(modalEliminarSocio);
-            obtenerSocios();
+            cargarSocios();;
             obtenerCantidadSocios();
         }
     });
@@ -91,9 +96,9 @@ function iniciarSocios() {
     txtBuscarSocio.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
             if (txtBuscarSocio.value.trim() === '') {
-                obtenerSocios();
+                cargarSocios();;
             } else {
-                obtenerSociosPorNombre();
+                cargarSociosPorNombre();
             }
         }
 
@@ -102,9 +107,9 @@ function iniciarSocios() {
 
     btnBuscarSocio.addEventListener('click', () => {
         if (txtBuscarSocio.value.trim() === '') {
-            obtenerSocios();
+            cargarSocios();;
         } else {
-            obtenerSociosPorNombre();
+            cargarSociosPorNombre();
         }
 
         txtSelectFiltro.value = 'Filtros';
@@ -112,9 +117,9 @@ function iniciarSocios() {
 
     txtSelectFiltro.addEventListener('change', () => {
         if (!txtSelectFiltro.value.trim() === 'Todos') {
-            obtenerSocios();
+            cargarSocios();;
         } else {
-            obtenerSociosPorFiltro();
+            cargarSociosPorFiltro();
         }
     });
 
@@ -163,13 +168,69 @@ function iniciarSocios() {
         modal.classList.remove('modal--show');
     }
 
-    async function obtenerSocios() {
-        const response = await fetch('http://localhost/Proyecto/BACKEND/api/socios.php');
-
-        socios = await response.json();
+    async function cargarSocios() {
+        socios = await socioApi.obtenerSocios();
 
         mostrarPagina();
         crearPaginacion();
+    }
+
+    async function cargarSociosPorNombre() {
+        socios = await socioApi.obtenerSociosPorNombre(txtBuscarSocio.value);
+
+        mostrarPagina();
+        crearPaginacion();
+    }
+
+    async function cargarSociosPorFiltro() {
+        socios = await socioApi.obtenerSociosPorFiltro(txtSelectFiltro.value.trim());
+
+        mostrarPagina();
+        crearPaginacion();
+    }
+
+    async function obtenerCantidadSocios() {
+        let cantidadSocios = await socioApi.obtenerCantidadSocios();
+        tituloCantiadSocios.textContent = `Mostrando 1 a 10 de ${cantidadSocios} socios`
+    }
+
+    async function darDeAltaSocio() {
+        if (validarCampos(txtNombreEditar, txtApellidoEditar, txtDniAlta, txtTelefonoEditar, txtBarrioEditar, txtCalleEditar, txtAlturaEditar)) return;
+
+        const data = await socioApi.darDeAltaSocio(
+            txtNombreAlta.value, 
+            txtApellidoAlta.value, 
+            txtDniAlta.value, 
+            txtTelefonoAlta.value, 
+            txtBarrioAlta.value, 
+            txtCalleAlta.value, 
+            txtAlturaAlta.value
+        )
+
+        alert(data.message);
+    }
+
+    async function editarSocio() {
+        if (validarCampos(txtNombreEditar, txtApellidoEditar, txtDniAlta, txtTelefonoEditar, txtBarrioEditar, txtCalleEditar, txtAlturaEditar)) return;
+
+        const data = await socioApi.editarSocio(
+            txtIdSocioEditar.value,
+            txtNombreEditar.value, 
+            txtApellidoEditar.value, 
+            txtDniEditar.value, 
+            txtTelefonoEditar.value, 
+            txtBarrioEditar.value, 
+            txtCalleEditar.value, 
+            txtAlturaEditar.value
+        );
+
+        alert(data.message);
+    }
+
+    async function eliminarSocio() {
+        const data = socioApi.eliminarSocio(idEliminar);
+
+        alert(data.message);
     }
 
     function mostrarPagina() {
@@ -226,131 +287,6 @@ function iniciarSocios() {
 
             contenedorPaginas.appendChild(boton);
         }
-    }
-
-    async function obtenerSociosPorNombre() {
-        const response = await fetch('http://localhost/Proyecto/BACKEND/api/socios.php?accion=nombreSocio&buscar=' + txtBuscarSocio.value)
-
-        socios = await response.json();
-
-        mostrarPagina();
-        crearPaginacion();
-    }
-
-    async function obtenerSociosPorFiltro() {
-        let filtro = txtSelectFiltro.value.toLowerCase();
-
-        if (filtro === 'numero socio') {
-            filtro = 'id';
-        }
-
-        const response = await fetch(`http://localhost/Proyecto/BACKEND/api/socios.php?parametro=${filtro}`)
-        
-        socios = await response.json();
-
-        mostrarPagina();
-        crearPaginacion();
-    }
-
-    async function obtenerCantidadSocios() {
-        const response = await fetch('http://localhost/Proyecto/BACKEND/api/socios.php?accion=cantidad');
-
-        const data = await response.json()
-        tituloCantiadSocios.textContent = `Mostrando 1 a 10 de ${data.cantidad} socios`;
-    }
-
-    async function darDeAltaSocio() {
-        if (!validarCampos(txtNombreAlta, txtApellidoAlta, txtDniAlta, txtTelefonoAlta, txtBarrioAlta, txtCalleAlta, txtAlturaAlta)) return;
-
-        const response = await fetch('http://localhost/Proyecto/BACKEND/api/socios.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                apellido: txtApellidoAlta.value,
-                nombre: txtNombreAlta.value,
-                dni: txtDniAlta.value,
-                telefono: txtTelefonoAlta.value,
-                barrio: txtBarrioAlta.value,
-                calle: txtCalleAlta.value,
-                altura: txtAlturaAlta.value,
-                estado: 1,
-                id_periodo: 1
-            }),
-        }) 
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            alert(data.message);
-            return;
-        }
-
-        alert(data.message);
-        return true;
-    }
-
-    async function editarSocio() {
-        if (!validarCampos(txtNombreEditar, txtApellidoEditar, txtDniEditar, txtTelefonoEditar, txtBarrioEditar, txtCalleEditar, txtAlturaEditar)) return;
-
-        const response = await fetch('http://localhost/Proyecto/BACKEND/api/socios.php', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify ({
-                id: txtIdSocioEditar.value,
-                apellido: txtApellidoEditar.value,
-                nombre: txtNombreEditar.value,
-                dni: txtDniEditar.value,
-                telefono: txtTelefonoEditar.value,
-                barrio: txtBarrioEditar.value,
-                calle: txtCalleEditar.value,
-                altura: txtAlturaEditar.value
-            }),
-        })
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            alert(data.message);
-            return;
-        }
-
-        alert(data.message);
-
-        if (txtBuscarSocio.value !== '') {
-            txtBuscarSocio.value = '';
-        }
-
-        if (txtSelectFiltro.value !== 'Todos') {
-            txtSelectFiltro.value = 'Todos';
-        }
-
-        return true;
-    }
-
-    async function eliminarSocio() {
-        const response = await fetch('http://localhost/Proyecto/BACKEND/api/socios.php', {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                id: idEliminar,
-            }),
-        })
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            alert(data.message);
-            return;
-        }
-
-        alert(data.message);
-        return true;
     }
 
     function completarCamposConDatosFila(fila) {

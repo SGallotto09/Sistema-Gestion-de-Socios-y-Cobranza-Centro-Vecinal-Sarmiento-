@@ -2,7 +2,7 @@
 
 header('Content-Type: application/json');
 
-include '../config/database.php';
+include '../database/database.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
 
@@ -10,33 +10,33 @@ $input = json_decode(file_get_contents('php://input'), true);
 
 if ($method === 'GET') {
     if (isset($_GET['accion']) && $_GET['accion'] === 'cantidad') {
-        GetCantidadSocios($pdo);
+        GetCantidadSocios($conexion);
 
     } else if (isset($_GET['accion']) && $_GET['accion'] === 'nombreSocio') {
-        GetSocioPorNombre($pdo);
+        GetSocioPorNombre($conexion);
 
     } else if (isset($_GET['parametro'])) {
-        GetSociosFiltro($pdo, $_GET['parametro']);
+        GetSociosFiltro($conexion, $_GET['parametro']);
 
     } else {
-        GetSocios($pdo);
+        GetSocios($conexion);
     }
 
     return;
 }
 
 match (($method)) {
-    'POST' => PostSocio($pdo, $input),
-    'PUT' => PutSocio($pdo, $input),
-    'DELETE' => DeleteSocio($pdo, $input),
+    'POST' => PostSocio($conexion, $input),
+    'PUT' => PutSocio($conexion, $input),
+    'DELETE' => DeleteSocio($conexion, $input),
 };
 
-function GetSocios($pdo) {
+function GetSocios($conexion) {
     $query = "  SELECT s.id, s.nombre, s.apellido, s.dni, s.telefono, s.barrio, s.calle, s.altura, s.estado, p.titulo 
                 FROM socio AS s JOIN periodo AS p ON s.id_periodo = p.id 
                 ORDER BY s.apellido ASC, s.nombre ASC  ";
 
-    $stmt = $pdo->prepare($query);
+    $stmt = $conexion->prepare($query);
 
     $stmt->execute();
 
@@ -45,7 +45,7 @@ function GetSocios($pdo) {
     echo json_encode($socios);
 }
 
-function GetSocioPorNombre($pdo) {
+function GetSocioPorNombre($conexion) {
     $busqueda = preg_replace('/\s+/', ' ', trim($_GET['buscar'] ?? ''));
 
     if (empty($busqueda)) {
@@ -61,7 +61,7 @@ function GetSocioPorNombre($pdo) {
                 OR dni LIKE :busqueda 
                 ORDER BY s.apellido ASC, s.nombre ASC  ";
 
-    $stmt = $pdo->prepare($query);
+    $stmt = $conexion->prepare($query);
 
     $stmt->execute([
         ':busqueda' => "%$busqueda%"
@@ -72,7 +72,7 @@ function GetSocioPorNombre($pdo) {
     echo json_encode($socios);
 }
 
-function GetSociosFiltro($pdo, $parametro) {
+function GetSociosFiltro($conexion, $parametro) {
     $columnasPermitidas = [
         'id',
         'dni',
@@ -90,7 +90,7 @@ function GetSociosFiltro($pdo, $parametro) {
                 FROM socio AS s JOIN periodo AS p ON s.id_periodo = p.id 
                 ORDER BY $parametro ASC  ";
 
-    $stmt = $pdo->prepare($query);
+    $stmt = $conexion->prepare($query);
 
     $stmt->execute();
 
@@ -99,10 +99,10 @@ function GetSociosFiltro($pdo, $parametro) {
     echo json_encode($socios);
 }
 
-function GetCantidadSocios($pdo) {
+function GetCantidadSocios($conexion) {
     $query = "SELECT COUNT(*) AS cantidad FROM socio";
 
-    $stmt = $pdo->prepare($query);
+    $stmt = $conexion->prepare($query);
 
     $stmt->execute();
 
@@ -111,14 +111,14 @@ function GetCantidadSocios($pdo) {
     echo json_encode($resultado);
 }
 
-function PostSocio($pdo, $input) {
+function PostSocio($conexion, $input) {
     try {
         $datos = validarCampos($input);
 
         $query = "INSERT INTO socio (nombre, apellido, dni, telefono, barrio, calle, altura, estado, id_periodo) 
                     VALUES (:nombre, :apellido, :dni, :telefono, :barrio, :calle, :altura, :estado, :id_periodo)";
 
-        $stmt = $pdo->prepare($query);
+        $stmt = $conexion->prepare($query);
 
         $stmt->execute([
             'nombre'   => $datos['nombre'],
@@ -147,7 +147,7 @@ function PostSocio($pdo, $input) {
     }
 }
 
-function PutSocio($pdo, $input) {
+function PutSocio($conexion, $input) {
     try {
         $id = validarId($input);
         $datos = validarCampos($input);
@@ -162,7 +162,7 @@ function PutSocio($pdo, $input) {
                         estado = :estado,
                         id_periodo = :id_periodo WHERE id = :id";
 
-        $stmt = $pdo->prepare($query);
+        $stmt = $conexion->prepare($query);
 
         $stmt->execute([
             'id'           => $id,
@@ -194,12 +194,12 @@ function PutSocio($pdo, $input) {
     }
 }
 
-function DeleteSocio($pdo, $input) {
+function DeleteSocio($conexion, $input) {
     $id = validarId($input);
 
     $query = "DELETE FROM socio WHERE id = :id";
 
-    $stmt = $pdo->prepare($query);
+    $stmt = $conexion->prepare($query);
 
     $stmt->execute([
         'id' => $id,
