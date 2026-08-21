@@ -1,4 +1,4 @@
-import { SocioApi } from "../api/SociosApi";
+import { SocioApi } from "../api/SociosApi.js";
 
 document.addEventListener('DOMContentLoaded', iniciarSocios);
 
@@ -93,7 +93,7 @@ function iniciarSocios() {
         }
     });
 
-    txtBuscarSocio.addEventListener("keydown", (e) => {
+    txtBuscarSocio.addEventListener("keydown", async (e) => {
         if (e.key === "Enter") {
             if (txtBuscarSocio.value.trim() === '') {
                 cargarSocios();;
@@ -105,7 +105,7 @@ function iniciarSocios() {
         txtSelectFiltro.value = 'Filtros';
     });
 
-    btnBuscarSocio.addEventListener('click', () => {
+    btnBuscarSocio.addEventListener('click', async () => {
         if (txtBuscarSocio.value.trim() === '') {
             cargarSocios();;
         } else {
@@ -115,7 +115,7 @@ function iniciarSocios() {
         txtSelectFiltro.value = 'Filtros';
     });
 
-    txtSelectFiltro.addEventListener('change', () => {
+    txtSelectFiltro.addEventListener('change', async () => {
         if (!txtSelectFiltro.value.trim() === 'Todos') {
             cargarSocios();;
         } else {
@@ -191,13 +191,13 @@ function iniciarSocios() {
 
     async function obtenerCantidadSocios() {
         let cantidadSocios = await socioApi.obtenerCantidadSocios();
-        tituloCantiadSocios.textContent = `Mostrando 1 a 10 de ${cantidadSocios} socios`
+        tituloCantiadSocios.textContent = `Mostrando 1 a 10 de ${cantidadSocios.cantidad} socios`
     }
 
     async function darDeAltaSocio() {
-        if (validarCampos(txtNombreEditar, txtApellidoEditar, txtDniAlta, txtTelefonoEditar, txtBarrioEditar, txtCalleEditar, txtAlturaEditar)) return;
+        if (!validarCampos(txtNombreAlta, txtApellidoAlta, txtDniAlta, txtTelefonoAlta, txtBarrioAlta, txtCalleAlta, txtAlturaAlta)) return;
 
-        const data = await socioApi.darDeAltaSocio(
+        const nuevoSocio = await socioApi.darDeAltaSocio(
             txtNombreAlta.value, 
             txtApellidoAlta.value, 
             txtDniAlta.value, 
@@ -207,13 +207,14 @@ function iniciarSocios() {
             txtAlturaAlta.value
         )
 
-        alert(data.message);
+        alert(nuevoSocio.message);
+        return true;
     }
 
     async function editarSocio() {
-        if (validarCampos(txtNombreEditar, txtApellidoEditar, txtDniAlta, txtTelefonoEditar, txtBarrioEditar, txtCalleEditar, txtAlturaEditar)) return;
+        if (!validarCampos(txtNombreEditar, txtApellidoEditar, txtDniEditar, txtTelefonoEditar, txtBarrioEditar, txtCalleEditar, txtAlturaEditar)) return;
 
-        const data = await socioApi.editarSocio(
+        const socioEditado = await socioApi.editarSocio(
             txtIdSocioEditar.value,
             txtNombreEditar.value, 
             txtApellidoEditar.value, 
@@ -224,13 +225,15 @@ function iniciarSocios() {
             txtAlturaEditar.value
         );
 
-        alert(data.message);
+        alert(socioEditado.message);
+        return true;
     }
 
     async function eliminarSocio() {
-        const data = socioApi.eliminarSocio(idEliminar);
+        const data = await socioApi.eliminarSocio(idEliminar);
 
         alert(data.message);
+        return true;
     }
 
     function mostrarPagina() {
@@ -378,6 +381,6 @@ function iniciarSocios() {
         return true;
     }
 
-    obtenerSocios();
+    cargarSocios();
     obtenerCantidadSocios();
 }

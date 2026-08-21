@@ -21,16 +21,16 @@ function iniciarMenu() {
 
     // NAVEGAR ENTRE PAGINAS
     btnIrAHome.addEventListener('click', () => {
-        window.location.href = '../PAGES/dashboard.html';
+        window.location.href = '../PAGES/dashboard.php';
     })
     btnIrASocios.addEventListener('click', () => {
-        window.location.href = '../PAGES/socios.html';
+        window.location.href = '../PAGES/socios.php';
     })
     btnIrACobranza.addEventListener('click', () => {
-        window.location.href = '../PAGES/cobranza.html';
+        window.location.href = '../PAGES/cobranza.php';
     })
     btnIrAConfiguracion.addEventListener('click', () => {
-        window.location.href = '../PAGES/configuracion.html';
+        window.location.href = '../PAGES/configuracion.php';
     })
 
     // CERRAR SESION
@@ -38,7 +38,7 @@ function iniciarMenu() {
         modalCerrarSesion.classList.add('modal--show');
     });
 
-    btnCerrarSesionModal.addEventListener('click', () => {
+    btnCerrarSesionModal.addEventListener('click', async () => {
         closeModal(modalCerrarSesion);
         cerrarSesion();
     })
@@ -63,7 +63,16 @@ function iniciarMenu() {
         modal.classList.remove('modal--show');
     }
 
-    function cerrarSesion() {
-        window.location.href = 'login.html';
+    async function cerrarSesion() {
+        const response = await fetch('http://localhost/Proyecto/BACKEND/controllers/LogoutController.php', {
+            method: 'POST'
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            window.location.href = 'login.html';
+            alert(data.message);
+        }
     }
 }

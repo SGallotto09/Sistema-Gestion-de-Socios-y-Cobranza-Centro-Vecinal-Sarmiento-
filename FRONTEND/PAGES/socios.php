@@ -1,3 +1,14 @@
+<?php
+
+session_start();
+
+if(!isset($_SESSION['id'])) {
+    header('Location: login.html');
+    exit;
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,7 +19,7 @@
     <link rel="stylesheet" href="../CSS/socios.css">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="../JS/controllers/MenuController.js"></script>
-    <script src="../JS/controllers/SociosController.js"></script>
+    <script type="module" src="../JS/controllers/SociosController.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>

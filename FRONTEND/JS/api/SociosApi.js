@@ -1,6 +1,6 @@
 export class SocioApi {
     async obtenerSocios() {
-        const response = await fetch('http://localhost/Proyecto/BACKEND/api/socios.php');
+        const response = await fetch('http://localhost/Proyecto/BACKEND/controllers/SocioController.php');
 
         const socios = await response.json();
 
@@ -8,7 +8,7 @@ export class SocioApi {
     }
 
     async obtenerSociosPorNombre(_busqueda) {
-        const response = await fetch('http://localhost/Proyecto/BACKEND/api/socios.php?accion=nombreSocio&buscar=' + _busqueda)
+        const response = await fetch('http://localhost/Proyecto/BACKEND/controllers/SocioController.php&buscar=' + _busqueda)
 
         const socios = await response.json();
 
@@ -22,7 +22,7 @@ export class SocioApi {
             filtro = 'id';
         }
 
-        const response = await fetch(`http://localhost/Proyecto/BACKEND/api/socios.php?parametro=${filtro}`)
+        const response = await fetch(`http://localhost/Proyecto/BACKEND/controllers/SocioController.php?parametro=${filtro}`)
         
         const socios = await response.json();
 
@@ -30,7 +30,7 @@ export class SocioApi {
     }
 
     async obtenerCantidadSocios() {
-        const response = await fetch('http://localhost/Proyecto/BACKEND/api/socios.php?accion=cantidad');
+        const response = await fetch('http://localhost/Proyecto/BACKEND/controllers/SocioController.php?accion=cantidad');
 
         const cantidadSocios = await response.json()
         
@@ -38,7 +38,7 @@ export class SocioApi {
     }
 
     async darDeAltaSocio(_nombre, _apellido, _dni, _telefono, _barrio, _calle, _altura) {
-        const response = await fetch('http://localhost/Proyecto/BACKEND/api/socios.php', {
+        const response = await fetch('http://localhost/Proyecto/BACKEND/controllers/SocioController.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -50,26 +50,22 @@ export class SocioApi {
                 telefono: _telefono,
                 barrio: _barrio,
                 calle: _calle,
-                altura: _altura,
-                activo: 1,
-                id_periodo: 1,
-                created_by: id_administrador,
-                created_at: new Date().toISOString().split('T')[0],
+                altura: _altura
             }),
         }) 
 
-        const data = await response.json();
+        const nuevoSocio = await response.json();
 
         if (!response.ok) {
-            alert(data.message);
+            alert(nuevoSocio.message);
             return;
         }
 
-        return data;
+        return nuevoSocio;
     }
 
     async editarSocio(_id, _nombre, _apellido, _dni, _telefono, _barrio, _calle, _altura) {
-        const response = await fetch('http://localhost/Proyecto/BACKEND/api/socios.php', {
+        const response = await fetch('http://localhost/Proyecto/BACKEND/controllers/SocioController.php', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -83,32 +79,27 @@ export class SocioApi {
                 barrio: _barrio,
                 calle: _calle,
                 altura: _altura,
-                updated_by: id_usuario,
-                updated_at: new Date().toISOString().split('T')[0],
             }),
         })
 
-        const data = await response.json();
+        const socioEditado = await response.json();
 
         if (!response.ok) {
             alert(data.message);
             return;
         }
 
-        return data;
+        return socioEditado;
     }
 
     async eliminarSocio(idEliminar) {
-        const response = await fetch('http://localhost/Proyecto/BACKEND/api/socios.php', {
-            method: 'PUT',
+        const response = await fetch('http://localhost/Proyecto/BACKEND/controllers/SocioController.php', {
+            method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 id: idEliminar,
-                eliminado: 1,
-                delete_by: id_administrador,
-                delete_at: new Date().toISOString().split('T')[0],
             }),
         })
 

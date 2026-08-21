@@ -1,3 +1,14 @@
+<?php
+
+session_start();
+
+if (!isset($_SESSION['id'])) {
+    header('Location: login.html');
+    exit;
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,7 +19,7 @@
     <link rel="stylesheet" href="../CSS/dashboard.css">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="../JS/controllers/MenuController.js"></script>
-    <script src="../JS/controllers/DashboardController.js"></script>
+    <script type="module" src="../JS/controllers/DashboardController.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -95,7 +106,7 @@
                 </div>
 
                 <div class="rol-usuario">
-                    <span><b>Administrador</b></span>
+                    <span id="spanNombreUsuario"><b>Administrador</b></span>
                     <i data-lucide="circle-user"></i>
                 </div>
             </div>

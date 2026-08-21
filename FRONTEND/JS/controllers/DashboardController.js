@@ -1,7 +1,10 @@
+import { SocioApi } from "../api/SociosApi.js";
+
 document.addEventListener('DOMContentLoaded', iniciarDashboard);
 
 function iniciarDashboard() {
     lucide.createIcons();  
+    const sociosApi = new SocioApi();
 
     // VARIABLES
 
@@ -10,21 +13,20 @@ function iniciarDashboard() {
     const btnIrACobranza = document.getElementById('btnCobranzaDashboard');
 
     const h2TotalSocios = document.getElementById('h2TotalSocios');
+    const spanNombreUsuario = document.getElementById('spanNombreUsuario');
 
     // COMPORTAMIENTOS
     btnIrASocios.addEventListener('click', () => {
-        window.location.href = '../PAGES/socios.html';
+        window.location.href = '../PAGES/socios.php';
     });
     btnIrACobranza.addEventListener('click', () => {
-        window.location.href = '../PAGES/cobranza.html';
+        window.location.href = '../PAGES/cobranza.php';
     });
 
-    async function obtenerCantidadSocios() {
-        const response = await fetch('http://localhost/Proyecto/BACKEND/api/socios.php?accion=cantidad');
-
-        const data = await response.json()
-        h2TotalSocios.textContent = data.cantidad;
+    async function cargarCantidadSocios() {
+        const cantidadSocios = await sociosApi.obtenerCantidadSocios();
+        h2TotalSocios.textContent = cantidadSocios.cantidad;
     }
 
-    obtenerCantidadSocios();
+    cargarCantidadSocios();
 }
