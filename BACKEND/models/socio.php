@@ -1,4 +1,5 @@
 <?php
+require_once '../models/Cuota.php';
 
 class SocioModel {
     function getSocios($conexion) {
@@ -145,10 +146,9 @@ class SocioModel {
                 'created_at'    => date('Y-m-d'),
             ]);
 
-            http_response_code(201);
-            echo json_encode([
-                'message' => 'Socio creado correctamente.'
-            ]);
+            $idSocioCreado = $conexion->lastInsertId();
+
+            return ['idSocioCreado' => $idSocioCreado];
 
         } catch (Exception $e) {
             http_response_code(400);
@@ -212,7 +212,8 @@ class SocioModel {
         try {
             $idEliminar = $this->validarId($input);
 
-            $query = "UPDATE socio SET eliminado = :eliminado, 
+            $query = "UPDATE socio SET activo = :activo,
+                        eliminado = :eliminado, 
                         deleted_by = :deleted_by, 
                         deleted_at = :deleted_at 
                         WHERE id = :id";
@@ -221,6 +222,7 @@ class SocioModel {
 
             $stmt->execute([
                 'id'         => $idEliminar,
+                'activo'     => 0,
                 'eliminado'  => 1,
                 'deleted_by' => $idUsuario,
                 'deleted_at' => date('Y-m-d')
