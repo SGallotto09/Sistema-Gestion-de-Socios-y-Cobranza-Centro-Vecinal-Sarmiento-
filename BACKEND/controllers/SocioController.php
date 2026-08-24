@@ -53,11 +53,13 @@ match (($method)) {
 
 function createSocioController($_socio, $_cadenaConexion, $_input, $_idUsuario) {
     try {
-        $idSocioCreado = $_socio->createSocio($_cadenaConexion, $_input, $_idUsuario);
+        $socioCreado = $_socio->createSocio($_cadenaConexion, $_input, $_idUsuario);
 
-        if (!empty($idSocioCreado['idSocioCreado'])) {
+        if (!empty($socioCreado['idSocioCreado'])) {
             $cuota = new CuotaModel();
-            $cuotaCreada = $cuota->createCuotaSocio($_cadenaConexion, $idSocioCreado['idSocioCreado']);
+            $cuotaCreada = $cuota->createCuotaSocio(
+                $_cadenaConexion, $socioCreado['idSocioCreado'], $socioCreado['id_periodo']
+            );
 
             if (!$cuotaCreada) {
                 http_response_code(500);

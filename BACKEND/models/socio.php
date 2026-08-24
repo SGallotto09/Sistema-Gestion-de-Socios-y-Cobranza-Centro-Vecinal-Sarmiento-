@@ -148,7 +148,10 @@ class SocioModel {
 
             $idSocioCreado = $conexion->lastInsertId();
 
-            return ['idSocioCreado' => $idSocioCreado];
+            return [
+                'idSocioCreado' => $idSocioCreado,
+                'id_periodo'    => 1
+            ];
 
         } catch (Exception $e) {
             http_response_code(400);

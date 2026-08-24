@@ -13,7 +13,7 @@ $hoy = date('Y-m-d');
 
 foreach ($cuotas as $cuota) {
     if ($cuota['fecha_vencimiento'] < $hoy) {
-        $cuotaModel->createCuotaSocio($cadenaConexion, $cuota['id_socio']);
+        $cuotaModel->createCuotaSocio($cadenaConexion, $cuota['id_socio'], $cuota['idPS']);
     }
 }
 

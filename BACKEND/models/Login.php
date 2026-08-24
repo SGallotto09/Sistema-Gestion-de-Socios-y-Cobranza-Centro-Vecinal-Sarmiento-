@@ -45,17 +45,15 @@ class LoginModel {
             $_SESSION['id'] = $usuarioEncontrado['id'];
             $_SESSION['rol'] = $usuarioEncontrado['rol'];
 
-            http_response_code(200);
-            echo json_encode([
-                'message' => 'Bienvenido al sistema!'
-            ]);
+            return true;
         }
         catch (Exception $e) {
             http_response_code(400);
-
             echo json_encode([
                 'message' => $e->getMessage()
             ]);
+
+            return false;
         }
     }
 }
