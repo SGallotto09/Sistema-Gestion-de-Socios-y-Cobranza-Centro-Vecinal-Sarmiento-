@@ -4,18 +4,18 @@ require_once '../models/Cuota.php';
 class SocioModel {
     function getSocios($conexion) {
         try {
-            $query = "  SELECT s.id, s.nombre, s.apellido, s.dni, s.telefono, s.barrio, s.calle, s.altura, p.titulo
-                    FROM socio AS s JOIN periodo AS p ON s.id_periodo = p.id AND s.eliminado IS NULL
+            $querySocios = "  SELECT s.id, s.nombre, s.apellido, s.dni, s.telefono, s.barrio, s.calle, s.altura, p.titulo
+                    FROM socio AS s 
+                    JOIN periodo AS p ON s.id_periodo = p.id AND s.eliminado IS NULL
                     ORDER BY s.apellido ASC, s.nombre ASC  ";
 
-            $stmt = $conexion->prepare($query);
+            $stmt = $conexion->prepare($querySocios);
 
             $stmt->execute();
 
             $socios = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            http_response_code(200);
-            echo json_encode($socios);
+            return $socios;
         }   
         catch (Exception $e) {
             http_response_code(404);
@@ -23,8 +23,33 @@ class SocioModel {
             echo json_encode([
                 'message' => $e->getMessage()
             ]);
+        } 
+    }
+
+    function getSociosCobranza($conexion) {
+        try {
+            $querySocios = "SELECT s.id, s.nombre, s.apellido, s.dni, s.telefono, s.barrio, s.calle, s.altura, pe.titulo, c.estado AS estadoCuota, pa.estado AS estadoPago FROM socio AS s 
+                            JOIN periodo AS pe ON s.id_periodo = pe.id 
+                            JOIN cuota AS c ON c.id_socio = s.id AND s.eliminado IS NULL
+                            JOIN pago AS pa ON pa.id_cuota = c.id
+                            ORDER BY s.apellido ASC, s.nombre ASC";
+
+            $stmt = $conexion->prepare($querySocios);
+
+            $stmt->execute();
+
+            $socios = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $socios;
         }
-        
+        catch (Exception $e) {
+            http_response_code(400);
+            echo json_encode([
+                'message' => $e->getMessage()
+            ]);
+
+            return false;
+        }
     }
 
     function getSocioPorNombre($conexion) {
@@ -52,8 +77,7 @@ class SocioModel {
 
             $socios = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            http_response_code(200);
-            echo json_encode($socios);
+            return $socios;
         }
         catch (Excpetion $e) {
             http_resposne_code(404);
@@ -89,8 +113,7 @@ class SocioModel {
 
             $socios = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            http_response_code(200);
-            echo json_encode($socios);
+            return $socios;
         }
         catch (Exception $e) {
             http_response_code(400) ;
@@ -101,25 +124,50 @@ class SocioModel {
         }
     }
 
-    function getCantidadSocios($conexion) {
-        try {
-            $query = "SELECT COUNT(*) AS cantidad FROM socio";
+    function getCantidadSocios($conexion, $busqueda) {
+        if ($busqueda === 'cobranza') {
+            try {
+                $query = "SELECT COUNT(DISTINCT s.id) AS cantidad FROM socio AS s 
+                        JOIN periodo AS pe ON s.id_periodo = pe.id 
+                        JOIN cuota AS c ON c.id_socio = s.id 
+                        AND s.eliminado IS NULL
+                        JOIN pago AS pa ON pa.id_cuota = c.id";
+                
+                $stmt = $conexion->prepare($query);
 
-            $stmt = $conexion->prepare($query);
+                $stmt->execute();
 
-            $stmt->execute();
+                $cantidad = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+                return $cantidad;
+            }
+            catch (Exception $e) {
+                http_response_code(404);
 
-            http_response_code(200);
-            echo json_encode($resultado);
+                echo json_encode([
+                    'message' => $e->getMessage()
+                ]);
+            }
         }
-        catch (Exception $e) {
-            http_response_code(404);
+        else {
+            try {
+                $query = "SELECT COUNT(*) AS cantidad FROM socio";
 
-            echo json_encode([
-                'message' => $e->getMessage()
-            ]);
+                $stmt = $conexion->prepare($query);
+
+                $stmt->execute();
+
+                $cantidad = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                return $cantidad;
+            }
+            catch (Exception $e) {
+                http_response_code(404);
+
+                echo json_encode([
+                    'message' => $e->getMessage()
+                ]);
+            }
         }
     }
 

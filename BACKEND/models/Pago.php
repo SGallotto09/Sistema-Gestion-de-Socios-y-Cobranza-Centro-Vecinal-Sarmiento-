@@ -19,19 +19,18 @@ class PagoModel {
 
             return $cuota;
         }
-        catch (Exception $e) {
+        catch (PDOException $e) {
             http_response_code(400);
-            echo json_encode([
-                'message' => $e->getMessage()
-            ]);
 
-            return false;
+            throw $e;
         }
     }
 
-    function createPagoCuotaSocio($conexion, $idCuota, $idUsuario) {
+    function registerPagoCuotaSocio($conexion, $idCuota, $idUsuario) {
         try {
-            $query = "INSERT INTO pago (created_by, created_at, estado, id_cuota)
+            $conexion->beginTransaction();
+            
+            $queryEstadoPago = "INSERT INTO pago (created_by, created_at, estado, id_cuota)
                     VALUES (:created_by, :created_at, :estado, :id_cuota)";
             
             $stmt = $conexion->prepare($query);
@@ -43,43 +42,65 @@ class PagoModel {
                 'id_cuota'   => $idCuota
             ]);
 
+            $queryEstadoCuota = "UPDATE cuota SET estado = :estado,
+                                updated_by = :updated_by,
+                                updated_at = :updated_at
+                                WHERE id = :id";
+
+            $stmt = $conexion->prepare($queryEstadoCuota);
+
+            $stmt->execute([
+                'estado'     => 1,
+                'id_cuota'   => $idCuota,
+                'updated_by' => $idUsuario,
+                'updated_at' => date('Y-m-d')
+            ]);
+            $conexion->commit();
             return true;
         }
-        catch (Exception $e) {
+        catch (PDOException $e) {
             http_response_code(400);
-            echo json_encode([
-                'message' => $e->getMessage()
-            ]);
+            $conexion->rollBack();
 
-            return false;
+            throw $e;
         }
     }   
 
-    function updatePagoCuotaSocio($conexion, $estadoPago, $idCuota, $idUsuario) {
+    function processEstadoPagoCuotaSocio($conexion, $estado, $idCuota, $idUsuario) {
         try {
-            $query = "UPDATE pago SET estado = :estado,
-                        updated_by = :updated_by,
-                        updated_at = :updated_at
-                        WHERE id_cuota = :id_cuota";
+            $conexion->beginTransaction();
 
-            $stmt = $conexion->prepare($query);
+            $queryEstadoPago = "UPDATE pago SET estado = :estado,
+                                updated_by = :updated_by,
+                                updated_at = :updated_at
+                                WHERE id_cuota = :id_cuota";
+
+            $stmt = $conexion->prepare($queryEstadoPago);
 
             $stmt->execute([
-                'estado'     => $estadoPago,
+                'estado'     => $estado,
                 'id_cuota'   => $idCuota,
                 'updated_by' => $idUsuario,
                 'updated_at' => date('Y-m-d')
             ]);
 
+            $queryEstadoCuota = "UPDATE cuota SET estado = :estado
+                                WHERE id = :id";
+
+            $stmt = $conexion->prepare($queryEstadoCuota);
+
+            $stmt->execute([
+                'estado'     => $estado,
+                'id'         => $idCuota
+            ]);
+            $conexion->commit();
             return true;
         }
-        catch (Exception $e) {
+        catch (PDOException $e) {
             http_response_code(400);
-            echo json_encode([
-                'message' => $e->getMessage()
-            ]);
+            $conexion->rollBack();
 
-            return false;
+            throw $e;
         }
     }
 }

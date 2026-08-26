@@ -36,14 +36,14 @@ function createOrUpdatePagoCuota($_cadenaConexion, $idCuota, $idUsuario) {
     if ($cuotaPagada !== null) {
         $estadoPago = (int)$cuotaPagada['estado'];
 
-        if ($cuotaPagada['estado'] == 0) {
+        if ($cuotaPagada['estado'] === 0) {
             $estadoPago = 1;
         }
-        elseif ($cuotaPagada['estado'] == 1) {
+        elseif ($cuotaPagada['estado'] === 1) {
             $estadoPago = 0;
         }
 
-        $updateado = $pagoModel->updatePagoCuotaSocio($_cadenaConexion, $estadoPago, $idCuota, $idUsuario);
+        $updateado = $pagoModel->processEstadoPagoCuotaSocio($_cadenaConexion, $estadoPago, $idCuota, $idUsuario);
 
         if (!$updateado) {
             http_response_code(400);
@@ -60,7 +60,7 @@ function createOrUpdatePagoCuota($_cadenaConexion, $idCuota, $idUsuario) {
         ]);
     }
     else {
-        $creado = $pagoModel->createPagoCuotaSocio($_cadenaConexion, $idCuota, $idUsuario);
+        $creado = $pagoModel->registerPagoCuotaSocio($_cadenaConexion, $idCuota, $idUsuario);
 
         if (!$creado) {
             http_response_code(400);

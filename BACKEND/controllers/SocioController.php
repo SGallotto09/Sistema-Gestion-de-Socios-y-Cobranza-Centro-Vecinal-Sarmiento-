@@ -1,5 +1,5 @@
 <?php
-
+/*
 session_start();
 
 if (!isset($_SESSION['id'])) {
@@ -11,7 +11,7 @@ if (!isset($_SESSION['id'])) {
 
     exit;
 }
-
+*/
 header('Content-Type: application/json');
 
 require_once '../database/database.php';
@@ -22,24 +22,43 @@ $conexion = new Conexion();
 $cadenaConexion = $conexion->obtenerConexion();
 
 $socio = new SocioModel();
-$idUsuario = $_SESSION['id'];
+$idUsuario = 1;
 
 $method = $_SERVER['REQUEST_METHOD'];
 
 $input = json_decode(file_get_contents('php://input'), true);
 
 if ($method === 'GET') {
-    if (isset($_GET['accion']) && $_GET['accion'] === 'cantidad') {
-        $socio->getCantidadSocios($cadenaConexion);
+    $socios = null;
+    $cantidadSocios = null;
+
+    if (isset($_GET['accion']) && $_GET['accion'] === 'cantidadSocios') {
+        $cantidadSocios = $socio->getCantidadSocios($cadenaConexion, null);
+
+    } else if (isset($_GET['accion']) && $_GET['accion'] === 'cantidadCobranza') {
+        $cantidadSocios = $socio->getCantidadSocios($cadenaConexion, 'cobranza');
 
     } else if (isset($_GET['accion']) && $_GET['accion'] === 'nombreSocio') {
-        $socio->getSocioPorNombre($cadenaConexion);
+        $socios = $socio->getSocioPorNombre($cadenaConexion);
+
+    } else if (isset($_GET['accion']) && $_GET['accion'] === 'cobranza') {
+        $socios = $socio->getSociosCobranza($cadenaConexion);
 
     } else if (isset($_GET['parametro'])) {
-        $socio->getSociosFiltro($cadenaConexion, $_GET['parametro']);
+        $socios =$socio->getSociosFiltro($cadenaConexion, $_GET['parametro']);
 
     } else {
-        $socio->getSocios($cadenaConexion);
+        $socios = $socio->getSocios($cadenaConexion);
+    }
+
+    if ($socios !== null) {
+        http_response_code(200);
+        echo json_encode($socios);
+    }
+
+    if ($cantidadSocios !== null) {
+        http_response_code(200);
+        echo json_encode($cantidadSocios);
     }
 
     return;

@@ -8,7 +8,7 @@ session_destroy();
 http_response_code(200);
 
 echo json_encode([
-    'message' => 'Sesión cerrada correctamente.'
+    'message' => 'Sesion cerrada correctamente.'
 ]);
 
 ?>

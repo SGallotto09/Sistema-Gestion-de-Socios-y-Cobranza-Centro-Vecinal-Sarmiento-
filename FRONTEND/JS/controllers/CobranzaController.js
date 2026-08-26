@@ -1,9 +1,13 @@
+import { SocioApi } from "../api/SociosApi.js";
 document.addEventListener('DOMContentLoaded', iniciarCobranza);
 
 function iniciarCobranza() {
     lucide.createIcons();
 
     // VARIABLES
+
+    // CLASE SOCIO
+    const socioApi = new SocioApi();
 
     // MODALES
     const modalEditarSocio = document.getElementById('modalEditarSocio');
@@ -47,9 +51,9 @@ function iniciarCobranza() {
     txtBuscarSocio.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
             if (txtBuscarSocio.value.trim() === '') {
-                obtenerSocios();
+                cargarSociosSocios();
             } else {
-                obtenerSociosPorNombre();
+                cargarSociosPorNombre();
             }
         }
 
@@ -58,9 +62,9 @@ function iniciarCobranza() {
 
     btnBuscarSocio.addEventListener('click', () => {
         if (txtBuscarSocio.value.trim() === '') {
-            obtenerSocios();
+            cargarSocios();
         } else {
-            obtenerSociosPorNombre();
+            cargarSociosPorNombre();
         }
 
         txtSelectFiltro.value = 'Filtros';
@@ -100,10 +104,8 @@ function iniciarCobranza() {
         modal.classList.add('modal--show');
     }
 
-    async function obtenerSocios() {
-        const response = await fetch('http://localhost/Proyecto/BACKEND/api/socios.php');
-
-        socios = await response.json();
+    async function cargarSocios() {
+        socios = await socioApi.obtenerSociosCobranza();
 
         mostrarPagina();
         crearPaginacion();
@@ -119,6 +121,16 @@ function iniciarCobranza() {
         let divPagado = '';
 
         for (let i = 0; i < sociosPagina.length; i++) {
+            let estadoPago = 'no-pagado';
+            let estadoVisita = 'no-visitado';
+
+            if (sociosPagina[i].estadoPago == 1) {
+                estadoPago = 'pagado';
+            }
+
+            if (sociosPagina[i].estadoVisita == 1) {
+                estadoVisita = 'visitado';
+            }
 
             filas += 
                 `<tr data-id="${sociosPagina[i].id}">
@@ -129,13 +141,13 @@ function iniciarCobranza() {
                     <td>${sociosPagina[i].telefono}</td>
                     <td>
                         <div class="estado">
-                            <span class="punto pagado"></span>
+                            <span class="punto ${estadoPago}"></span>
                             <span>Pagado</span>
                         </div>
                     </td>    
                     <td>
                         <div class="estado">
-                            <span class="punto visitado"></span>
+                            <span class="punto no-visitado"></span>
                             <span>Visitado</span>
                         </div>
                     </td>
@@ -175,37 +187,31 @@ function iniciarCobranza() {
         }
     }
 
-    async function obtenerSociosPorNombre() {
-        const response = await fetch('http://localhost/Proyecto/BACKEND/api/socios.php?accion=nombreSocio&buscar=' + txtBuscarSocio.value)
-
-        socios = await response.json();
+    async function cargarSociosPorNombre() {
+        socios = await socioApi.obtenerSociosPorNombre(txtBuscarSocio);
 
         mostrarPagina();
         crearPaginacion();
     }
 
-    async function obtenerSociosPorFiltro() {
+    async function cargarSociosPorFiltro() {
         let filtro = txtSelectFiltro.value.toLowerCase();
 
         if (filtro === 'numero socio') {
             filtro = 'id';
         }
 
-        const response = await fetch(`http://localhost/Proyecto/BACKEND/api/socios.php?parametro=${filtro}`)
-        
-        socios = await response.json();
+        socios = await socioApi.obtenerSociosPorFiltro(txtSelectFiltro)
 
         mostrarPagina();
         crearPaginacion();
     }
 
     async function obtenerCantidadSocios() {
-        const response = await fetch('http://localhost/Proyecto/BACKEND/api/socios.php?accion=cantidad');
-
-        const data = await response.json()
-        tituloCantiadSocios.textContent = `Mostrando 1 a 10 de ${data.cantidad} socios`;
+        let cantidadSocios = await socioApi.obtenerCantidadSociosCobranza();
+        tituloCantiadSocios.textContent = `Mostrando 1 a 10 de ${cantidadSocios.cantidad} socios`;
     }
 
-    obtenerSocios();
+    cargarSocios();
     obtenerCantidadSocios();
 }

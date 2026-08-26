@@ -7,6 +7,30 @@ export class SocioApi {
         return socios;
     }
 
+    async obtenerCantidadSocios() {
+        const response = await fetch('http://localhost/Proyecto/BACKEND/controllers/SocioController.php?accion=cantidadSocios');
+
+        const cantidadSocios = await response.json()
+        
+        return cantidadSocios;
+    }
+
+    async obtenerSociosCobranza() {
+        const response = await fetch('http://localhost/Proyecto/BACKEND/controllers/SocioController.php?accion=cobranza');
+
+        const socios = await response.json();
+
+        return socios;
+    }
+
+    async obtenerCantidadSociosCobranza() {
+        const response = await fetch('http://localhost/Proyecto/BACKEND/controllers/SocioController.php?accion=cantidadCobranza');
+
+        const cantidadSocios = await response.json()
+        
+        return cantidadSocios;
+    }
+
     async obtenerSociosPorNombre(_busqueda) {
         const response = await fetch('http://localhost/Proyecto/BACKEND/controllers/SocioController.php&buscar=' + _busqueda)
 
@@ -27,14 +51,6 @@ export class SocioApi {
         const socios = await response.json();
 
         return socios;
-    }
-
-    async obtenerCantidadSocios() {
-        const response = await fetch('http://localhost/Proyecto/BACKEND/controllers/SocioController.php?accion=cantidad');
-
-        const cantidadSocios = await response.json()
-        
-        return cantidadSocios;
     }
 
     async darDeAltaSocio(_nombre, _apellido, _dni, _telefono, _barrio, _calle, _altura) {

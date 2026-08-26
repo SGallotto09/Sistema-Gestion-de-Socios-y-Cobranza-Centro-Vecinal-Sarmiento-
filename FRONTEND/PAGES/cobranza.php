@@ -19,7 +19,7 @@ if(!isset($_SESSION['id'])) {
     <link rel="stylesheet" href="../CSS/cobranza.css">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="../JS/controllers/MenuController.js"></script>
-    <script src="../JS/controllers/CobranzaController.js"></script>
+    <script type="module" src="../JS/controllers/CobranzaController.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
