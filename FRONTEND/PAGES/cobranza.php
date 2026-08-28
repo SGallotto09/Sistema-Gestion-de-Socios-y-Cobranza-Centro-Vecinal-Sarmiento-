@@ -178,19 +178,19 @@ if(!isset($_SESSION['id'])) {
 
                     <div class="modal_datos_editar_socio">
                         <h3 class="modal_title">Socio:</h3>
-                        <h2 class="modal_title">1001 - Gallotto, Santiago</h2>
+                        <h2 class="modal_title" id="txtInfoSocio"></h2>
                     </div>
 
                     <div class="modal_body_editar_socio">
                         <div class="modal_estado_pago_editar_socio">
                             <h4 class="modal_title">Estado de pago:</h4>
                             <div>
-                                <input type="radio" name="estadoPago" class="modal_radio_editar_socio" id="radioPagado">
+                                <input type="radio" name="estadoPago" class="modal_radio_editar_socio" value="pagado">
                                 <span>Pagado</span>
                             </div>
                             
                             <div>
-                                <input type="radio" name="estadoPago" class="modal_radio_editar_socio" id="radioNoPagado">
+                                <input type="radio" name="estadoPago" class="modal_radio_editar_socio" value="noPagado">
                                 <span>No pagado</span>
                             </div>
                         </div>
@@ -198,12 +198,12 @@ if(!isset($_SESSION['id'])) {
                         <div class="modal_visita_editar_socio">
                             <h4 class="modal_title">Visita:</h4>
                             <div>
-                                <input type="radio" name="visita" class="modal_radio_editar_socio" id="radioVisitado">
+                                <input type="radio" name="visita" class="modal_radio_editar_socio" value="visitado">
                                 <span>Visitado</span>
                             </div>
                             
                             <div>
-                                <input type="radio" name="visita" class="modal_radio_editar_socio" id="radioNoVisitado">
+                                <input type="radio" name="visita" class="modal_radio_editar_socio" value="noVisitado">
                                 <span>No visitado</span>
                             </div>
                         </div>

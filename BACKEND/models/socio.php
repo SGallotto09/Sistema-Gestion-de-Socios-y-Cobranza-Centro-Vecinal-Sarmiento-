@@ -28,10 +28,12 @@ class SocioModel {
 
     function getSociosCobranza($conexion) {
         try {
-            $querySocios = "SELECT s.id, s.nombre, s.apellido, s.dni, s.telefono, s.barrio, s.calle, s.altura, pe.titulo, c.estado AS estadoCuota, pa.estado AS estadoPago FROM socio AS s 
-                            JOIN periodo AS pe ON s.id_periodo = pe.id 
-                            JOIN cuota AS c ON c.id_socio = s.id AND s.eliminado IS NULL
-                            JOIN pago AS pa ON pa.id_cuota = c.id
+            $querySocios = "SELECT s.id, s.nombre, s.apellido, s.dni, s.telefono, s.barrio, s.calle, s.altura, c.id AS idCuota, c.estado AS estadoCuota
+                            FROM socio AS s 
+                            JOIN cuota AS c ON c.id_socio = s.id
+                            INNER JOIN(SELECT id_socio, MAX(id) AS ultima_cuota FROM cuota GROUP BY id_socio)
+                            ultimas ON c.id = ultimas.ultima_cuota
+                            WHERE s.eliminado IS NULL
                             ORDER BY s.apellido ASC, s.nombre ASC";
 
             $stmt = $conexion->prepare($querySocios);
@@ -130,8 +132,7 @@ class SocioModel {
                 $query = "SELECT COUNT(DISTINCT s.id) AS cantidad FROM socio AS s 
                         JOIN periodo AS pe ON s.id_periodo = pe.id 
                         JOIN cuota AS c ON c.id_socio = s.id 
-                        AND s.eliminado IS NULL
-                        JOIN pago AS pa ON pa.id_cuota = c.id";
+                        AND s.eliminado IS NULL";
                 
                 $stmt = $conexion->prepare($query);
 

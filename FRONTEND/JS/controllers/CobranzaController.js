@@ -1,4 +1,5 @@
 import { SocioApi } from "../api/SociosApi.js";
+import { PagosApi } from "../api/PagosApi.js";
 document.addEventListener('DOMContentLoaded', iniciarCobranza);
 
 function iniciarCobranza() {
@@ -8,6 +9,7 @@ function iniciarCobranza() {
 
     // CLASE SOCIO
     const socioApi = new SocioApi();
+    const pagosApi = new PagosApi();
 
     // MODALES
     const modalEditarSocio = document.getElementById('modalEditarSocio');
@@ -16,7 +18,11 @@ function iniciarCobranza() {
 
     const btnGenrarLinkAcceso = document.getElementById('btnGenerarLinkAcceso');
     const btnGenerarPLantillaImpresion = document.getElementById('btnGenerarPlantillaImpresion');
+
+    let txtInfoSocio = document.getElementById('txtInfoSocio');
+    let idCuota = null;
     const btnGuardarCambios = document.getElementById('btnGuardarCambios');
+    let estadoOriginalPago = null;
 
     // TABLA
     const tbodySocios = document.getElementById('tbodySocios');
@@ -32,7 +38,7 @@ function iniciarCobranza() {
     // FILTRO
     let txtBuscarSocio = document.getElementById('txtBuscarSocio');
     const btnBuscarSocio = document.getElementById('btnBuscarSocio');
-    let txtSelectFiltro = document.getElementById('selectFiltro');
+    const txtSelectFiltro = document.getElementById('selectFiltro');
 
     // COMPORTAMIENTOS
 
@@ -44,8 +50,62 @@ function iniciarCobranza() {
         openModal(modalPlantillaImpresion);
     });
 
-    btnGuardarCambios.addEventListener('click', () => {
-        // IMPLEMENTAR LA FUNCION DE EDITAR EL ESTADO DE PAGO Y VISITA
+    tbodySocios.addEventListener('click', (e) => {
+        const botonEditar = e.target.closest('.lapiz');
+        const fila = e.target.closest('tr');
+
+        if (!fila) return;
+
+        const idSocio = parseInt(fila.dataset.id);
+        idCuota = parseInt(fila.dataset.idCuota);
+
+        for (let i = 0; i < socios.length; i++) {
+            if (idSocio === socios[i].id) {
+                txtInfoSocio.textContent = `${socios[i].id} - ${socios[i].apellido} ${socios[i].nombre}`;
+                estadoOriginalPago = parseInt(socios[i].estadoCuota);
+                if (estadoOriginalPago === 0) {
+                    estadoOriginalPago = 'noPagado'
+                }
+                else {
+                    estadoOriginalPago = 'pagado'
+                }
+                break;
+            }
+        }
+
+        if (botonEditar) {
+            const radioPago = document.querySelector(`input[name="estadoPago"][value="${estadoOriginalPago}"]`);
+
+            if (radioPago) {
+                radioPago.checked = true;
+            }
+            openModal(modalEditarSocio);
+        }
+    });
+
+    btnGuardarCambios.addEventListener('click', async () => {
+        const radioPagado = document.querySelector('input[name="estadoPago"]:checked');
+        const radioVisitado = document.querySelector('input[name="visita"]:checked');
+
+        if (!radioPagado && !radioVisitado) {
+            alert('No hay ninguna opcion marcada');
+            return;
+        }
+        if (!radioPagado || !radioVisitado) {
+            alert('te flata marcar una opcion');
+            return;
+        }
+
+        if (radioPagado.value !== estadoOriginalPago) {
+            let pago = await pagosApi.registerPago(idCuota);
+            if (pago !== null) {
+                alert(pago.message);
+            }
+
+            cargarSocios();
+        }
+
+        closeModal(modalEditarSocio);
     })
 
     txtBuscarSocio.addEventListener("keydown", (e) => {
@@ -68,14 +128,6 @@ function iniciarCobranza() {
         }
 
         txtSelectFiltro.value = 'Filtros';
-    });
-
-    tbodySocios.addEventListener('click', (e) => {
-        const botonEditar = e.target.closest('.lapiz');
-
-        if (botonEditar) {
-            openModal(modalEditarSocio);
-        }
     });
 
     btnAnterior.addEventListener("click", () => {
@@ -104,6 +156,10 @@ function iniciarCobranza() {
         modal.classList.add('modal--show');
     }
 
+    function closeModal(modal) {
+        modal.classList.remove('modal--show');
+    }
+
     async function cargarSocios() {
         socios = await socioApi.obtenerSociosCobranza();
 
@@ -118,14 +174,13 @@ function iniciarCobranza() {
         const sociosPagina = socios.slice(inicio, fin);
 
         let filas = '';
-        let divPagado = '';
 
         for (let i = 0; i < sociosPagina.length; i++) {
-            let estadoPago = 'no-pagado';
+            let estadoCuota = 'no-pagado';
             let estadoVisita = 'no-visitado';
 
-            if (sociosPagina[i].estadoPago == 1) {
-                estadoPago = 'pagado';
+            if (sociosPagina[i].estadoCuota == 1) {
+                estadoCuota = 'pagado';
             }
 
             if (sociosPagina[i].estadoVisita == 1) {
@@ -133,7 +188,7 @@ function iniciarCobranza() {
             }
 
             filas += 
-                `<tr data-id="${sociosPagina[i].id}">
+                `<tr data-id="${sociosPagina[i].id}" data-id-cuota="${sociosPagina[i].idCuota}">
                     <td>${sociosPagina[i].id}</td>
                     <td>${sociosPagina[i].apellido}</td>
                     <td>${sociosPagina[i].nombre}</td>
@@ -141,7 +196,7 @@ function iniciarCobranza() {
                     <td>${sociosPagina[i].telefono}</td>
                     <td>
                         <div class="estado">
-                            <span class="punto ${estadoPago}"></span>
+                            <span class="punto ${estadoCuota}"></span>
                             <span>Pagado</span>
                         </div>
                     </td>    

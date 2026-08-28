@@ -36,10 +36,10 @@ function createOrUpdatePagoCuota($_cadenaConexion, $idCuota, $idUsuario) {
     if ($cuotaPagada !== null) {
         $estadoPago = (int)$cuotaPagada['estado'];
 
-        if ($cuotaPagada['estado'] === 0) {
+        if ($estadoPago === 0) {
             $estadoPago = 1;
         }
-        elseif ($cuotaPagada['estado'] === 1) {
+        elseif ($estadoPago === 1) {
             $estadoPago = 0;
         }
 

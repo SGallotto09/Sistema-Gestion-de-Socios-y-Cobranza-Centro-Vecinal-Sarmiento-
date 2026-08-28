@@ -5,7 +5,7 @@ date_default_timezone_set('America/Argentina/Buenos_Aires');
 class CuotaModel {
     function getUltimasCuotasSocios($conexion) {
         try {
-            $queryCuotas = "SELECT c.*, s.activo, s.id_periodo as idPS FROM cuota as c 
+            $queryCuotas = "SELECT c.*, s.id_periodo as idPS FROM cuota as c 
                             INNER JOIN(SELECT id_socio, MAX(id) AS ultima_cuota FROM cuota GROUP BY id_socio)
                             ultimas ON c.id = ultimas.ultima_cuota
                             INNER JOIN socio as s

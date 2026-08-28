@@ -33,7 +33,7 @@ class PagoModel {
             $queryEstadoPago = "INSERT INTO pago (created_by, created_at, estado, id_cuota)
                     VALUES (:created_by, :created_at, :estado, :id_cuota)";
             
-            $stmt = $conexion->prepare($query);
+            $stmt = $conexion->prepare($queryEstadoPago);
 
             $stmt->execute([
                 'created_by' => $idUsuario,
@@ -42,18 +42,14 @@ class PagoModel {
                 'id_cuota'   => $idCuota
             ]);
 
-            $queryEstadoCuota = "UPDATE cuota SET estado = :estado,
-                                updated_by = :updated_by,
-                                updated_at = :updated_at
+            $queryEstadoCuota = "UPDATE cuota SET estado = :estado
                                 WHERE id = :id";
 
             $stmt = $conexion->prepare($queryEstadoCuota);
 
             $stmt->execute([
                 'estado'     => 1,
-                'id_cuota'   => $idCuota,
-                'updated_by' => $idUsuario,
-                'updated_at' => date('Y-m-d')
+                'id'   => $idCuota
             ]);
             $conexion->commit();
             return true;
