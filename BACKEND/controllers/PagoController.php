@@ -17,8 +17,7 @@ header('Content-Type: application/json');
 require_once '../database/database.php';
 require_once '../models/Pago.php';
 
-$conexion = new Conexion();
-$cadenaConexion = $conexion->obtenerConexion();
+$cadenaConexion = Conexion::getInstance()->getConexion();
 
 $method = $_SERVER['REQUEST_METHOD'];
 $idUsuario = $_SESSION['id'];

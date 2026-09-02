@@ -2,26 +2,36 @@
 
 class Conexion {
 
-    public static function obtenerConexion() {
+    private static $instance = null;
+
+    private $conexion;
+
+    private function __construct() {
         $host = 'localhost';
         $port = '3306';
         $user = 'root';
         $password = 'AguStin09';
         $dbname = 'vecinal_sarmiento_bbdd';
 
-        try {
-            $connectionString = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4";
+        $connectionString = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4";
 
-                    // PDO = PHP Data Objects
-            $conexion = new PDO($connectionString, $user, $password);
+                // PDO = PHP Data Objects
+        $this->conexion = new PDO($connectionString, $user, $password);
 
-            $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $this->conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    }
 
-            return $conexion;
-        } catch (PDOException $e) {
-            die('Conexion fallida: ' . $e->getMessage());
+    public static function getInstance() {
+        if (self::$instance === null) {
+            self::$instance = new Conexion();
         }
+
+        return self::$instance;
     } 
+
+    public function getConexion() {
+        return $this->conexion;
+    }
 
 }
 
