@@ -12,9 +12,24 @@ $method = $_SERVER['REQUEST_METHOD'];
 // ESTA LINEA ME LEE EL CUERPO DE LA REQUEST CONVIRTIENDOLA A FOTMATO PHP 
 $input = json_decode(file_get_contents('php://input'), true);
 
-match($method) {
-    'POST' => userLoged($cadenaConexion, $input),
-};
+try {
+    match($method) {
+        'POST'      => userLoged($cadenaConexion, $input),
+        default     => throw new Exception('Método HTTP no permitido')
+    };
+} catch (PDOException $e) {
+    http_response_code(500);
+    echo json_encode([
+        'message' => 'Error interno del servidor.'
+    ]);
+
+} catch (Exception $e) {
+    htpp_response_code(400);
+    echo json_encode([
+        'message' => $e->getMessage()
+    ]);
+}
+
 
 function userLoged($_cadenaConexion, $_input) {
     $login = new LoginModel();

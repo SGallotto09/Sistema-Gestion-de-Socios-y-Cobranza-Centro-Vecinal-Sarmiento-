@@ -24,9 +24,22 @@ $idUsuario = $_SESSION['id'];
 
 $input = json_decode(file_get_contents('php://input'), true);
 
-match ($method) {
-    'POST' => createOrUpdatePagoCuota($cadenaConexion, $input['id_cuota'], $idUsuario),
-};
+try {
+    match ($method) {
+        'POST'      => createOrUpdatePagoCuota($cadenaConexion, $input['id_cuota'], $idUsuario),
+        default     => throw new Exception('Método HTTP no permitido')
+    };
+} catch (PDOException $e) {
+    http_response_code(500);
+    echo json_encode([
+        'message' => 'Ocurrio un error en el servidor.'
+    ]);
+} catch (Exception $e) {
+    http_response_code(400);
+    echo json_encode([
+        'message' => $e->getMessage()
+    ]);
+}
 
 function createOrUpdatePagoCuota($_cadenaConexion, $idCuota, $idUsuario) {
     $pagoModel = new PagoModel();

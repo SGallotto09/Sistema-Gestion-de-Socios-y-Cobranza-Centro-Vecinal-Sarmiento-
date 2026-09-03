@@ -13,19 +13,16 @@ if (!isset($_SESSION['id'])) {
 }
 
 header('Content-Type: application/json');
+$input = json_decode(file_get_contents('php://input'), true);
+$method = $_SERVER['REQUEST_METHOD'];
 
 require_once '../database/database.php';
 require_once '../models/Socio.php';
 require_once '../models/Cuota.php';
 
 $cadenaConexion = Conexion::getInstance()->getConexion();
-
-$socio = new SocioModel();
 $idUsuario = $_SESSION['id'];
-
-$method = $_SERVER['REQUEST_METHOD'];
-
-$input = json_decode(file_get_contents('php://input'), true);
+$socio = new SocioModel();
 
 try {
     match (($method)) {

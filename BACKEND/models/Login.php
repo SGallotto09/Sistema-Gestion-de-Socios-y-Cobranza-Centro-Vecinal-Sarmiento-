@@ -18,43 +18,33 @@ class LoginModel {
             return;
         }
 
-        try {
-            $query = "SELECT * FROM usuario WHERE usuario = :usuario";
+        $query = "SELECT * FROM usuario WHERE usuario = :usuario";
 
-            $stmt = $conexion->prepare($query);
+        $stmt = $conexion->prepare($query);
 
-            $stmt->execute([
-                'usuario' => $usuario,
-            ]);
+        $stmt->execute([
+            'usuario' => $usuario,
+        ]);
 
-            $usuarioEncontrado = $stmt->fetch(PDO::FETCH_ASSOC);
+        $usuarioEncontrado = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if (!$usuarioEncontrado) {
-                echo json_encode(['message' => 'Usuario o contraseña incorrectos.']);
-                return;
-            } 
+        if (!$usuarioEncontrado) {
+            echo json_encode(['message' => 'Usuario o contraseña incorrectos.']);
+            return;
+        } 
 
-            if (!password_verify($contrasenia, $usuarioEncontrado['contrasenia'])) {
-                echo json_encode(['message' => 'Usuario o contraseña incorrectos.']);
-                return;
-            }
-
-            session_start();
-            session_regenerate_id(true);
-
-            $_SESSION['id'] = $usuarioEncontrado['id'];
-            $_SESSION['rol'] = $usuarioEncontrado['rol'];
-
-            return true;
+        if (!password_verify($contrasenia, $usuarioEncontrado['contrasenia'])) {
+            echo json_encode(['message' => 'Usuario o contraseña incorrectos.']);
+            return;
         }
-        catch (Exception $e) {
-            http_response_code(400);
-            echo json_encode([
-                'message' => $e->getMessage()
-            ]);
 
-            return false;
-        }
+        session_start();
+        session_regenerate_id(true);
+
+        $_SESSION['id'] = $usuarioEncontrado['id'];
+        $_SESSION['rol'] = $usuarioEncontrado['rol'];
+
+        return true;
     }
 }
 
