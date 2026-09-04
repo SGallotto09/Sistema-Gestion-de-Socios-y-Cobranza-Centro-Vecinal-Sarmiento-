@@ -1,5 +1,7 @@
 <?php
 
+date_default_timezone_set('America/Argentina/Buenos_Aires');
+
 class LinkAcceso {
     function createLinkAcceso($conexion, $idAdministrador, $idCobrador, $duracionToken) {
         $token = bin2hex(random_bytes(32));

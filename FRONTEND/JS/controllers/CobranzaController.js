@@ -1,5 +1,7 @@
 import { SocioApi } from "../api/SociosApi.js";
 import { PagosApi } from "../api/PagosApi.js";
+import { LinkAccesoApi } from "../api/LinkAccesoApi.js";
+import { UserApi } from "../api/UsuariosApi.js";
 document.addEventListener('DOMContentLoaded', iniciarCobranza);
 
 function iniciarCobranza() {
@@ -7,22 +9,28 @@ function iniciarCobranza() {
 
     // VARIABLES
 
-    // CLASE SOCIO
+    // INSTANCIAS DE CLASES
     const socioApi = new SocioApi();
     const pagosApi = new PagosApi();
+    const linkAccesoApi = new LinkAccesoApi();
+    const userApi = new UserApi();
 
     // MODALES
     const modalEditarSocio = document.getElementById('modalEditarSocio');
     const modalLinkAcceso = document.getElementById('modalLinkAcceso');
+    const modalLinkGenerado = document.getElementById('modalLinkGenerado');
     const modalPlantillaImpresion = document.getElementById('modalPlantillaImpresion');
 
-    const btnGenrarLinkAcceso = document.getElementById('btnGenerarLinkAcceso');
+    // BOTONES
+    const btnAbrirModalLinkAcceso = document.getElementById('btnAbrirModalLinkAcceso');
     const btnGenerarPLantillaImpresion = document.getElementById('btnGenerarPlantillaImpresion');
+    const btnGenerarLinkAcceso = document.getElementById('btnGenerarLink');
+    const btnGuardarCambios = document.getElementById('btnGuardarCambios');
 
     let txtInfoSocio = document.getElementById('txtInfoSocio');
     let idCuota = null;
-    const btnGuardarCambios = document.getElementById('btnGuardarCambios');
     let estadoOriginalPago = null;
+    let datosLinkGenerado = null;
 
     // TABLA
     const tbodySocios = document.getElementById('tbodySocios');
@@ -42,8 +50,9 @@ function iniciarCobranza() {
 
     // COMPORTAMIENTOS
 
-    btnGenrarLinkAcceso.addEventListener('click', () => {
+    btnAbrirModalLinkAcceso.addEventListener('click', async () => {
         openModal(modalLinkAcceso);
+        cargarCobradores();
     });
 
     btnGenerarPLantillaImpresion.addEventListener('click', () => {
@@ -151,6 +160,12 @@ function iniciarCobranza() {
         }
     });
 
+    btnGenerarLinkAcceso.addEventListener('click', async () => {
+        datosLinkGenerado = generarLinkAcceso();
+
+        openModal(modalLinkGenerado);
+    })
+
     // FUNCIONES
     function openModal(modal) {
         modal.classList.add('modal--show');
@@ -165,6 +180,21 @@ function iniciarCobranza() {
 
         mostrarPagina();
         crearPaginacion();
+    }
+
+    async function cargarCobradores() {
+        const cobradores = await userApi.getUsuarios('Cobrador');
+
+        const selectCobradores = document.getElementById('selectCobradores');
+
+        cobradores.forEach(cobrador => {
+            const option = document.createElement('option');
+
+            option.value = cobrador.id;
+            option.textContent = cobrador.nombre + ' ' + cobrador.apellido;
+
+            selectCobradores.appendChild(option);
+        });
     }
 
     function mostrarPagina() {
@@ -265,6 +295,31 @@ function iniciarCobranza() {
     async function obtenerCantidadSocios() {
         let cantidadSocios = await socioApi.obtenerCantidadSociosCobranza();
         tituloCantiadSocios.textContent = `Mostrando 1 a 10 de ${cantidadSocios.cantidad} socios`;
+    }
+
+    async function generarLinkAcceso() {
+        const idCobrador = Number(document.getElementById('selectCobradores').value);
+        const duracionToken = Number(document.getElementById('txtTempo').value);
+
+        if (!idCobrador || idCobrador <= 0) {
+            alert('Se debe asignar a un cobrador.');
+            return;
+        }
+
+        if (!duracionToken || duracionToken <= 0) {
+            alert('El link de acceso requiere de un tiempo de duracion.');
+            return;
+        }
+
+        const linkAcceso = await linkAccesoApi.registerLinkAcceso(idCobrador, duracionToken);
+
+        if (linkAcceso === null) {
+            alert(linkAcceso.message);
+            return;
+        }
+
+        closeModal(modalLinkAcceso);
+        return linkAcceso;
     }
 
     cargarSocios();

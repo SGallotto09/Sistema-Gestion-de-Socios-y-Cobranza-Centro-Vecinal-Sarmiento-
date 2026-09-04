@@ -103,7 +103,7 @@ if(!isset($_SESSION['id'])) {
             <div class="header">
                 <h2>Cobranza: Bimestre Julio - Agosto 2026</h2>
                 <div class="botonesHeader">
-                    <button class="btnHeader" id="btnGenerarLinkAcceso">
+                    <button class="btnHeader" id="btnAbrirModalLinkAcceso">
                         <i data-lucide="link-2"></i>
                         <span><b>Generar link de acceso</b></span>
                     </button>
@@ -233,8 +233,8 @@ if(!isset($_SESSION['id'])) {
                             <div class="modal_content_select_cobrador">
                                 <div class="select_cobrador">
                                     <i data-lucide="user"></i>
-                                    <select id="selectCobrador">
-                                        <option value="">YAYU DJ</option>
+                                    <select id="selectCobradores">
+                                        <option value="">Seleccione un usuario</option>
                                     </select>
                                 </div>
                             </div>
@@ -245,7 +245,7 @@ if(!isset($_SESSION['id'])) {
                             <div class="modal_input_tempo_general_link_socio">
                                 <select id="txtTempo">
                                     <option value="24">24 horas</option>
-                                    <option value="16">16 horas</option>
+                                    <option value="12">12 horas</option>
                                     <option value="8">8 horas</option>
                                     <option value="4">4 horas</option>
                                 </select>
@@ -258,8 +258,7 @@ if(!isset($_SESSION['id'])) {
                             </div>
                             
                             <div class="modal_info_aviso_generar_link_socio">
-                                <h4 class="modal_title">El link sera valido hasta el:</h4>
-                                <h4 class="modal_title">25/07/2026 18:30hs</h4>
+                                <h4 class="modal_title">Importante: Este enlace será válido hasta la fecha de vencimiento indicada. Una vez vencido, deberá generarse un nuevo enlace para acceder.</h4>
                             </div>
                         </div>
                     </div>
