@@ -270,6 +270,37 @@ if(!isset($_SESSION['id'])) {
                 </div>
             </section>
 
+            <section class="modal_carga_link" id="modalCargaLink">
+                <div class="modal_content_carga">
+                    <div class="modal_header_carga">
+                        <div class="icon_content_carga">
+                            <i data-lucide="link-2"></i>
+                        </div>
+                    </div>
+                    <div class="modal_body_carga">
+                        <div class="title_carga">
+                            <h2>Generando link de acceso...</h2>
+                        </div>
+
+                        <div class="subtitle_carga">
+                            <p class="p_texto_cobrador">Estamos preparando un enlace seguro para el cobrador.</p>
+                            <p class="p_texto_cobrador">Esto puede tardar unos segundos.</p>
+                        </div>
+                    </div>
+                    <div class="modal_footer_carga">
+                        <div class="content_barra_carga">
+                            <div class="barra_carga">
+                                <div class="progreso_carga"></div>
+                            </div>
+                        </div>
+
+                        <div class="porcentaje_carga">
+                            <span id="porcentajeCarga">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <section class="modal modal_link_generado" id="modalLinkGenerado">
                 <div class="modal_content_link_generado">
                     <div class="modal_header_link_generado">
@@ -292,8 +323,8 @@ if(!isset($_SESSION['id'])) {
 
                             <div class="info_cobrador">
                                 <h4 class="modal_title">Cobrador asignado:</h4>
-                                <p class="p_texto_cobrador"><b>Santiago Gallotto</b></p>
-                                <p class="p_texto">DNI: 47.823.673</p>
+                                <p class="p_texto_cobrador" id="txtCobradorAsignado"><b></b></p>
+                                <p class="p_texto" id="txtDNICobrador"></p>
                             </div>
                         </div>
 
@@ -306,7 +337,7 @@ if(!isset($_SESSION['id'])) {
                                 <div class="content_link_generado">
                                     <h4 class="modal_title">Link de acceso (unico):</h4>
                                     <div class="modal_input_link_generado">
-                                        <input type="text" id="txtToken" value="https://sistemasocios.com/cobro/a8f34dh2kLm" readonly>
+                                        <input type="text" id="txtToken" value="" readonly>
 
                                         <button id="btnCopiar">
                                             <i data-lucide="copy"></i>
@@ -321,7 +352,7 @@ if(!isset($_SESSION['id'])) {
                                 </div>
                                 <div class="info_valido_hasta">
                                     <h4 class="modal_title">Valido hasta:</h4>
-                                    <p class="p_texto">25/07/2026 18:30hs</p>
+                                    <p class="p_texto" id="txtFechaVencimiento"></p>
                                 </div>
                             </div>
 
@@ -332,7 +363,7 @@ if(!isset($_SESSION['id'])) {
 
                                 <div class="info_duracion">
                                     <h4 class="modal_title">Duración:</h4>
-                                    <p class="p_texto">24 horas</p>
+                                    <p class="p_texto" id="txtDuracion"></p>
                                 </div>
                             </div>
                         </div>

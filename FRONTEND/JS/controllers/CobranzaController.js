@@ -18,6 +18,7 @@ function iniciarCobranza() {
     // MODALES
     const modalEditarSocio = document.getElementById('modalEditarSocio');
     const modalLinkAcceso = document.getElementById('modalLinkAcceso');
+    const modalCargaLink = document.getElementById('modalCargaLink');
     const modalLinkGenerado = document.getElementById('modalLinkGenerado');
     const modalPlantillaImpresion = document.getElementById('modalPlantillaImpresion');
 
@@ -31,12 +32,18 @@ function iniciarCobranza() {
     let idCuota = null;
     let estadoOriginalPago = null;
     let datosLinkGenerado = null;
+    const txtCobradorAsignado = document.getElementById('txtCobradorAsignado');
+    const txtDNICobrador = document.getElementById('txtDNICobrador');
+    const txtToken = document.getElementById('txtToken');
+    const txtFechaVencimiento = document.getElementById('txtFechaVencimiento');
+    const txtDuracion = document.getElementById('txtDuracion');
 
     // TABLA
     const tbodySocios = document.getElementById('tbodySocios');
     let socios = [];
     let paginaActual = 1;
     const sociosPorPagina = 10;
+    let cobradores = null;
 
     const contenedorPaginas = document.getElementById('contenedorPaginas');
     const btnAnterior = document.getElementById("btnAnterior");
@@ -52,7 +59,10 @@ function iniciarCobranza() {
 
     btnAbrirModalLinkAcceso.addEventListener('click', async () => {
         openModal(modalLinkAcceso);
-        cargarCobradores();
+
+        if (cobradores === null) {
+            cargarCobradores();
+        }
     });
 
     btnGenerarPLantillaImpresion.addEventListener('click', () => {
@@ -161,10 +171,22 @@ function iniciarCobranza() {
     });
 
     btnGenerarLinkAcceso.addEventListener('click', async () => {
-        datosLinkGenerado = generarLinkAcceso();
+        openModal(modalCargaLink);
+
+        const promesaLink = generarLinkAcceso();
+        const promesaCarga = iniciarCarga();
+
+        const [linkAcceso] = await Promise.all([
+            promesaLink,
+            promesaCarga
+        ]);
+
+        datosLinkGenerado = linkAcceso;
 
         openModal(modalLinkGenerado);
-    })
+
+        completarDatosLinkGenerado();
+    });
 
     // FUNCIONES
     function openModal(modal) {
@@ -183,7 +205,7 @@ function iniciarCobranza() {
     }
 
     async function cargarCobradores() {
-        const cobradores = await userApi.getUsuarios('Cobrador');
+        cobradores = await userApi.getUsuarios('Cobrador');
 
         const selectCobradores = document.getElementById('selectCobradores');
 
@@ -320,6 +342,45 @@ function iniciarCobranza() {
 
         closeModal(modalLinkAcceso);
         return linkAcceso;
+    }
+
+    function iniciarCarga() {
+        const barra = document.querySelector('.progreso_carga');
+        const porcentajeTexto = document.getElementById('porcentajeCarga');
+
+        barra.style.transition = 'none';
+        barra.style.width = '0%';
+        porcentajeTexto.textContent = '0%';
+
+        barra.offsetWidth;
+
+        barra.style.transition = 'width 0.05s linear';
+
+        return new Promise(resolve => {
+            let progreso = 0;
+            const intervalo = setInterval(() => {
+                progreso++;
+
+                barra.style.width = `${progreso}%`;
+                porcentajeTexto.textContent = `${progreso}%`;
+
+                if (progreso >= 100) {
+                    clearInterval(intervalo);
+                    closeModal(modalCargaLink);
+
+                    resolve();
+                }
+            }, 20);
+        });
+    }
+
+    async function completarDatosLinkGenerado() {
+        const cobrador = await userApi.getUsuarioById(datosLinkGenerado.linkAcceso.destinado_a, 'Cobrador');
+        txtCobradorAsignado.textContent = `${cobrador.nombre} ${cobrador.apellido}`;
+        txtDNICobrador.textContent = `${cobrador.dni}`;
+        txtToken.value = `${datosLinkGenerado.linkAcceso.token}`;
+        txtFechaVencimiento.textContent = `${datosLinkGenerado.linkAcceso.fecha_vencimiento}`;
+        txtDuracion.textContent = `${datosLinkGenerado.linkAcceso.duracionToken} horas`;
     }
 
     cargarSocios();

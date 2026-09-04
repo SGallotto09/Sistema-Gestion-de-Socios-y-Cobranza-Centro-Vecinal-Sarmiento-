@@ -23,7 +23,8 @@ $cadenaConexion = Conexion::getInstance()->getConexion();
 
 try {
     $usuarios = match ($method) {
-        'POST' => getUsuariosController($cadenaConexion, $input['rol'])
+        'GET'  => getUsuariosController($cadenaConexion, $_GET['rol'] ?? null),
+        'POST' => getUsuarioController($cadenaConexion, $input['rol'] ?? null, $input['id'] ?? null)
     };
 
     echo json_encode($usuarios);
@@ -58,6 +59,29 @@ function getUsuariosController($_cadenaConexion, $_rol) {
     }
 
     return $usuarios;
+}
+
+function getUsuarioController($_cadenaConexion, $_rol, $_idUsuario) {
+    if ($_rol === null) throw new Exception('Se requiere de un tipo de rol.');
+    $usuariosPermitidos = ['Administrador', 'Cobrador'];
+    if (!in_array($_rol, $usuariosPermitidos, true)) throw new Exception('Valor de rol no valido.'); 
+    if ($_idUsuario === null) throw new Exception('Se requiere de un usuario');
+    if (!filter_var($_idUsuario, FILTER_VALIDATE_INT) || $_idUsuario <= 0) throw new Exception('El ID del usuario no es válido.');
+
+    $userModel = new UserModel();
+    $usuario = null;
+
+    if ($_rol === 'Administrador') {
+        $usuario = $userModel->getAdministradorById($_cadenaConexion, $_idUsuario);
+    } elseif ($_rol === 'Cobrador') {
+        $usuario = $userModel->getCobradorById($_cadenaConexion, $_idUsuario);
+    }
+
+    if ($usuario === null) {
+        throw new Exception('No se encontro ningun ' . $_rol);
+    }
+
+    return $usuario;
 }
 
 ?>

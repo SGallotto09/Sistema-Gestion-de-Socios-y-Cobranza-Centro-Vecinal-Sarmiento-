@@ -59,7 +59,7 @@ function createLinkController($_cadenaConexion, $_idAdministrador, $_idCobrador,
     http_response_code(201);
     echo json_encode([
         'message' => 'Link de acceso generado con exito!',
-        'linkAcceso' => $linkAcceso
+        'linkAcceso' => $linkCreado
     ]);
 }
 

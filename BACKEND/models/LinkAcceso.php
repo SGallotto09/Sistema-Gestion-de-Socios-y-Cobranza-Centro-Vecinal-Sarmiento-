@@ -30,7 +30,8 @@ class LinkAcceso {
         return [
             'token' => $token,
             'destinado_a' => $idCobrador,
-            'fecha_vencimiento' => $fechaVencimiento
+            'fecha_vencimiento' => $fechaVencimiento,
+            'duracionToken' => $duracionToken
         ];
     }
 }
