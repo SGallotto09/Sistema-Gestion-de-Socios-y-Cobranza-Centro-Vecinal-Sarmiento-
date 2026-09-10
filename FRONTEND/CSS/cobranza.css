@@ -240,6 +240,8 @@ td {
     cursor: pointer;
 }
 
+.modal_acciones_socio,
+.modal_registro_visita,
 .modal_editar_socio,
 .modal_generar_link_socio,
 .modal_carga_link,
@@ -271,7 +273,7 @@ td {
     transition: opacity 0.2s;
 }
 
-.modal_content_editar_socio,
+.modal_content_acciones,
 .modal_content_generar_link_socio,
 .modal_content_link_generado,
 .modal_content_plantilla_impresion {
@@ -283,6 +285,17 @@ td {
 }
 
 .modal_content_editar_socio,
+.modal_content_registro_visita {
+    height: 60%;
+    max-height: 100vh;
+    background-color: var(--bg-body);
+    border-radius: 10px;
+    padding: 20px 20px;
+}
+
+.modal_content_acciones,
+.modal_content_registro_visita,
+.modal_content_editar_socio,
 .modal_content_link_generado,
 .modal_content_generar_link_socio {
     width: 90%;
@@ -292,6 +305,266 @@ td {
 .modal_content_plantilla_impresion {
     width: 90%;
     max-width: 800px;
+}
+
+/*                                MODAL ACCIONES SOCIO                            */
+
+.modal_content_acciones {
+    display: grid;
+    grid-template-areas:'titulo_acciones'
+                        'datos_socio_acciones'
+                        'content_acciones'
+                        'footer_acciones';
+    grid-template-rows: 20% 25% 45% 10%;
+}
+
+.content_titulo_acciones {
+    grid-area: titulo_acciones;
+
+    display: grid;
+    grid-template-areas:'cerrar_modal'
+                        'titulos';
+    grid-template-rows: 30% 70%;
+}
+
+.cerrar_modal {
+    grid-area: cerrar_modal;
+
+    display: flex;
+    justify-content: end;
+}
+
+.titulo_acciones {
+    grid-area: titulos;
+
+    text-align: center;
+    align-content: center;
+}
+
+.titulo_acciones h4 {
+    margin: 0;
+    font-size: 35px;
+}
+
+.titulo_acciones p {
+    font-size: 20px;
+}
+
+.datos_socio_acciones {
+    grid-area: datos_socio_acciones;
+    background-color: #ECF2F7;
+
+    display: grid;
+    grid-template-areas:'icono_socio_accion data_socio_accion';
+    grid-template-columns: 20% 80%;
+
+    margin: 20px 0px;
+    border-radius: 10px;
+}
+
+.icono_socio_accion {
+    grid-area: icono_socio_accion;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icono_socio_accion svg {
+    width: 50%;
+    height: 50%;
+}
+
+.data_socio_accion {
+    grid-area: data_socio_accion;
+
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.acciones {
+    grid-area: content_acciones;
+
+    display: grid;
+    grid-template-areas:'content_visita content_pago';
+    grid-template-columns: 49% 49%;
+    justify-content: space-between;
+
+    margin: 10px 0px 20px 0px; 
+}
+
+.content_registrar_visita,
+.content_registrar_pago {
+    display: grid;
+    grid-template-areas:'icono_accion'
+                        'datos_titulo_accion'
+                        'flecha';
+    grid-template-rows: 2fr 2fr 1fr;
+
+    min-height: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    font: inherit;
+    color: inherit;
+}
+
+.content_registrar_visita {
+    grid-area: content_visita;
+    background-color: #E3F1FE;
+    border: 2px solid #287BD2;
+    border-radius: 10px;
+}
+
+.content_registrar_pago {
+    grid-area: content_pago;
+    background-color: #E6F6EC;
+    border: 2px solid #168A3A;
+    border-radius: 10px;
+}
+
+.content_registrar_visita:hover {
+    background-color: #D0E7FC;
+}
+
+.content_registrar_pago:hover {
+    background-color: #D1F0DC;
+}
+
+.content_registrar_visita:hover,
+.content_registrar_pago:hover{
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.icono_accion {
+    padding-top: 10px;
+    grid-area: icono_accion;
+    overflow: hidden;
+    min-height: 0;
+}
+
+.icono_accion svg {
+    transform: scale(2.2);
+    border-radius: 100%;
+    padding: 6px;
+}
+
+.icono_visita {
+    color: white;
+    background-color: #065DB7;
+}
+
+.icono_pago {
+    color: white;
+    background-color: #078A33;
+}
+
+.titulo_accion {
+    grid-area: datos_titulo_accion;
+    padding: 0px 10px;
+    gap: 10px;
+}
+
+.footer_content_accion {
+    grid-area: flecha;
+}
+
+.footer_content_accion svg {
+    transform: scale(1.8);
+    border-radius: 100%;
+    padding: 6px;
+}
+
+.flecha_visita {
+    color: #065DB7;
+}
+
+.flecha_pago {
+    color: #078A33;
+}
+
+.icono_accion,
+.titulo_accion,
+.footer_content_accion {
+    text-align: center;
+    align-content: center;
+}
+
+.footer_acciones {
+    grid-area: footer_acciones;
+
+    display: flex;
+    justify-content: center;
+}
+
+/*                               MODAL REGISTRO VISITAS                         */
+.modal_content_registro_visita {
+    display: grid;
+    grid-template-areas:'header_registro_visita'
+                        'body_registro_visita'
+                        'footer_registro_visita';
+    grid-template-rows: 30% 50% 20%;
+}
+
+.header_registro_visita {
+    grid-area: header_registro_visita;
+
+    display: grid;
+    grid-template-areas:'cerrar_modal'
+                        'titulos';
+    grid-template-rows: 30% 70%;
+}
+
+.titulo_registro_visitas {
+    grid-area: titulos;
+
+    text-align: center;
+    align-content: center;
+}
+
+.titulo_registro_visitas h4 {
+    margin: 0;
+    font-size: 35px;
+}
+
+.titulo_registro_visitas p {
+    font-size: 20px;
+}
+
+.body_registro_visita {
+    grid-area: body_registro_visita;
+    background-color: #ECF2F7;
+
+    display: grid;
+    grid-template-areas:'icono_socio_accion data_socio_accion';
+    grid-template-columns: 20% 80%;
+
+    margin: 20px 0px;
+    border-radius: 10px;
+}
+
+.footer_registro_visita {
+    grid-area: footer_registro_visita;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+#btnRegistrarVisita {
+    color: white;
+    background-color: #065DB7;
+    border-radius: 15px;
+}
+
+#btnRegistrarVisita:hover {
+    background-color: #81c2ff;
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
 .modal_content_editar_socio,
@@ -362,45 +635,52 @@ td {
     grid-area: body;
 
     display: grid;
-    grid-template-areas:'estado_pago'
-                        'visita';
+    grid-template-areas:'titulo_cuota'
+                        'estado_pago';
+    grid-area: 30% 70%;
+}
+
+.titulo_cuota {
+    grid-area: titulo_cuota;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#txtNumeroCuota {
+    margin: 0;
+    padding-left: 20px;
+    font-size: 25px;
+    color: var(--placeholder);
 }
 
 .modal_estado_pago_editar_socio {
     grid-area: estado_pago;
-    padding-top: 20px;
 }
 
-.modal_estado_pago_editar_socio div,
-.modal_visita_editar_socio div{
+.modal_estado_pago_editar_socio div {
     display: flex;
     align-items: center;
     gap: 15px;
 
-    padding: 10px 0px;
+    padding: 10px 20px;
 }
 
-.modal_estado_pago_editar_socio span,
-.modal_visita_editar_socio span{
-    font-size: 17px;
+.modal_estado_pago_editar_socio span {
+    font-size: 20px;
     font-weight: 500;
     color: var(--input);
 }
 
 .modal_radio_editar_socio{
-    width: 22px;
-    height: 22px;
+    width: 30px;
+    height: 30px;
     cursor: pointer;
 }
 
-.modal_visita_editar_socio {
-    grid-area: visita;
-}
-
-.modal_estado_pago_editar_socio h4,
-.modal_visita_editar_socio h4{
+.modal_estado_pago_editar_socio h4 {
     margin: 0 0 20px;
-    font-size: 18px;
+    font-size: 25px;
     font-weight: 600;
 }
 
@@ -417,7 +697,8 @@ td {
 }
 
 .modal_boton_cancelar,
-.modal_boton_accion {
+.modal_boton_accion,
+#btnRegistrarVisita {
     width: 50%;
     padding: 12px 30px;
     font-size: 20px;
@@ -808,10 +1089,12 @@ td {
 
 .modal_title {
     margin: 0;
+    font-size: 22px;
 }
 
 .p_texto {
     margin: 0;
+    color: var(--placeholder);
 }
 
 .p_texto_cobrador {

@@ -15,28 +15,12 @@ function iniciarCobranza() {
     const linkAccesoApi = new LinkAccesoApi();
     const userApi = new UserApi();
 
-    // MODALES
-    const modalEditarSocio = document.getElementById('modalEditarSocio');
-    const modalLinkAcceso = document.getElementById('modalLinkAcceso');
-    const modalCargaLink = document.getElementById('modalCargaLink');
-    const modalLinkGenerado = document.getElementById('modalLinkGenerado');
-    const modalPlantillaImpresion = document.getElementById('modalPlantillaImpresion');
+    //                      PANTALLA MAIN
 
-    // BOTONES
-    const btnAbrirModalLinkAcceso = document.getElementById('btnAbrirModalLinkAcceso');
-    const btnGenerarPLantillaImpresion = document.getElementById('btnGenerarPlantillaImpresion');
-    const btnGenerarLinkAcceso = document.getElementById('btnGenerarLink');
-    const btnGuardarCambios = document.getElementById('btnGuardarCambios');
-
-    let txtInfoSocio = document.getElementById('txtInfoSocio');
-    let idCuota = null;
-    let estadoOriginalPago = null;
-    let datosLinkGenerado = null;
-    const txtCobradorAsignado = document.getElementById('txtCobradorAsignado');
-    const txtDNICobrador = document.getElementById('txtDNICobrador');
-    const txtToken = document.getElementById('txtToken');
-    const txtFechaVencimiento = document.getElementById('txtFechaVencimiento');
-    const txtDuracion = document.getElementById('txtDuracion');
+    // FILTRO
+    let txtBuscarSocio = document.getElementById('txtBuscarSocio');
+    const btnBuscarSocio = document.getElementById('btnBuscarSocio');
+    const txtSelectFiltro = document.getElementById('selectFiltro');
 
     // TABLA
     const tbodySocios = document.getElementById('tbodySocios');
@@ -44,16 +28,53 @@ function iniciarCobranza() {
     let paginaActual = 1;
     const sociosPorPagina = 10;
     let cobradores = null;
-
     const contenedorPaginas = document.getElementById('contenedorPaginas');
     const btnAnterior = document.getElementById("btnAnterior");
     const btnSiguiente = document.getElementById("btnSiguiente");
     const tituloCantiadSocios = document.getElementById('tituloCantiadSocios');
 
-    // FILTRO
-    let txtBuscarSocio = document.getElementById('txtBuscarSocio');
-    const btnBuscarSocio = document.getElementById('btnBuscarSocio');
-    const txtSelectFiltro = document.getElementById('selectFiltro');
+    //                        MODALES
+
+    // MODAL ACCIONES SOCIO
+    const modalAccionesSocio = document.getElementById('modalAccionesSocio');
+    let txtDniTelefonoSocio = document.getElementsByClassName('dataSocioDniTelefono');
+    const btnAbrirModalEstadoPago = document.getElementById('btnModalEstadoPago');
+    const btnAbrirModalVisita = document.getElementById('btnModalVisita');
+
+    // MODAL REGISTRAR VISITA
+    const modalRegistrarVisita = document.getElementById('modalRegistrarVisita');
+    const btnRegistrarVisita = document.getElementById('btnRegistrarVisita');
+
+    // MODAL EDITAR ESTADO PAGO SOCIO
+    const modalEditarEstadoPagoSocio = document.getElementById('modalEditarEstadoPagoSocio');
+    let txtNumeroCuotaSocio = document.getElementById('txtNumeroCuota');
+    let txtInfoSocio = document.getElementsByClassName('dataSocio');
+    let idCuota = null;
+    let estadoOriginalPago = null;
+    const btnGuardarCambios = document.getElementById('btnGuardarCambios');
+
+    // (1) MODAL GENERAR LINK SOCIO
+    const btnAbrirModalLinkAcceso = document.getElementById('btnAbrirModalLinkAcceso');
+    const modalLinkAcceso = document.getElementById('modalLinkAcceso');
+    const selectCobradores = document.getElementById('selectCobradores');
+    let datosLinkGenerado = null;
+    const btnGenerarLinkAcceso = document.getElementById('btnGenerarLink');
+
+    // (2) MODAL CARGA LINK
+    const modalCargaLink = document.getElementById('modalCargaLink');  
+    
+    // (3) MODAL LINK GENERADO
+    const modalLinkGenerado = document.getElementById('modalLinkGenerado');
+    const txtCobradorAsignado = document.getElementById('txtCobradorAsignado');
+    const txtDNICobrador = document.getElementById('txtDNICobrador');
+    const txtToken = document.getElementById('txtToken');
+    const txtFechaVencimiento = document.getElementById('txtFechaVencimiento');
+    const txtDuracion = document.getElementById('txtDuracion');
+
+    // MODAL PANTALLA DE IMPRESION
+    const btnAbrirModalPLantillaImpresion = document.getElementById('btnGenerarPlantillaImpresion');
+    const modalPlantillaImpresion = document.getElementById('modalPlantillaImpresion');
+    const btnImprimirPlantilla = document.getElementById('btnImprimirPlantilla');    
 
     // COMPORTAMIENTOS
 
@@ -65,7 +86,7 @@ function iniciarCobranza() {
         }
     });
 
-    btnGenerarPLantillaImpresion.addEventListener('click', () => {
+    btnAbrirModalPLantillaImpresion.addEventListener('click', () => {
         openModal(modalPlantillaImpresion);
     });
 
@@ -77,10 +98,18 @@ function iniciarCobranza() {
 
         const idSocio = parseInt(fila.dataset.id);
         idCuota = parseInt(fila.dataset.idCuota);
+        txtNumeroCuotaSocio.textContent = `Numero cuota: ${idCuota}`;
 
         for (let i = 0; i < socios.length; i++) {
             if (idSocio === socios[i].id) {
-                txtInfoSocio.textContent = `${socios[i].id} - ${socios[i].apellido} ${socios[i].nombre}`;
+                for (let j = 0; j < txtInfoSocio.length; j++) {
+                    txtInfoSocio[j].textContent = `${socios[i].id} - ${socios[i].apellido} ${socios[i].nombre}`;
+                }
+
+                for (let x = 0; x < txtDniTelefonoSocio.length; x++) {
+                    txtDniTelefonoSocio[x].textContent = `DNI: ${formatearDNI(socios[i].dni)}  |  Telefono: ${socios[i].telefono}`;
+                }
+
                 estadoOriginalPago = parseInt(socios[i].estadoCuota);
                 if (estadoOriginalPago === 0) {
                     estadoOriginalPago = 'noPagado'
@@ -93,25 +122,25 @@ function iniciarCobranza() {
         }
 
         if (botonEditar) {
-            const radioPago = document.querySelector(`input[name="estadoPago"][value="${estadoOriginalPago}"]`);
-
-            if (radioPago) {
-                radioPago.checked = true;
-            }
-            openModal(modalEditarSocio);
+            openModal(modalAccionesSocio);
         }
+    });
+
+    btnAbrirModalEstadoPago.addEventListener('click', () => {
+        closeModal(modalAccionesSocio);
+        const radioPago = document.querySelector(`input[name="estadoPago"][value="${estadoOriginalPago}"]`);
+
+        if (radioPago) {
+            radioPago.checked = true;
+        }
+        openModal(modalEditarEstadoPagoSocio);
     });
 
     btnGuardarCambios.addEventListener('click', async () => {
         const radioPagado = document.querySelector('input[name="estadoPago"]:checked');
-        const radioVisitado = document.querySelector('input[name="visita"]:checked');
 
-        if (!radioPagado && !radioVisitado) {
-            alert('No hay ninguna opcion marcada');
-            return;
-        }
-        if (!radioPagado || !radioVisitado) {
-            alert('te flata marcar una opcion');
+        if (!radioPagado) {
+            alert('Se requiere marcar una opcion de estado');
             return;
         }
 
@@ -124,7 +153,12 @@ function iniciarCobranza() {
             cargarSocios();
         }
 
-        closeModal(modalEditarSocio);
+        closeModal(modalEditarEstadoPagoSocio);
+    });
+
+    btnAbrirModalVisita.addEventListener('click', () => {
+        closeModal(modalAccionesSocio);
+        openModal(modalRegistrarVisita);
     })
 
     txtBuscarSocio.addEventListener("keydown", (e) => {
@@ -189,6 +223,7 @@ function iniciarCobranza() {
     });
 
     // FUNCIONES
+
     function openModal(modal) {
         modal.classList.add('modal--show');
     }
@@ -206,8 +241,6 @@ function iniciarCobranza() {
 
     async function cargarCobradores() {
         cobradores = await userApi.getUsuarios('Cobrador');
-
-        const selectCobradores = document.getElementById('selectCobradores');
 
         cobradores.forEach(cobrador => {
             const option = document.createElement('option');
@@ -374,13 +407,18 @@ function iniciarCobranza() {
         });
     }
 
+
     async function completarDatosLinkGenerado() {
         const cobrador = await userApi.getUsuarioById(datosLinkGenerado.linkAcceso.destinado_a, 'Cobrador');
         txtCobradorAsignado.textContent = `${cobrador.nombre} ${cobrador.apellido}`;
-        txtDNICobrador.textContent = `${cobrador.dni}`;
+        txtDNICobrador.textContent = `DNI: ${formatearDNI(cobrador.dni)}`;
         txtToken.value = `${datosLinkGenerado.linkAcceso.token}`;
         txtFechaVencimiento.textContent = `${datosLinkGenerado.linkAcceso.fecha_vencimiento}`;
         txtDuracion.textContent = `${datosLinkGenerado.linkAcceso.duracionToken} horas`;
+    }
+
+    function formatearDNI(dni) {
+        return new Intl.NumberFormat('es-AR').format(dni);
     }
 
     cargarSocios();
