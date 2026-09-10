@@ -1,5 +1,5 @@
 <?php
-
+/*
 session_start();
 
 if (!isset($_SESSION['id'])) {
@@ -11,21 +11,26 @@ if (!isset($_SESSION['id'])) {
 
     exit;
 }
-
+*/
 header('Content-Type: application/json');
 
-require_once '../database/database';
+require_once '../database/database.php';
 require_once '../models/Visita.php';
+require_once '../models/Cuota.php';
 
 $cadenaConexion = Conexion::getInstance()->getConexion();
 
 $method = $_SERVER['REQUEST_METHOD'];
-$idUsuario = $_SESSION['id'];
+$idUsuario = 1;
+$visitaModel = new VisitaModel();
 
 $input = json_decode(file_get_contents('php://input'), true);
 
 try {
-
+    match ($method) {
+        'GET'  => getCantidadVisitas($visitaModel, $cadenaConexion, $_GET['idCuota'] ?? null),
+        'POST' => createVisitaSocio($visitaModel, $cadenaConexion, $input['idCuota'], $idUsuario)
+    };
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode([
@@ -38,9 +43,33 @@ try {
     ]);
 }
 
-function createOrUpdateVisitaSocio($_cadenaConexion, $_idSocio, $_idUsuario) {
-    $visita = new Visita();
-    
-    // Chequear como hacer para que el cobrador pueda marcar mas de una vez que visito al mismo socio en el mismo dia 
+function getCantidadVisitas($_visitaModel, $_cadenaConexion, $_idCuota) {
+    if ($_idCuota === null) throw new Exception('Se requiere un numero de cuota.');
+    if (!filter_var($_idCuota, FILTER_VALIDATE_INT) || $_idCuota <= 0) throw new Exception('Numero de cuota invalido.');
+
+    $cantidadVisitas = $_visitaModel->getCantidadVisitasSocio($_cadenaConexion, $_idCuota);
+
+    http_response_code(200);
+    echo json_encode($cantidadVisitas);
+}
+
+function createVisitaSocio($_visitaModel, $_cadenaConexion, $_idCuota, $_idUsuario) {
+    if ($_idUsuario === null) throw new Exception('El usuario no se encuentra autenticado.');
+    if ($_idCuota === null) throw new Exception('Se requiere un numero de cuota.');
+    if (!filter_var($_idCuota, FILTER_VALIDATE_INT) || $_idCuota <= 0) throw new Exception('Numero de cuota invalido.');
+
+    $cuota = new CuotaModel();
+    $existeCuota = $cuota->getCuotaById($_cadenaConexion, $_idCuota);
+
+    if (!$existeCuota) throw new Exception('La cuota que se intenta cobrar no está registrada.');
+
+    $visitado = $_visitaModel->createVisita($_cadenaConexion, $_idCuota, $_idUsuario);
+
+    if (!$visitado) throw new Exception('Ocurrio un error al guardar el registro.');
+
+    http_response_code(201);
+    echo json_encode([
+        'message' => 'Visita registrada con exito.'
+    ]);
 }
 ?>

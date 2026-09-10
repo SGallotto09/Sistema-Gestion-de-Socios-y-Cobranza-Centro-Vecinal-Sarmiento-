@@ -1,44 +1,34 @@
 <?php
 
-class Visita {
-    function createVisitaSocio($conexion, $idSocio, $idUsuario) {
-        $query = "INSERT INTO visita (created_by, created_at, estado, id_socio) 
-                    VALUES (:created_by, :created_at, :estado, :id_socio)";
+class VisitaModel {
+    function getCantidadVisitasSocio($conexion, $idCuota) {
+        $query = "SELECT COUNT(*) AS cantidad FROM visita WHERE id_cuota = :id_cuota";
+
+        $stmt = $conexion->prepare($query);
+
+        $stmt->execute([
+            'id_cuota' => $idCuota
+        ]);
+
+        $visitas = $stmt->fetchColumn();
+
+        return $visitas;
+    }
+
+    function createVisita($conexion, $idCuota, $idUsuario) {
+        $query = "INSERT INTO visita (created_by, created_at, id_cuota) 
+                    VALUES (:created_by, :created_at, :id_cuota)";
 
         $stmt = $conexion->prepare($query);
 
         $stmt->execute([
             'created_by' => $idUsuario,
-            'created_at' => date('Y-m-d'),
-            'estado'     => 1,
-            'id_socio'   => $idSocio
+            'created_at' => date('Y-m-d H:i:s'),
+            'id_cuota'   => $idCuota
         ]);
 
         return true;
     }   
-
-    function updateEstadoVisita($conexion, $estado, $idVisita, $idUsuario) {
-        $query = "UPDATE visita SET estado = :estado, 
-                    updated_by = :updated_by, 
-                    updated_at = :updated_at 
-                    WHERE id = :id";
-
-        $stmt = $conexion->prepare($query);
-
-        $stmt->execute([
-            'estado' => $estado,
-            'updated_by' => $idUsuario,
-            'updated_at' => date('Y-m-d')
-        ]);
-
-        $filasModificadas = $stmt->rowCount();
-
-        if ($filasModificadas === 0) {
-            return false;
-        }
-
-        return true;
-    }
 }
 
 ?>

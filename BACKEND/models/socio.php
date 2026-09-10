@@ -151,9 +151,7 @@ class SocioModel {
         return $socios;
     }
 
-    function createSocio($conexion, $input, $idUsuario) {
-        $datos = $this->validarCampos($input);
-
+    function createSocio($conexion, $datos, $idUsuario) {
         $query = "INSERT INTO socio (nombre, apellido, dni, telefono, barrio, calle, altura, activo, id_periodo, created_by, created_at) 
                 VALUES (:nombre, :apellido, :dni, :telefono, :barrio, :calle, :altura, :activo, :id_periodo, :created_by, :created_at)";
 
@@ -185,10 +183,7 @@ class SocioModel {
         ];
     }
 
-    function updateSocio($conexion, $input, $idUsuario) {
-        $id = $this->validarId($input);
-        $datos = $this->validarCampos($input);
-
+    function updateSocio($conexion, $idUpdate, $input, $idUsuario) {
         $query = "UPDATE socio SET nombre = :nombre,
                         apellido = :apellido,
                         dni = :dni,
@@ -203,7 +198,7 @@ class SocioModel {
         $stmt = $conexion->prepare($query);
 
         $stmt->execute([
-            'id'           => $id,
+            'id'           => $idUpdate,
             'nombre'       => $datos['nombre'],
             'apellido'     => $datos['apellido'],
             'dni'          => $datos['dni'],
@@ -224,9 +219,7 @@ class SocioModel {
         return true;
     }
 
-    function deleteSocio($conexion, $input, $idUsuario) {
-        $idEliminar = $this->validarId($input);
-
+    function deleteSocio($conexion, $idEliminar, $idUsuario) {
         $query = "UPDATE socio SET activo = :activo,
                     eliminado = :eliminado, 
                     deleted_by = :deleted_by, 
@@ -250,100 +243,6 @@ class SocioModel {
         }
 
         return true;
-    }
-
-    function validarId($input) {
-
-        // $input['id'] ?? => ?? significa que es algo nulo. Y la linea completa me sirve para usar el id que me viene del input o sino un texto vacio gracias a ??
-
-        // FILTER_SANITIZE_NUMBER_INT => me sirve para filtrar solo por numeros enteros del 0 al 9
-        $id = filter_var($input['id'] ?? '', FILTER_SANITIZE_NUMBER_INT);
-
-        // VALIDO QUE SEA UN NUMERO ENTERO CON VALORES DEL 0 AL 9
-        if (!ctype_digit($id)) {
-            throw new Exception('ID inválido.');
-        }
-
-        return $id;
-    }
-
-    function validarCampos($input) {
-        // SANITIZAR
-        $apellido = preg_replace('/\s+/', ' ', trim($input['apellido'] ?? ''));
-        $nombre = preg_replace('/\s+/', ' ', trim($input['nombre'] ?? ''));
-        $dni = preg_replace('/\s+/', '', trim($input['dni'] ?? ''));
-        $telefono = preg_replace('/\s+/', '', trim($input['telefono'] ?? ''));
-        $barrio = preg_replace('/\s+/', ' ', trim($input['barrio'] ?? ''));
-        $calle = preg_replace('/\s+/', ' ', trim($input['calle'] ?? ''));
-        $altura = preg_replace('/\s+/', ' ', trim($input['altura'] ?? ''));
-
-        // VALIDACIONES
-        if ($apellido === '') {
-            throw new Exception('El apellido es obligatorio.');
-        }
-
-        if (strlen($apellido) < 2 || strlen($apellido) > 50) {
-            throw new Exception('El apellido debe tener entre 2 y 50 caracteres.');
-        }
-
-        if ($nombre === '') {
-            throw new Exception('El nombre es obligatorio.');
-        }
-
-        if (strlen($nombre) < 2 || strlen($nombre) > 50) {
-            throw new Exception('El nombre debe tener entre 2 y 50 caracteres.');
-        }
-
-        if ($dni === '') {
-            throw new Exception('El DNI es obligatorio.');
-        }
-
-        if (!ctype_digit($dni) || strlen($dni) != 8) {
-            throw new Exception('El DNI debe contener exactamente 8 números.');
-        }
-
-        if ($telefono === '') {
-            throw new Exception('El teléfono es obligatorio.');
-        }
-
-        if (!ctype_digit($telefono) || strlen($telefono) < 8 || strlen($telefono) > 15) {
-            throw new Exception('El teléfono es inválido.');
-        }
-
-        if ($barrio === '') {
-            throw new Exception('El barrio es obligatorio.');
-        }
-
-        if (strlen($barrio) > 50) {
-            throw new Exception('El barrio no puede superar los 50 caracteres.');
-        }
-
-        if ($calle === '') {
-            throw new Exception('La calle es obligatoria.');
-        }
-
-        if (strlen($calle) > 100) {
-            throw new Exception('La calle no puede superar los 100 caracteres.');
-        }
-
-        if ($altura === '') {
-            throw new Exception('La altura es obligatoria.');
-        }
-
-        if (!ctype_digit($altura)) {
-            throw new Exception('La altura debe ser un número válido.');
-        }
-
-        // RETORNO TODOS LOS VALORES DE MI INPUT YA SANITIZADOS Y VALIDADOS PARA EJECUTAR LA QUERY
-        return [
-            'nombre'     => $nombre,
-            'apellido'   => $apellido,
-            'dni'        => $dni,
-            'telefono'   => $telefono,
-            'barrio'     => $barrio,
-            'calle'      => $calle,
-            'altura'     => $altura,
-        ];
     }
 }
 

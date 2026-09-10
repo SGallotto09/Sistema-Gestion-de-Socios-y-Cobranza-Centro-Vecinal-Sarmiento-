@@ -293,13 +293,17 @@ td {
     padding: 20px 20px;
 }
 
-.modal_content_acciones,
 .modal_content_registro_visita,
 .modal_content_editar_socio,
 .modal_content_link_generado,
 .modal_content_generar_link_socio {
     width: 90%;
     max-width: 600px;
+}
+
+.modal_content_acciones {
+    width: 90%;
+    max-width: 750px;
 }
 
 .modal_content_plantilla_impresion {
@@ -352,13 +356,13 @@ td {
 
 .datos_socio_acciones {
     grid-area: datos_socio_acciones;
+    border: 1px solid black;
     background-color: #ECF2F7;
 
     display: grid;
-    grid-template-areas:'icono_socio_accion data_socio_accion';
-    grid-template-columns: 20% 80%;
+    grid-template-areas:'icono_socio_accion data_socio_accion contador_visitas';
+    grid-template-columns: 15% 55% 30%;
 
-    margin: 20px 0px;
     border-radius: 10px;
 }
 
@@ -371,17 +375,49 @@ td {
 }
 
 .icono_socio_accion svg {
-    width: 50%;
-    height: 50%;
+    width: 80%;
+    height: 80%;
 }
 
-.data_socio_accion {
+.data_socio_accion,
+.data_socio_accion_modal2 {
     grid-area: data_socio_accion;
 
     display: flex;
     justify-content: center;
     flex-direction: column;
     gap: 7px;
+
+    margin: 10px 10px 10px 0px;
+}
+
+.data_socio_accion {
+    border-right: 2px solid gray;
+}
+
+.contador_visitas {
+    grid-area: contador_visitas;
+    background-color: #E6F6EC;
+
+    text-align: center;
+    align-content: center;
+
+    border-radius: 10px;
+
+    margin: 10px 10px 10px 0px;
+    align-self: start;
+}
+
+.contador_visitas svg {
+    width: 30%;
+    height: 30%;
+    color: #078A33;
+}
+
+.contador_visitas h4 {
+    margin: 0;
+    font-size: 30px;
+    padding-top: 5px;
 }
 
 .acciones {

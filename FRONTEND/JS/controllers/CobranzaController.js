@@ -2,6 +2,7 @@ import { SocioApi } from "../api/SociosApi.js";
 import { PagosApi } from "../api/PagosApi.js";
 import { LinkAccesoApi } from "../api/LinkAccesoApi.js";
 import { UserApi } from "../api/UsuariosApi.js";
+import { VisitaApi } from "../api/VisitaApi.js";
 document.addEventListener('DOMContentLoaded', iniciarCobranza);
 
 function iniciarCobranza() {
@@ -14,6 +15,7 @@ function iniciarCobranza() {
     const pagosApi = new PagosApi();
     const linkAccesoApi = new LinkAccesoApi();
     const userApi = new UserApi();
+    const visitaApi = new VisitaApi()
 
     //                      PANTALLA MAIN
 
@@ -43,6 +45,7 @@ function iniciarCobranza() {
 
     // MODAL REGISTRAR VISITA
     const modalRegistrarVisita = document.getElementById('modalRegistrarVisita');
+    let txtContadorVisitas = document.getElementById('txtContadorVisitas');
     const btnRegistrarVisita = document.getElementById('btnRegistrarVisita');
 
     // MODAL EDITAR ESTADO PAGO SOCIO
@@ -90,7 +93,7 @@ function iniciarCobranza() {
         openModal(modalPlantillaImpresion);
     });
 
-    tbodySocios.addEventListener('click', (e) => {
+    tbodySocios.addEventListener('click', async (e) => {
         const botonEditar = e.target.closest('.lapiz');
         const fila = e.target.closest('tr');
 
@@ -120,6 +123,8 @@ function iniciarCobranza() {
                 break;
             }
         }
+
+        txtContadorVisitas.textContent = await obtenerCantidadVisitasPorCuota(idCuota);
 
         if (botonEditar) {
             openModal(modalAccionesSocio);
@@ -159,7 +164,17 @@ function iniciarCobranza() {
     btnAbrirModalVisita.addEventListener('click', () => {
         closeModal(modalAccionesSocio);
         openModal(modalRegistrarVisita);
-    })
+    });
+
+    btnRegistrarVisita.addEventListener('click', async () => {
+        const visitaCreada = await visitaApi.createVisita(idCuota);
+
+        alert(visitaCreada.message);
+        closeModal(modalRegistrarVisita);
+
+        mostrarPagina();
+        crearPaginacion();
+    });
 
     txtBuscarSocio.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
@@ -252,7 +267,7 @@ function iniciarCobranza() {
         });
     }
 
-    function mostrarPagina() {
+    async function mostrarPagina() {
         const inicio = (paginaActual - 1) * sociosPorPagina;
         const fin = inicio + sociosPorPagina;
 
@@ -263,12 +278,13 @@ function iniciarCobranza() {
         for (let i = 0; i < sociosPagina.length; i++) {
             let estadoCuota = 'no-pagado';
             let estadoVisita = 'no-visitado';
+            const visitasCuota = await obtenerCantidadVisitasPorCuota(sociosPagina[i].idCuota);
 
             if (sociosPagina[i].estadoCuota == 1) {
                 estadoCuota = 'pagado';
             }
 
-            if (sociosPagina[i].estadoVisita == 1) {
+            if (visitasCuota >= 1) {
                 estadoVisita = 'visitado';
             }
 
@@ -287,7 +303,7 @@ function iniciarCobranza() {
                     </td>    
                     <td>
                         <div class="estado">
-                            <span class="punto no-visitado"></span>
+                            <span class="punto ${estadoVisita}"></span>
                             <span>Visitado</span>
                         </div>
                     </td>
@@ -407,7 +423,6 @@ function iniciarCobranza() {
         });
     }
 
-
     async function completarDatosLinkGenerado() {
         const cobrador = await userApi.getUsuarioById(datosLinkGenerado.linkAcceso.destinado_a, 'Cobrador');
         txtCobradorAsignado.textContent = `${cobrador.nombre} ${cobrador.apellido}`;
@@ -419,6 +434,11 @@ function iniciarCobranza() {
 
     function formatearDNI(dni) {
         return new Intl.NumberFormat('es-AR').format(dni);
+    }
+
+    async function obtenerCantidadVisitasPorCuota(_idCuota) {
+        let visitas = await visitaApi.getCantidadVisitas(_idCuota);
+        return visitas;
     }
 
     cargarSocios();

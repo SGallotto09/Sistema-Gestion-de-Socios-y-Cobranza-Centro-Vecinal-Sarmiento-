@@ -16,6 +16,7 @@ header('Content-Type: application/json');
 
 require_once '../database/database.php';
 require_once '../models/Pago.php';
+require_once '../models/Cuota.php';
 
 $cadenaConexion = Conexion::getInstance()->getConexion();
 
@@ -41,9 +42,18 @@ try {
     ]);
 }
 
-function createOrUpdatePagoCuota($_cadenaConexion, $idCuota, $idUsuario) {
+function createOrUpdatePagoCuota($_cadenaConexion, $_idCuota, $_idUsuario) {
+    if ($_idUsuario === null) throw new Exception('El usuario no se encuentra autenticado.');
+    if ($_idCuota === null) throw new Exception('Se requiere un numero de cuota.');
+    if (!filter_var($_idCuota, FILTER_VALIDATE_INT) || $_idCuota <= 0) throw new Exception('Numero de cuota invalido.');
+
+    $cuota = new CuotaModel();
+    $existeCuota = $cuota->getCuotaById($_cadenaConexion, $_idCuota);
+
+    if (!$existeCuota) throw new Exception('Este socio no contiene cuota.');
+
     $pagoModel = new PagoModel();
-    $cuotaPagada = $pagoModel->getPagoPorCuota($_cadenaConexion, $idCuota);
+    $cuotaPagada = $pagoModel->getPagoPorCuota($_cadenaConexion, $_idCuota);
 
     if ($cuotaPagada !== null) {
         $estadoPago = (int)$cuotaPagada['estado'];
@@ -55,16 +65,9 @@ function createOrUpdatePagoCuota($_cadenaConexion, $idCuota, $idUsuario) {
             $estadoPago = 0;
         }
 
-        $updateado = $pagoModel->processEstadoPagoCuotaSocio($_cadenaConexion, $estadoPago, $idCuota, $idUsuario);
+        $updateado = $pagoModel->processEstadoPagoCuotaSocio($_cadenaConexion, $estadoPago, $_idCuota, $_idUsuario);
 
-        if (!$updateado) {
-            http_response_code(400);
-            echo json_encode([
-                'message' => 'Ocurrio un error.'
-            ]);
-
-            return;
-        }
+        if (!$updateado) throw new Exception('No se pudo modificar el estado del pago.');
 
         http_response_code(200);
         echo json_encode([
@@ -72,18 +75,11 @@ function createOrUpdatePagoCuota($_cadenaConexion, $idCuota, $idUsuario) {
         ]);
     }
     else {
-        $creado = $pagoModel->registerPagoCuotaSocio($_cadenaConexion, $idCuota, $idUsuario);
+        $creado = $pagoModel->registerPagoCuotaSocio($_cadenaConexion, $_idCuota, $_idUsuario);
 
-        if (!$creado) {
-            http_response_code(400);
-            echo json_encode([
-                'message' => 'Ocurrio un error.'
-            ]);
+        if (!$creado) throw new Exception('No se pudo ejecutar el pago de la cuota.');
 
-            return;
-        }
-
-        http_response_code(200);
+        http_response_code(201);
         echo json_encode([
             'message' => 'Pago creado con exito!'
         ]);

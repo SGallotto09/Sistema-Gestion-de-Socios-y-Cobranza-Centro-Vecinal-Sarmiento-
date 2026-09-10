@@ -191,6 +191,12 @@ if(!isset($_SESSION['id'])) {
                             <h4 class="dataSocio modal_title"></h4>
                             <p class="dataSocioDniTelefono p_texto"></p>
                         </div>
+
+                        <div class="contador_visitas">
+                            <i data-lucide="chart-no-axes-column-increasing"></i>
+                            <p class="p_texto">Visitas registradas</p>
+                            <h4 id="txtContadorVisitas"></h4>
+                        </div>
                     </div>
 
                     <div class="acciones">
@@ -244,7 +250,7 @@ if(!isset($_SESSION['id'])) {
                             <i data-lucide="user"></i>
                         </div>
                         
-                        <div class="data_socio_accion">
+                        <div class="data_socio_accion_modal2">
                             <p class="p_texto_cobrador">Socio:</p>
                             <h4 class="dataSocio modal_title"></h4>
                             <p class="dataSocioDniTelefono p_texto"></p>

@@ -3,6 +3,24 @@
 date_default_timezone_set('America/Argentina/Buenos_Aires');
 
 class CuotaModel {
+    function getCuotaById($conexion, $idCuota) {
+        $query = "SELECT * FROM cuota WHERE id = :id";
+
+        $stmt = $conexion->prepare($query);
+
+        $stmt->execute([
+            'id' => $idCuota
+        ]);
+
+        $cuota = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$cuota) {
+            return false;
+        }
+
+        return $cuota;
+    }
+
     function getUltimasCuotasSocios($conexion) {
         $queryCuotas = "SELECT c.*, s.id_periodo as idPS FROM cuota as c 
                         INNER JOIN(SELECT id_socio, MAX(id) AS ultima_cuota FROM cuota GROUP BY id_socio)
