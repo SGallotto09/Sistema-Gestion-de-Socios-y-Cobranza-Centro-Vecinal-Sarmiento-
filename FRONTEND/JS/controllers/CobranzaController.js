@@ -3,6 +3,7 @@ import { PagosApi } from "../api/PagosApi.js";
 import { LinkAccesoApi } from "../api/LinkAccesoApi.js";
 import { UserApi } from "../api/UsuariosApi.js";
 import { VisitaApi } from "../api/VisitaApi.js";
+
 document.addEventListener('DOMContentLoaded', iniciarCobranza);
 
 function iniciarCobranza() {
@@ -220,9 +221,22 @@ function iniciarCobranza() {
     });
 
     btnGenerarLinkAcceso.addEventListener('click', async () => {
+        const idCobrador = Number(document.getElementById('selectCobradores').value);
+        const duracionToken = Number(document.getElementById('txtTempo').value);
+
+        if (!idCobrador || idCobrador <= 0) {
+            alert('Se debe asignar a un cobrador.');
+            return;
+        }
+
+        if (!duracionToken || duracionToken <= 0) {
+            alert('El link de acceso requiere de un tiempo de duracion.');
+            return;
+        }
+
         openModal(modalCargaLink);
 
-        const promesaLink = generarLinkAcceso();
+        const promesaLink = generarLinkAcceso(idCobrador, duracionToken);
         const promesaCarga = iniciarCarga();
 
         const [linkAcceso] = await Promise.all([
@@ -368,21 +382,8 @@ function iniciarCobranza() {
         tituloCantiadSocios.textContent = `Mostrando 1 a 10 de ${cantidadSocios.cantidad} socios`;
     }
 
-    async function generarLinkAcceso() {
-        const idCobrador = Number(document.getElementById('selectCobradores').value);
-        const duracionToken = Number(document.getElementById('txtTempo').value);
-
-        if (!idCobrador || idCobrador <= 0) {
-            alert('Se debe asignar a un cobrador.');
-            return;
-        }
-
-        if (!duracionToken || duracionToken <= 0) {
-            alert('El link de acceso requiere de un tiempo de duracion.');
-            return;
-        }
-
-        const linkAcceso = await linkAccesoApi.registerLinkAcceso(idCobrador, duracionToken);
+    async function generarLinkAcceso(_idCobrador, _duracionToken) {
+        const linkAcceso = await linkAccesoApi.registerLinkAcceso(_idCobrador, _duracionToken);
 
         if (linkAcceso === null) {
             alert(linkAcceso.message);

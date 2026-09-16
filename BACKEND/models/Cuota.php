@@ -41,6 +41,21 @@ class CuotaModel {
         return $cuotas;
     }
 
+    function getCuotasSinPagar($conexion) {
+        $query = "SELECT COUNT(*) FROM cuota AS c JOIN socio AS s ON c.id_socio = s.id 
+        WHERE c.estado = 0 AND s.activo = 1 AND c.fecha_vencimiento >= :fecha_actual";
+
+        $stmt = $conexion->prepare($query);
+
+        $stmt->execute([
+            'fecha_actual' => date('Y-m-d')
+        ]);
+
+        $cuotasSinPagar = $stmt->fetchColumn();
+
+        return $cuotasSinPagar;
+    }
+
     function createCuotaSocio($conexion, $idSocio, $idPeriodoSocio) {
         $query = "INSERT INTO cuota (fecha_creacion, fecha_vencimiento, estado, id_socio, id_periodo)
                     VALUES (:fecha_creacion, :fecha_vencimiento, :estado, :id_socio, :id_periodo)";

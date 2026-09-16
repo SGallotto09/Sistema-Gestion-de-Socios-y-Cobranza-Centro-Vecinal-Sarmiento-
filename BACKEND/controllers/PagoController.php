@@ -22,12 +22,14 @@ $cadenaConexion = Conexion::getInstance()->getConexion();
 
 $method = $_SERVER['REQUEST_METHOD'];
 $idUsuario = $_SESSION['id'];
+$pagoModel = new PagoModel();
 
 $input = json_decode(file_get_contents('php://input'), true);
 
 try {
     match ($method) {
-        'POST'      => createOrUpdatePagoCuota($cadenaConexion, $input['id_cuota'], $idUsuario),
+        'GET'       => getCantidadPagos($pagoModel, $cadenaConexion),
+        'POST'      => createOrUpdatePagoCuota($pagoModel, $cadenaConexion, $input['id_cuota'], $idUsuario),
         default     => throw new Exception('Método HTTP no permitido')
     };
 } catch (PDOException $e) {
@@ -42,7 +44,16 @@ try {
     ]);
 }
 
-function createOrUpdatePagoCuota($_cadenaConexion, $_idCuota, $_idUsuario) {
+function getCantidadPagos($_pagoModel, $_cadenaConexion) {
+    $cantidadPagos = $_pagoModel->getCantidadDePagos($_cadenaConexion);
+
+    http_response_code(200);
+    echo json_encode([
+        'cantidadPagos' => $cantidadPagos
+    ]);
+}
+
+function createOrUpdatePagoCuota($_pagoModel, $_cadenaConexion, $_idCuota, $_idUsuario) {
     if ($_idUsuario === null) throw new Exception('El usuario no se encuentra autenticado.');
     if ($_idCuota === null) throw new Exception('Se requiere un numero de cuota.');
     if (!filter_var($_idCuota, FILTER_VALIDATE_INT) || $_idCuota <= 0) throw new Exception('Numero de cuota invalido.');
@@ -52,8 +63,7 @@ function createOrUpdatePagoCuota($_cadenaConexion, $_idCuota, $_idUsuario) {
 
     if (!$existeCuota) throw new Exception('Este socio no contiene cuota.');
 
-    $pagoModel = new PagoModel();
-    $cuotaPagada = $pagoModel->getPagoPorCuota($_cadenaConexion, $_idCuota);
+    $cuotaPagada = $_pagoModel->getPagoPorCuota($_cadenaConexion, $_idCuota);
 
     if ($cuotaPagada !== null) {
         $estadoPago = (int)$cuotaPagada['estado'];
@@ -65,7 +75,7 @@ function createOrUpdatePagoCuota($_cadenaConexion, $_idCuota, $_idUsuario) {
             $estadoPago = 0;
         }
 
-        $updateado = $pagoModel->processEstadoPagoCuotaSocio($_cadenaConexion, $estadoPago, $_idCuota, $_idUsuario);
+        $updateado = $_pagoModel->processEstadoPagoCuotaSocio($_cadenaConexion, $estadoPago, $_idCuota, $_idUsuario);
 
         if (!$updateado) throw new Exception('No se pudo modificar el estado del pago.');
 
@@ -75,7 +85,7 @@ function createOrUpdatePagoCuota($_cadenaConexion, $_idCuota, $_idUsuario) {
         ]);
     }
     else {
-        $creado = $pagoModel->registerPagoCuotaSocio($_cadenaConexion, $_idCuota, $_idUsuario);
+        $creado = $_pagoModel->registerPagoCuotaSocio($_cadenaConexion, $_idCuota, $_idUsuario);
 
         if (!$creado) throw new Exception('No se pudo ejecutar el pago de la cuota.');
 

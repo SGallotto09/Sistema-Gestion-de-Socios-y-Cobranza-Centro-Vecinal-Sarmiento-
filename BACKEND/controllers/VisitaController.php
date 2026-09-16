@@ -28,7 +28,11 @@ $input = json_decode(file_get_contents('php://input'), true);
 
 try {
     match ($method) {
-        'GET'  => getCantidadVisitas($visitaModel, $cadenaConexion, $_GET['idCuota'] ?? null),
+        'GET'  => match ($_GET['accion'] ?? null) {
+            'visitasSocio' => getVisitasSocio($visitaModel, $cadenaConexion, $_GET['idCuota'] ?? null),
+            'totalVisitas' => getTotalVisitas($visitaModel, $cadenaConexion),
+            default        => throw new Exception('Acción GET no válida.')
+        },
         'POST' => createVisitaSocio($visitaModel, $cadenaConexion, $input['idCuota'], $idUsuario)
     };
 } catch (PDOException $e) {
@@ -43,7 +47,7 @@ try {
     ]);
 }
 
-function getCantidadVisitas($_visitaModel, $_cadenaConexion, $_idCuota) {
+function getVisitasSocio($_visitaModel, $_cadenaConexion, $_idCuota) {
     if ($_idCuota === null) throw new Exception('Se requiere un numero de cuota.');
     if (!filter_var($_idCuota, FILTER_VALIDATE_INT) || $_idCuota <= 0) throw new Exception('Numero de cuota invalido.');
 
@@ -51,6 +55,15 @@ function getCantidadVisitas($_visitaModel, $_cadenaConexion, $_idCuota) {
 
     http_response_code(200);
     echo json_encode($cantidadVisitas);
+}
+
+function getTotalVisitas($_visitaModel, $_cadenaConexion) {
+    $totalVisitas = $_visitaModel->getTotalVisitasSocios($_cadenaConexion);
+
+    http_response_code(200);
+    echo json_encode([
+        'totalVisitas' => $totalVisitas
+    ]);
 }
 
 function createVisitaSocio($_visitaModel, $_cadenaConexion, $_idCuota, $_idUsuario) {

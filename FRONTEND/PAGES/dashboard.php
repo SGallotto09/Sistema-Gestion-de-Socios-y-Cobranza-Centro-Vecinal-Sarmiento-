@@ -133,7 +133,7 @@ if (!isset($_SESSION['id'])) {
 
                 <div class="pagaron-bimestre">
                     <i data-lucide="circle-dollar-sign" class="iconoDato cobrados"></i>
-                    <h2 id="h2PagaronBimestre">280</h2>
+                    <h2 id="h2PagaronBimestre"></h2>
                     <div class="contenedor-parrafos">
                         <p><b>Pagaron el bimestre</b></p>
                         <p id="pagaronBimestre"><b>80% del total</b></p>
@@ -142,7 +142,7 @@ if (!isset($_SESSION['id'])) {
 
                 <div class="socios-visitados">
                     <i data-lucide="user" class="iconoDato"></i>
-                    <h2 id="h2SociosVisitados">320</h2>
+                    <h2 id="h2SociosVisitados"></h2>
                     <div class="contenedor-parrafos">
                         <p><b>Socios visitados</b></p>
                         <p id="pagaronBimestre"><b>91% del total</b></p>
@@ -151,7 +151,7 @@ if (!isset($_SESSION['id'])) {
 
                 <div class="pendientes-pago">
                     <i data-lucide="circle-x" class="iconoDato pendiente"></i>
-                    <h2 id="h2PendientesPago">70</h2>
+                    <h2 id="h2PendientesPago"></h2>
                     <div class="contenedor-parrafos">
                         <p><b>Pendientes de pago</b></p>
                         <p id="pagaronBimestre"><b>20% del total</b></p>

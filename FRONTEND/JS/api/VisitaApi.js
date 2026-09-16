@@ -1,6 +1,6 @@
 export class VisitaApi {
     async getCantidadVisitas(idCuota) {
-        const response = await fetch(`http://localhost/Proyecto/BACKEND/controllers/VisitaController.php?idCuota=${idCuota}`);
+        const response = await fetch(`http://localhost/Proyecto/BACKEND/controllers/VisitaController.php?accion=visitasSocio&idCuota=${idCuota}`);
 
         const cantidadVisitas = await response.json();
 
@@ -9,6 +9,14 @@ export class VisitaApi {
         }
 
         return cantidadVisitas;
+    }
+
+    async getTotalVisitas() {
+        const response = await fetch('http://localhost/Proyecto//BACKEND/controllers/VisitaController.php?accion=totalVisitas');
+
+        const totalVisitas = await response.json();
+
+        return totalVisitas;
     }
 
     async createVisita(_idCuota) {

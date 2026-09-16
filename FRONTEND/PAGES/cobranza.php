@@ -200,19 +200,6 @@ if(!isset($_SESSION['id'])) {
                     </div>
 
                     <div class="acciones">
-                        <button class="content_registrar_visita" id="btnModalVisita">
-                            <div class="icono_accion">
-                                <i data-lucide="house" class="icono_visita"></i>
-                            </div>
-                            <div class="titulo_accion">
-                                <h4 class="p_texto_cobrador">Registrar visita</h4>
-                                <p class="p_texto">Registra una nueva visita a este socio.</p>
-                            </div>
-                            <div class="footer_content_accion">
-                                <i data-lucide="arrow-right" class="flecha_visita"></i>
-                            </div>
-                        </button>
-                        
                         <button class="content_registrar_pago" id="btnModalEstadoPago">
                             <div class="icono_accion">
                                 <i data-lucide="circle-dollar-sign" class="icono_pago"></i>
@@ -223,6 +210,19 @@ if(!isset($_SESSION['id'])) {
                             </div>
                             <div class="footer_content_accion">
                                 <i data-lucide="arrow-right" class="flecha_pago"></i>
+                            </div>
+                        </button>
+                        
+                        <button class="content_registrar_visita" id="btnModalVisita">
+                            <div class="icono_accion">
+                                <i data-lucide="house" class="icono_visita"></i>
+                            </div>
+                            <div class="titulo_accion">
+                                <h4 class="p_texto_cobrador">Registrar visita</h4>
+                                <p class="p_texto">Registra una nueva visita a este socio.</p>
+                            </div>
+                            <div class="footer_content_accion">
+                                <i data-lucide="arrow-right" class="flecha_visita"></i>
                             </div>
                         </button>
                     </div>

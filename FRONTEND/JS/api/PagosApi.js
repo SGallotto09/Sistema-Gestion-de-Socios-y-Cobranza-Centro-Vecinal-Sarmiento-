@@ -1,4 +1,12 @@
 export class PagosApi {
+    async getCantidadDePagos() {
+        const response = await fetch('http://localhost/Proyecto/BACKEND/controllers/PagoController.php');
+
+        const cantidadPagos = await response.json();
+
+        return cantidadPagos;
+    }
+
     async registerPago(idCuota) {
         const response = await fetch('http://localhost/Proyecto/BACKEND/controllers/PagoController.php', {
             method: 'POST',

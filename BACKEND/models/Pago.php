@@ -19,6 +19,22 @@ class PagoModel {
         return $cuota;
     }
 
+    function getCantidadDePagos($conexion) {
+        $query = "SELECT COUNT(*) FROM pago AS p 
+                JOIN cuota AS c ON p.id_cuota = c.id AND c.estado = 1
+                JOIN socio AS s ON c.id_socio = s.id WHERE c.fecha_vencimiento >= :fecha_actual AND s.activo = 1";
+
+        $stmt = $conexion->prepare($query);
+
+        $stmt->execute([
+            'fecha_actual' => date('Y-m-d')
+        ]);
+
+        $cantidadPagos = $stmt->fetchColumn();
+
+        return $cantidadPagos;
+    }
+
     function registerPagoCuotaSocio($conexion, $idCuota, $idUsuario) {
         $conexion->beginTransaction();
         
