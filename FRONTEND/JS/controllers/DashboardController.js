@@ -18,11 +18,12 @@ function iniciarDashboard() {
     const btnIrASocios = document.getElementById('btnNuevoSocioDashboard')
     const btnIrACobranza = document.getElementById('btnCobranzaDashboard');
 
+    const spanNombreUsuario = document.getElementById('spanNombreUsuario');
+    const h2BimestreActual = document.getElementById('h2BimestreActual');
     const h2TotalSocios = document.getElementById('h2TotalSocios');
     const h2PagaronBimestre = document.getElementById('h2PagaronBimestre');
     const h2PendientesPago = document.getElementById('h2PendientesPago');
     const h2SociosVisitados = document.getElementById('h2SociosVisitados');
-    const spanNombreUsuario = document.getElementById('spanNombreUsuario');
 
     // COMPORTAMIENTOS
     btnIrASocios.addEventListener('click', () => {
@@ -31,6 +32,37 @@ function iniciarDashboard() {
     btnIrACobranza.addEventListener('click', () => {
         window.location.href = '../PAGES/cobranza.php';
     });
+
+    function obtenerBimestreActual() {
+        const fecha = new Date();
+
+        const meses = [
+            "Enero",
+            "Febrero",
+            "Marzo",
+            "Abril",
+            "Mayo",
+            "Junio",
+            "Julio",
+            "Agosto",
+            "Septiembre",
+            "Octubre",
+            "Noviembre",
+            "Diciembre"
+        ];
+
+        const mesActual = fecha.getMonth();
+
+        const mesProximo = (mesActual + 1) % 12;
+
+        h2BimestreActual.textContent = `${meses[mesActual]} - ${meses[mesProximo]}`;
+    }
+
+    function asignarNombreAdministrador() {
+        const usuarioLogeado = JSON.parse(sessionStorage.getItem("usuarioLogeado"));
+        spanNombreUsuario.textContent = usuarioLogeado.usuarioEncontrado.nombre + ' '  
+                                        + usuarioLogeado.usuarioEncontrado.apellido;
+    }
 
     async function obtenerCantidadSocios() {
         const cantidadSocios = await sociosApi.obtenerCantidadSociosCobranza();
@@ -52,6 +84,8 @@ function iniciarDashboard() {
         h2PendientesPago.textContent = cantidadCuotasSinPagar.cuotasSinPagar;
     }
 
+    asignarNombreAdministrador();
+    obtenerBimestreActual();
     obtenerCantidadSocios();
     obtenerCantidadTotalDePagos();
     obtenerTotalSociosVisitados();

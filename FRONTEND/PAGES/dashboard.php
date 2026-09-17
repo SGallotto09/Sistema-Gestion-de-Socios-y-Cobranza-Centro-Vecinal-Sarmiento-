@@ -1,11 +1,6 @@
 <?php
 
-session_start();
-
-if (!isset($_SESSION['id'])) {
-    header('Location: login.html');
-    exit;
-}
+require_once '../../BACKEND/tasks/validarSesionIniciada.php'
 
 ?>
 
@@ -106,7 +101,7 @@ if (!isset($_SESSION['id'])) {
                 </div>
 
                 <div class="rol-usuario">
-                    <span id="spanNombreUsuario"><b>Administrador</b></span>
+                    <span><b id="spanNombreUsuario"></b></span>
                     <i data-lucide="circle-user"></i>
                 </div>
             </div>
@@ -115,7 +110,7 @@ if (!isset($_SESSION['id'])) {
                 <div class="dato-bimestre">
                     <p>Bimestre actual</p>
                     <div>
-                        <span><b>Julio - Agosto 2026</b></span>
+                        <span><b id="h2BimestreActual"></b></span>
                         <i data-lucide="calendar-days"></i>
                     </div>
                 </div>
@@ -196,5 +191,7 @@ if (!isset($_SESSION['id'])) {
             </div>
         </div>
     </div>
+
+    <script src="../JS/verificarPestania.js"></script>
 </body>
 </html>

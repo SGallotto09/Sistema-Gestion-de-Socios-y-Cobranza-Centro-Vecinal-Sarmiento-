@@ -14,7 +14,7 @@ $input = json_decode(file_get_contents('php://input'), true);
 
 try {
     match($method) {
-        'POST'      => userLoged($cadenaConexion, $input),
+        'POST'      => userLoged($cadenaConexion, $input['usuario'], $input['contrasenia']),
         default     => throw new Exception('Método HTTP no permitido')
     };
 } catch (PDOException $e) {
@@ -24,29 +24,33 @@ try {
     ]);
 
 } catch (Exception $e) {
-    htpp_response_code(400);
+    http_response_code(400);
     echo json_encode([
         'message' => $e->getMessage()
     ]);
 }
 
 
-function userLoged($_cadenaConexion, $_input) {
+function userLoged($_cadenaConexion, $_usuario, $_contrasenia) {
+    // ESTAS SON LAS VARIABLES QUE ME DEVUELVE LA LECTURA DEL CUERPO DEL INPUT
+    //         ESTA LINEA DE CODIGO ME SACA LOS ESPACIOS INTERNOS Y EXTERNOS AL MISMO TIEMPO
+    $usuario = preg_replace('/\s+/', ' ', trim($_usuario ?? ''));
+    $contrasenia = trim($_contrasenia ?? ''); 
+
+    if (empty($usuario)) throw new Exception('El usuario es obligatorio.');
+    if (empty($contrasenia)) throw new Exception('La contraseña es obligatoria.');
+
     $login = new LoginModel();
-    $logueado = false;
 
-    $logueado = $login->validarUsuario($_cadenaConexion, $_input);
+    $logueado = $login->validarUsuario($_cadenaConexion, $_usuario, $_contrasenia);
 
-    if (!$logueado) {
-        http_response_code(404);
-        echo json_encode([
-            'message' => 'No se pudo loguear. Credenciales incorrectas.'
-        ]);
-    }
+    if (!$logueado) throw new Exception('No se pudo iniciar sesion. Credenciales incorrectas.');
 
     http_response_code(200);
     echo json_encode([
-        'message' => 'Bienvenido al sistema!'
+        'message'           => 'Bienvenido al sistema',
+        'usuarioEncontrado' => $logueado,
+        'token'             => $_SESSION['token_pestania']
     ]);
 }
 

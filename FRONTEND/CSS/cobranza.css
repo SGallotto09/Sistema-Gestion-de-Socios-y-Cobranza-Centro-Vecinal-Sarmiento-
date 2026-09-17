@@ -1261,3 +1261,492 @@ td {
     font-weight: 750;
     color: var(--boton);
 }
+
+/* =========================================================
+   RESPONSIVE - COBRANZA
+   ========================================================= */
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1024px) {
+
+    .contenedor-cobranza {
+        padding: 20px;
+        grid-template-rows: auto auto 1fr auto;
+        min-height: 100vh;
+    }
+
+
+    /* ---------- HEADER ---------- */
+
+    .header {
+        gap: 20px;
+    }
+
+    .header h2 {
+        font-size: 24px;
+    }
+
+    .botonesHeader {
+        gap: 10px;
+    }
+
+    .btnHeader {
+        padding: 12px;
+        font-size: 14px;
+    }
+
+
+    /* ---------- FILTRO ---------- */
+
+    .filtro-socios {
+        gap: 20px;
+    }
+
+    .input-socio {
+        width: 55%;
+    }
+
+    .select-filtro {
+        width: 40%;
+    }
+
+    #selectFiltro {
+        font-size: 18px;
+    }
+
+
+    /* ---------- TABLA ---------- */
+
+    .tabla-socios {
+        overflow-x: auto;
+    }
+
+    .tabla-socios table {
+        min-width: 900px;
+    }
+
+
+    /* ---------- FOOTER ---------- */
+
+    .footer {
+        padding-right: 0;
+    }
+
+    .siguiente-pagina {
+        width: 40%;
+    }
+}
+
+
+/* =========================================================
+   CELULAR
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .contenedor-cobranza {
+        padding: 15px;
+        gap: 15px;
+        grid-template-rows: auto auto 1fr auto;
+    }
+
+
+    /* ---------- HEADER ---------- */
+
+    .header {
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: center;
+        gap: 15px;
+        padding-bottom: 15px;
+    }
+
+    .header h2 {
+        font-size: 22px;
+        line-height: 1.3;
+        text-align: center;
+    }
+
+    .botonesHeader {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .btnHeader {
+        width: 100%;
+        padding: 12px 8px;
+        font-size: 13px;
+        gap: 6px;
+    }
+
+    .btnHeader svg {
+        width: 18px;
+        height: 18px;
+    }
+
+
+    /* ---------- FILTRO ---------- */
+
+    .filtro-socios {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .input-socio {
+        width: 100%;
+        height: 50px;
+    }
+
+    .input-socio input {
+        font-size: 17px;
+    }
+
+    .input-socio div {
+        width: 50px;
+        flex-shrink: 0;
+    }
+
+    .input-socio svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    .select-filtro {
+        width: 100%;
+        height: 50px;
+        justify-content: space-between;
+    }
+
+    .select-filtro h2 {
+        font-size: 18px;
+        margin: 0;
+    }
+
+    #selectFiltro {
+        width: 60%;
+        font-size: 17px;
+    }
+
+
+    /* ---------- TABLA ---------- */
+
+    .tabla-socios {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .tabla-socios table {
+        min-width: 900px;
+    }
+
+
+    /* ---------- FOOTER ---------- */
+
+    .footer {
+        flex-direction: column;
+        gap: 10px;
+        padding: 0;
+    }
+
+    .texto-footer {
+        text-align: center;
+    }
+
+    .siguiente-pagina {
+        width: 100%;
+        align-items: center;
+    }
+
+    .btnPagina {
+        margin: 0 5px;
+    }
+}
+
+    /* AJUSTES FINALES - MODAL ACCIONES COBRADOR */
+
+@media (max-width: 768px) {
+    .modal_acciones_socio {
+        padding: 8px;
+    }
+
+    .modal_content_acciones {
+        width: 100%;
+        max-width: 430px;
+
+        height: 470px;
+        max-height: calc(100dvh - 16px);
+        
+
+        display: grid;
+        grid-template-areas:'titulo_acciones'
+                            'datos_socio_acciones'
+                            'content_acciones'
+                            'footer_acciones';
+        grid-template-rows: 20% 30% 40% 10%;
+    }
+
+    /* TITULO */
+
+    .content_titulo_acciones {
+        grid-area: titulo_acciones;
+    }
+
+    .titulo_acciones h4 {
+        font-size: 20px;
+        margin: 0;
+    }
+
+    .titulo_acciones p {
+        font-size: 15px;
+        margin: 0;
+    }
+
+    /* DATOS DEL SOCIO */
+
+    .datos_socio_acciones {
+        grid-area: datos_socio_acciones;
+
+        display: grid;
+        grid-template-areas:'icono_socio_accion data_socio_accion'
+                            'icono_socio_accion contador_visitas';
+        grid-template-columns: 20% 80%;
+        margin-top: 10px;
+    }
+
+    .icono_socio_accion svg {
+        width: 50px;
+        height: 50px;
+        transform: none;
+        padding: 7px;
+        border-radius: 50%;
+        box-sizing: border-box;
+    }
+
+    .data_socio_accion {
+        margin: 3px 0;
+        border-right: none;
+    }
+
+    .data_socio_accion .modal_title {
+        font-size: 17px;
+    }
+
+    .p_texto_cobrador {
+        font-size: 14px;
+    }
+
+    .p_texto {
+        font-size: 13px;
+    }
+
+    /* CONTADOR DE VISITAS */
+
+    .contador_visitas {
+        width: auto;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 6px;
+        text-align: left;
+        border-radius: 10px;
+    }
+
+    .contador_visitas svg {
+        width: 19px;
+        height: 19px;
+    }
+
+    .contador_visitas h4 {
+        font-size: 17px;
+    }
+
+    /* ACCIONES */
+
+    .acciones {
+        grid-area: content_acciones;
+
+        display: grid;
+        grid-template-areas:'content_pago content_pago'
+                            'content_visita content_visita';
+        grid-template-rows: 50% 50%;
+        gap: 5px;
+    }
+
+    /* TEXTO DE LAS ACCIONES */
+
+    .titulo_accion {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+    }
+
+    .titulo_accion .p_texto_cobrador {
+        font-size: 16px;
+    }
+
+    .titulo_accion .p_texto {
+        font-size: 13px;
+    }
+
+    /* FLECHAS */
+
+    .footer_content_accion svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    /* CANCELAR */
+
+    .footer_acciones {
+        grid-area: footer_acciones;
+    }
+
+    .footer_acciones .modal_boton_cancelar {
+        width: 100%;
+        font-size: 17px;
+    }
+
+    /* MODAL CONFIRMAR VISITA */
+
+    .modal_content_registro_visita {
+        width: 100%;
+        max-width: 450px;
+
+        height: 400px;
+        max-height: calc(100dvh - 16px);
+
+        grid-template-areas:'header_registro_visita'
+                            'body_registro_visita'
+                            'footer_registro_visita';
+        grid-template-rows: 25% 45% 30%;
+    }
+
+    .header_registro_visita {
+        grid-area: header_registro_visita;
+    }
+
+    .titulo_registro_visitas h4 {
+        font-size: 27px;
+    }
+
+    .titulo_registro_visitas p {
+        font-size: 15px;
+    }
+
+    .body_registro_visita {
+        grid-area: body_registro_visita;
+    }
+
+    .footer_registro_visita {
+        grid-area: footer_registro_visita;
+
+        flex-direction: column-reverse;
+    }
+
+    .footer_registro_visita .modal_boton_cancelar,
+    .footer_registro_visita #btnRegistrarVisita {
+        width: 100%;
+        font-size: 17px;
+    }
+
+    /* MODAL EDITAR ESTADO DE PAGO */
+
+    .modal_content_editar_socio {
+        width: 100%;
+        max-width: 430px;
+
+        height: 470px;
+        max-height: calc(100dvh - 16px);
+
+        padding: 16px;
+
+        grid-template-areas:'header'
+                            'data'
+                            'body'
+                            'footer';
+
+        grid-template-rows:
+            auto
+            auto
+            1fr
+            auto;
+    }
+
+    .modal_header_editar_socio {
+        min-height: 45px;
+    }
+
+    .modal_header_editar_socio .modal_title_header {
+        font-size: 20px;
+    }
+
+    .modal_datos_editar_socio {
+        padding: 12px 0;
+
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        flex-wrap: wrap;
+    }
+
+    .modal_datos_editar_socio h3,
+    .modal_datos_editar_socio h2 {
+        font-size: 18px;
+    }
+
+    .modal_body_editar_socio {
+        display: flex;
+        flex-direction: column;
+        padding: 10px 0;
+    }
+
+    .titulo_cuota {
+        min-height: 60px;
+        border-bottom: 1px solid var(--border-color);
+        margin-bottom: 15px;
+    }
+
+    #txtNumeroCuota {
+        padding-left: 0;
+        font-size: 21px;
+    }
+
+    .modal_estado_pago_editar_socio h4 {
+        margin-bottom: 12px;
+        font-size: 19px;
+    }
+
+    .modal_estado_pago_editar_socio div {
+        padding: 10px 0;
+    }
+
+    .modal_estado_pago_editar_socio span {
+        font-size: 18px;
+    }
+
+    .modal_radio_editar_socio {
+        width: 25px;
+        height: 25px;
+    }
+
+    .modal_footer_editar_socio {
+        flex-direction: column-reverse;
+        gap: 10px;
+        padding-top: 10px;
+    }
+
+    .modal_footer_editar_socio .modal_boton_cancelar,
+    .modal_footer_editar_socio .modal_boton_accion {
+        width: 100%;
+        min-height: 50px;
+        font-size: 17px;
+    }
+}

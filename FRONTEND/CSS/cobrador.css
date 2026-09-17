@@ -1,0 +1,416 @@
+:root {
+
+    /* FONDOS */
+    --bg-body: #F9FAFB;
+    --bg-card: #FFFFFF;
+
+    /* VERDE */
+    --boton: #4CAF50;
+    --boton-hover: #43A047;
+
+    /* TEXTO */
+    --texto-principal: #111827;
+    --texto-secundario: #4B5563;
+
+    /* BORDES */
+    --border-color: #E5E7EB;
+
+    /* SOMBRA */
+    --sombra-card: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+
+/* =====================================================
+   RESET
+   ===================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background-color: var(--bg-body);
+    color: var(--texto-principal);
+    font-family: Arial, sans-serif;
+}
+
+
+/* =====================================================
+   CONTENEDOR PRINCIPAL
+   ===================================================== */
+
+.contenedor-cobrador {
+    width: 100%;
+    max-width: 600px;
+    min-height: 100vh;
+
+    margin: 0 auto;
+
+    padding: 20px 16px 30px;
+}
+
+
+/* =====================================================
+   HEADER
+   ===================================================== */
+
+.header-cobrador {
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding-bottom: 20px;
+
+    border-bottom: 1px solid var(--border-color);
+}
+
+
+.titulo-header {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+
+.texto-secundario {
+    font-size: 14px;
+    color: var(--texto-secundario);
+}
+
+
+.titulo-header h1 {
+    margin: 0;
+
+    font-size: 24px;
+    font-weight: 700;
+}
+
+
+.icono-usuario {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.icono-usuario svg {
+    width: 30px;
+    height: 30px;
+}
+
+
+/* =====================================================
+   BUSCADOR
+   ===================================================== */
+
+.buscador {
+    margin-top: 20px;
+}
+
+
+.contenedor-input {
+
+    width: 100%;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 14px;
+
+    background-color: var(--bg-card);
+
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+}
+
+
+.contenedor-input svg {
+    width: 21px;
+    height: 21px;
+
+    color: var(--texto-secundario);
+
+    flex-shrink: 0;
+}
+
+
+.contenedor-input input {
+
+    width: 100%;
+    height: 100%;
+
+    padding-left: 10px;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    font-size: 16px;
+    color: var(--texto-principal);
+}
+
+
+.contenedor-input input::placeholder {
+    color: #9CA3AF;
+}
+
+
+/* =====================================================
+   INFORMACIÓN DEL LISTADO
+   ===================================================== */
+
+.informacion-listado {
+
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+
+.informacion-listado span {
+
+    font-size: 14px;
+    color: var(--texto-secundario);
+}
+
+
+/* =====================================================
+   LISTA DE SOCIOS
+   ===================================================== */
+
+.lista-socios {
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 12px;
+}
+
+
+/* =====================================================
+   CARD SOCIO
+   ===================================================== */
+
+.card-socio {
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns: 62px 1fr 25px;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 15px;
+
+    background-color: var(--bg-card);
+
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+
+    box-shadow: var(--sombra-card);
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease,
+        border-color 0.15s ease;
+}
+
+
+/* EFECTO AL TOCAR */
+
+.card-socio:active {
+
+    transform: scale(0.98);
+
+    border-color: var(--boton);
+
+    box-shadow: 0 2px 10px rgba(76, 175, 80, 0.15);
+}
+
+
+/* =====================================================
+   NUMERO DE SOCIO
+   ===================================================== */
+
+.numero-socio {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 50px;
+
+    background-color: #E8F5E9;
+
+    border-radius: 10px;
+}
+
+
+.numero-socio span {
+
+    font-size: 11px;
+
+    color: var(--texto-secundario);
+}
+
+
+.numero-socio strong {
+
+    font-size: 18px;
+
+    color: var(--boton);
+}
+
+
+/* =====================================================
+   DATOS SOCIO
+   ===================================================== */
+
+.datos-socio {
+
+    min-width: 0;
+}
+
+
+.datos-socio h2 {
+
+    margin: 0 0 7px;
+
+    font-size: 17px;
+    font-weight: 600;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.dni {
+
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    color: var(--texto-secundario);
+
+    font-size: 14px;
+}
+
+
+.dni svg {
+
+    width: 17px;
+    height: 17px;
+
+    flex-shrink: 0;
+}
+
+
+/* =====================================================
+   FLECHA
+   ===================================================== */
+
+.flecha {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.flecha svg {
+
+    width: 22px;
+    height: 22px;
+
+    color: #9CA3AF;
+}
+
+
+/* =====================================================
+   TABLET / PANTALLAS GRANDES
+   ===================================================== */
+
+@media (min-width: 601px) {
+
+    .contenedor-cobrador {
+
+        padding-top: 30px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+
+    .titulo-header h1 {
+        font-size: 28px;
+    }
+
+
+    .card-socio:hover {
+
+        border-color: var(--boton);
+
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+        transform: translateY(-1px);
+    }
+}
+
+
+/* =====================================================
+   CELULARES PEQUEÑOS
+   ===================================================== */
+
+@media (max-width: 380px) {
+
+    .contenedor-cobrador {
+
+        padding: 15px 12px 25px;
+    }
+
+
+    .titulo-header h1 {
+
+        font-size: 21px;
+    }
+
+
+    .card-socio {
+
+        grid-template-columns: 55px 1fr 22px;
+
+        padding: 12px;
+
+        gap: 10px;
+    }
+
+
+    .numero-socio strong {
+
+        font-size: 16px;
+    }
+
+
+    .datos-socio h2 {
+
+        font-size: 16px;
+    }
+
+
+    .dni {
+
+        font-size: 13px;
+    }
+}

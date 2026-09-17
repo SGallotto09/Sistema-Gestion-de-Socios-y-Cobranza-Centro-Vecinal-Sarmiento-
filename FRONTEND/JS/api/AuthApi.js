@@ -17,8 +17,12 @@ export class LoginApi {
             alert(usuarioEncontrado.message);
         }
         else {
-            alert(usuarioEncontrado.message);
+            alert(usuarioEncontrado.message + ', ' + usuarioEncontrado.usuarioEncontrado.nombre + '!');
+
+            sessionStorage.setItem('tokenPestania', usuarioEncontrado.token);
+            
             window.location.href = 'dashboard.php';
+            return usuarioEncontrado;
         }
     }
 }

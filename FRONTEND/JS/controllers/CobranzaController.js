@@ -38,6 +38,7 @@ function iniciarCobranza() {
 
     //                        MODALES
 
+    let txtInfoSocio = document.getElementsByClassName('dataSocio');
     // MODAL ACCIONES SOCIO
     const modalAccionesSocio = document.getElementById('modalAccionesSocio');
     let txtDniTelefonoSocio = document.getElementsByClassName('dataSocioDniTelefono');
@@ -52,7 +53,6 @@ function iniciarCobranza() {
     // MODAL EDITAR ESTADO PAGO SOCIO
     const modalEditarEstadoPagoSocio = document.getElementById('modalEditarEstadoPagoSocio');
     let txtNumeroCuotaSocio = document.getElementById('txtNumeroCuota');
-    let txtInfoSocio = document.getElementsByClassName('dataSocio');
     let idCuota = null;
     let estadoOriginalPago = null;
     const btnGuardarCambios = document.getElementById('btnGuardarCambios');

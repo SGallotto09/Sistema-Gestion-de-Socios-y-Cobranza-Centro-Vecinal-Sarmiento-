@@ -21,6 +21,7 @@ function iniciarLogin() {
             return;
         }
 
-        loginApi.iniciarSesion(txtUsuario.value, txtContrasenia.value);
+        let usuarioLogeado = await loginApi.iniciarSesion(txtUsuario.value, txtContrasenia.value);
+        sessionStorage.setItem("usuarioLogeado", JSON.stringify(usuarioLogeado));
     });
 }

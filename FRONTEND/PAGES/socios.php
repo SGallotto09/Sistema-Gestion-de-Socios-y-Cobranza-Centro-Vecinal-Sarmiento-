@@ -1,11 +1,6 @@
 <?php
 
-session_start();
-
-if(!isset($_SESSION['id'])) {
-    header('Location: login.html');
-    exit;
-}
+require_once '../../BACKEND/tasks/validarSesionIniciada.php'
 
 ?>
 
@@ -325,5 +320,7 @@ if(!isset($_SESSION['id'])) {
             </section>
         </div>
     </div>
+
+    <script src="../JS/verificarPestania.js"></script>
 </body>
 </html>
