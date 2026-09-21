@@ -2,9 +2,16 @@
 
 session_start();
 
-if (!isset($_SESSION['id'])) {
-    http_response_code(401);
+$method = $_SERVER['REQUEST_METHOD'];
 
+$esAdministrador = isset($_SESSION['id']);
+
+$esCobrador =   isset($_SESSION['cobrador_autenticado']) &&
+                $_SESSION['cobrador_autenticado'] === true &&
+                isset($_SESSION['id_cobrador']);
+
+if (!$esAdministrador && !$esCobrador) {
+    http_response_code(401);
     echo json_encode([
         'message' => 'Usuario no autenticado.'
     ]);
@@ -20,8 +27,14 @@ require_once '../models/Cuota.php';
 
 $cadenaConexion = Conexion::getInstance()->getConexion();
 
-$method = $_SERVER['REQUEST_METHOD'];
-$idUsuario = $_SESSION['id'];
+$idUsuario = null;
+
+if ($esAdministrador) {
+    $idUsuario = $_SESSION['id'];
+} else if ($esCobrador) {
+    $idUsuario = $_SESSION['id_cobrador'];
+}
+
 $pagoModel = new PagoModel();
 
 $input = json_decode(file_get_contents('php://input'), true);

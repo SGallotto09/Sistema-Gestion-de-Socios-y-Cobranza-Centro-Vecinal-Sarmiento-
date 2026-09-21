@@ -1,6 +1,6 @@
 export class LinkAccesoApi {
     async registerLinkAcceso(idCobrador, duracionToken) {
-        const response = await fetch('http://localhost/Proyecto/BACKEND/controllers/LinkAccesoController.php', {
+        const response = await fetch('/Proyecto/BACKEND/controllers/LinkAccesoController.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

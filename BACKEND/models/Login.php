@@ -16,13 +16,6 @@ class LoginModel {
 
         if (!password_verify($contrasenia, $usuarioEncontrado['contrasenia'])) return false;
 
-        session_start();
-        session_regenerate_id(true);
-
-        $_SESSION['id'] = $usuarioEncontrado['id'];
-        $_SESSION['rol'] = $usuarioEncontrado['rol'];
-        $_SESSION["token_pestania"] = bin2hex(random_bytes(32));
-
         return $usuarioEncontrado;
     }
 }

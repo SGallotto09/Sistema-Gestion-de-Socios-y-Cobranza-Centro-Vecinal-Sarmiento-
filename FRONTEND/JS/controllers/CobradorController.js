@@ -12,6 +12,14 @@ function iniciarCobrador() {
     const pagosApi = new PagosApi();
     let socios = [];
 
+    //                        PANTALLA MAIN
+
+    const h2BimestreActual = document.getElementById('h2BimestreActual');
+    const buscador = document.getElementById('txtBuscarSocio');
+    const listaSocios = document.getElementById('listaSocios');
+    const txtCantidadSocios = document.getElementById('txtCantidadSocios');
+    const btnAccionSocio = document.getElementById('btnAccionSocio');
+
     //                        MODALES
 
     let txtInfoSocio = document.getElementsByClassName('dataSocio');
@@ -36,12 +44,14 @@ function iniciarCobrador() {
     const botonesCancelar = document.querySelectorAll('.modal_boton_cancelar');
     const botonesCerrarModal = document.querySelectorAll('.modal_close');
 
-    const h2BimestreActual = document.getElementById('h2BimestreActual');
-    const listaSocios = document.getElementById('listaSocios');
-    const btnAccionSocio = document.getElementById('btnAccionSocio');
+    buscador.addEventListener('input', () => {
+        const texto = buscador.value.trim();
+
+        filtrarSocios(texto);
+    });
 
     listaSocios.addEventListener('click', async (e) => {
-        const fila = e.target.closest('button');
+        const fila = e.target.closest('.card-socio');
 
         const idSocio = parseInt(fila.dataset.id);
         idCuota = parseInt(fila.dataset.idCuota);
@@ -54,7 +64,10 @@ function iniciarCobrador() {
                 }
 
                 for (let x = 0; x < txtDniTelefonoSocio.length; x++) {
-                    txtDniTelefonoSocio[x].textContent = `DNI: ${formatearDNI(socios[i].dni)}  |  Telefono: ${socios[i].telefono}`;
+                    txtDniTelefonoSocio[x].innerHTML = `
+                        <span>DNI: ${formatearDNI(socios[i].dni)}</span>
+                        <span>| Teléfono: ${socios[i].telefono}</span>
+                    `;
                 }
 
                 estadoOriginalPago = parseInt(socios[i].estadoCuota);
@@ -68,7 +81,12 @@ function iniciarCobrador() {
             }
         }
 
-        txtContadorVisitas.textContent = await obtenerCantidadVisitasPorCuota(idCuota);
+        try {
+            txtContadorVisitas.textContent = await obtenerCantidadVisitasPorCuota(idCuota);
+        } catch (error) {
+            console.error('Error al obtener cantidad de visitas:', error);
+            txtContadorVisitas.textContent = 'Error';
+        }
 
         openModal(modalAccionesSocio);
     });
@@ -160,23 +178,23 @@ function iniciarCobrador() {
         h2BimestreActual.textContent = `${meses[mesActual]} - ${meses[mesProximo]}`;
     }
 
-    function compaginarSocios() {
+    function compaginarSocios(sociosAMostrar) {
         let filas = '';
 
-        for (let i = 0; i < socios.length; i++) {
+        for (let i = 0; i < sociosAMostrar.length; i++) {
             filas += 
-                `<button data-id="${socios[i].id}" data-id-cuota="${socios[i].idCuota}" class="card-socio" type="button" id="btnAccionSocio">
+                `<button data-id="${sociosAMostrar[i].id}" data-id-cuota="${sociosAMostrar[i].idCuota}" class="card-socio" type="button" id="btnAccionSocio">
                     <div class="numero-socio">
                         <span>Nº</span>
-                        <strong>${socios[i].id}</strong>
+                        <strong>${sociosAMostrar[i].id}</strong>
                     </div>
 
                     <div class="datos-socio">
-                        <h2>${socios[i].apellido} ${socios[i].nombre}</h2>
+                        <h2>${sociosAMostrar[i].apellido} ${sociosAMostrar[i].nombre}</h2>
 
                         <div class="dni">
                             <i data-lucide="id-card"></i>
-                            <span>DNI: ${formatearDNI(socios[i].dni)}</span>
+                            <span>DNI: ${formatearDNI(sociosAMostrar[i].dni)}</span>
                         </div>
                     </div>
 
@@ -197,7 +215,12 @@ function iniciarCobrador() {
     async function cargarSocios() {
         socios = await socioApi.obtenerSociosCobranza();
 
-        compaginarSocios();
+        compaginarSocios(socios);
+    }
+
+    async function obtenerCantidadSocios() {
+        let cantidadSocios = await socioApi.obtenerCantidadSociosCobranza();
+        txtCantidadSocios.textContent = cantidadSocios.cantidad + ' socios:';
     }
 
     async function obtenerCantidadVisitasPorCuota(_idCuota) {
@@ -205,6 +228,19 @@ function iniciarCobrador() {
         return visitas;
     }
 
+    function filtrarSocios(texto) {
+        const resultado = socios.filter(socio => {
+
+            const nombreCompleto = `${socio.nombre} ${socio.apellido}`.toLowerCase();
+            const dni = socio.dni.toString();
+
+            return nombreCompleto.includes(texto.toLowerCase()) || dni.includes(texto);
+        });
+
+        compaginarSocios(resultado);
+    }
+
     obtenerBimestreActual();
     cargarSocios();
+    obtenerCantidadSocios();
 }

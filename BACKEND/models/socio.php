@@ -22,13 +22,13 @@ class SocioModel {
     }
 
     function getSociosCobranza($conexion) {
-        $querySocios = "SELECT s.id, s.nombre, s.apellido, s.dni, s.telefono, s.barrio, s.calle, s.altura, c.id AS idCuota, c.estado AS estadoCuota
-                        FROM socio AS s 
-                        JOIN cuota AS c ON c.id_socio = s.id
-                        INNER JOIN(SELECT id_socio, MAX(id) AS ultima_cuota FROM cuota GROUP BY id_socio)
-                        ultimas ON c.id = ultimas.ultima_cuota
-                        WHERE s.eliminado IS NULL
-                        ORDER BY s.apellido ASC, s.nombre ASC";
+        $querySocios = "SELECT s.id, s.nombre, s.apellido, s.dni, s.telefono, s.barrio, s.calle, s.altura, 
+                        c.id AS idCuota, c.estado AS estadoCuota FROM socio AS s
+                    INNER JOIN cuota AS c ON c.id_socio = s.id
+                    WHERE s.eliminado IS NULL
+                    AND c.fecha_creacion <= CURDATE()
+                    AND c.fecha_vencimiento >= CURDATE()
+                    ORDER BY s.apellido ASC, s.nombre ASC;";
 
         $stmt = $conexion->prepare($querySocios);
 
@@ -89,37 +89,6 @@ class SocioModel {
         }
     }
 
-    function getSocioPorNombre($conexion) {
-        $busqueda = preg_replace('/\s+/', ' ', trim($_GET['buscar'] ?? ''));
-
-        if (empty($busqueda)) {
-            echo json_encode([]);
-            return;
-        }
-
-        $query = "  SELECT s.id, s.nombre, s.apellido, s.dni, s.telefono, s.barrio, s.calle, s.altura, s.estado, p.titulo 
-                    FROM socio AS s JOIN periodo AS p ON s.id_periodo = p.id 
-                    WHERE nombre LIKE :busqueda 
-                    OR apellido LIKE :busqueda
-                    OR CONCAT(nombre, ' ', apellido) LIKE :busqueda
-                    OR dni LIKE :busqueda 
-                    ORDER BY s.apellido ASC, s.nombre ASC  ";
-
-        $stmt = $conexion->prepare($query);
-
-        $stmt->execute([
-            ':busqueda' => "%$busqueda%"
-        ]);
-
-        $socios = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        if (!$socios) {
-            return null;
-        }
-
-        return $socios;
-    }
-
     function getSociosFiltro($conexion, $parametro) {
         $columnasPermitidas = [
             'id',
@@ -151,7 +120,7 @@ class SocioModel {
         return $socios;
     }
 
-    function createSocio($conexion, $datos, $idUsuario) {
+    function createSocio($conexion, $datos, $idAdministrador) {
         $query = "INSERT INTO socio (nombre, apellido, dni, telefono, barrio, calle, altura, activo, id_periodo, created_by, created_at) 
                 VALUES (:nombre, :apellido, :dni, :telefono, :barrio, :calle, :altura, :activo, :id_periodo, :created_by, :created_at)";
 
@@ -167,7 +136,7 @@ class SocioModel {
             'altura'        => $datos['altura'],
             'activo'        => 1,
             'id_periodo'    => 1,
-            'created_by'    => $idUsuario,
+            'created_by'    => $idAdministrador,
             'created_at'    => date('Y-m-d'),
         ]);
 
@@ -183,7 +152,7 @@ class SocioModel {
         ];
     }
 
-    function updateSocio($conexion, $idUpdate, $input, $idUsuario) {
+    function updateSocio($conexion, $idUpdate, $datos, $idAdministrador) {
         $query = "UPDATE socio SET nombre = :nombre,
                         apellido = :apellido,
                         dni = :dni,
@@ -206,7 +175,7 @@ class SocioModel {
             'barrio'       => $datos['barrio'],
             'calle'        => $datos['calle'],
             'altura'       => $datos['altura'],
-            'updated_by'   => $idUsuario,
+            'updated_by'   => $idAdministrador,
             'updated_at'   => date('Y-m-d'),
         ]);
 
@@ -219,7 +188,7 @@ class SocioModel {
         return true;
     }
 
-    function deleteSocio($conexion, $idEliminar, $idUsuario) {
+    function deleteSocio($conexion, $idEliminar, $idAdministrador) {
         $query = "UPDATE socio SET activo = :activo,
                     eliminado = :eliminado, 
                     deleted_by = :deleted_by, 
@@ -232,7 +201,7 @@ class SocioModel {
             'id'         => $idEliminar,
             'activo'     => 0,
             'eliminado'  => 1,
-            'deleted_by' => $idUsuario,
+            'deleted_by' => $idAdministrador,
             'deleted_at' => date('Y-m-d')
         ]);
 

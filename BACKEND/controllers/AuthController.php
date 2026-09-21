@@ -41,10 +41,16 @@ function userLoged($_cadenaConexion, $_usuario, $_contrasenia) {
     if (empty($contrasenia)) throw new Exception('La contraseña es obligatoria.');
 
     $login = new LoginModel();
-
     $logueado = $login->validarUsuario($_cadenaConexion, $_usuario, $_contrasenia);
 
     if (!$logueado) throw new Exception('No se pudo iniciar sesion. Credenciales incorrectas.');
+
+    session_start();
+    session_regenerate_id(true);
+
+    $_SESSION['id'] = $logueado['id'];
+    $_SESSION['rol'] = $logueado['rol'];
+    $_SESSION["token_pestania"] = bin2hex(random_bytes(32));
 
     http_response_code(200);
     echo json_encode([

@@ -245,8 +245,7 @@ td {
 .modal_editar_socio,
 .modal_generar_link_socio,
 .modal_carga_link,
-.modal_link_generado,
-.modal_plantilla_impresion {
+.modal_link_generado {
     position: fixed;
     top: 0;
     left: 0;
@@ -275,8 +274,7 @@ td {
 
 .modal_content_acciones,
 .modal_content_generar_link_socio,
-.modal_content_link_generado,
-.modal_content_plantilla_impresion {
+.modal_content_link_generado {
     height: 90%;
     max-height: 100vh;
     background-color: var(--bg-body);
@@ -304,11 +302,6 @@ td {
 .modal_content_acciones {
     width: 90%;
     max-width: 750px;
-}
-
-.modal_content_plantilla_impresion {
-    width: 90%;
-    max-width: 800px;
 }
 
 /*                                MODAL ACCIONES SOCIO                            */
@@ -604,8 +597,7 @@ td {
 }
 
 .modal_content_editar_socio,
-.modal_content_generar_link_socio,
-.modal_content_plantilla_impresion {
+.modal_content_generar_link_socio {
     display: grid;
     grid-template-areas:'header'
                         'data'
@@ -629,8 +621,7 @@ td {
 
 .modal_header_editar_socio,
 .modal_header_generar_link_socio,
-.modal_header_link_generado,
-.modal_header_plantilla_impresion {
+.modal_header_link_generado {
     grid-area: header;
 
     display: flex;
@@ -655,8 +646,7 @@ td {
 
 .modal_datos_editar_socio,
 .modal_data_generar_link_socio,
-.modal_data_link_generado,
-.modal_data_plantilla_impresion {
+.modal_data_link_generado {
     grid-area: data;
     padding-bottom: 10px;
 }
@@ -673,7 +663,7 @@ td {
     display: grid;
     grid-template-areas:'titulo_cuota'
                         'estado_pago';
-    grid-area: 30% 70%;
+    grid-template-rows: 30% 70%;
 }
 
 .titulo_cuota {
@@ -722,8 +712,7 @@ td {
 
 .modal_footer_editar_socio, 
 .modal_footer_generar_link_socio,
-.modal_footer_link_generado,
-.modal_footer_plantilla-impresion {
+.modal_footer_link_generado {
     grid-area: footer;
 
     display: flex;
@@ -773,8 +762,7 @@ td {
 }
 
 .modal_data_generar_link_socio,
-.modal_data_link_generado,
-.modal_data_plantilla_impresion {
+.modal_data_link_generado {
     display: flex;
     align-items: center;
 }
@@ -1092,37 +1080,6 @@ td {
     padding: 8px;
 }
 
-.modal_body_plantilla_impresion {
-    display: grid;
-    grid-template-areas:'tabla_modal'
-                        'data_tabla_modal';
-    grid-template-rows: 90% 10%;
-}
-
-.modal_table_content_planilla_impresion {
-    grid-area: tabla_modal;
-}
-
-.modal_table_content_planilla_impresion table {
-    width: 100%;
-    height: 100%;
-    border: 2px solid var(--border-color);
-    border-radius: 10px;
-    background-color: var(--bg-card);
-}
-
-.modal_data_table_planilla_impresion {
-    grid-area: data_tabla_modal;
-
-    display: flex;
-    align-items: center;
-}
-
-.modal_data_table_planilla_impresion p {
-    font-size: 17px;
-    color: var(--placeholder);
-}
-
 .modal_title {
     margin: 0;
     font-size: 22px;
@@ -1341,6 +1298,7 @@ td {
     }
 }
 
+/* PANTALLA COBRADOR RESPONSIVE */
 
 /* =========================================================
    CELULAR
@@ -1468,7 +1426,7 @@ td {
     }
 }
 
-    /* AJUSTES FINALES - MODAL ACCIONES COBRADOR */
+/* MODALES ACCIONES COBRADOR */
 
 @media (max-width: 768px) {
     .modal_acciones_socio {
@@ -1529,8 +1487,38 @@ td {
     }
 
     .data_socio_accion {
+        min-width: 0;
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+
         margin: 3px 0;
         border-right: none;
+    }
+
+    .data_socio_accion .dataSocio {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-break: normal;
+    }
+
+    .dataSocioDniTelefono {
+        width: 100%;
+        min-width: 0;
+
+        margin: 0;
+
+        font-size: 12px;
+
+        white-space: nowrap;
+    }
+
+    .dataSocioDniTelefono span {
+        white-space: nowrap;
     }
 
     .data_socio_accion .modal_title {
@@ -1642,6 +1630,9 @@ td {
 
     .body_registro_visita {
         grid-area: body_registro_visita;
+
+        grid-template-columns: 40px minmax(0, 1fr);
+        column-gap: 8px;
     }
 
     .footer_registro_visita {
@@ -1667,19 +1658,19 @@ td {
 
         padding: 16px;
 
+        min-width: 0;
+        overflow: hidden;
+
         grid-template-areas:'header'
                             'data'
                             'body'
                             'footer';
 
-        grid-template-rows:
-            auto
-            auto
-            1fr
-            auto;
+        grid-template-rows: 10% 20% 45% 25%;
     }
 
     .modal_header_editar_socio {
+        grid-area: header;
         min-height: 45px;
     }
 
@@ -1688,35 +1679,54 @@ td {
     }
 
     .modal_datos_editar_socio {
+        grid-area: data;
+
         padding: 12px 0;
 
         display: flex;
-        align-items: center;
-        gap: 8px;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
 
-        flex-wrap: wrap;
+        gap: 6px;
+
+        width: 100%;
+        min-width: 0;
+        overflow: hidden;
     }
 
     .modal_datos_editar_socio h3,
     .modal_datos_editar_socio h2 {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+
         font-size: 18px;
+
+        margin: 0;
+
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-break: normal;
     }
 
     .modal_body_editar_socio {
+        grid-area: body;
+
         display: flex;
         flex-direction: column;
         padding: 10px 0;
     }
 
     .titulo_cuota {
-        min-height: 60px;
+        min-height: 40px;
         border-bottom: 1px solid var(--border-color);
-        margin-bottom: 15px;
+        margin-bottom: 10px;
     }
 
     #txtNumeroCuota {
         padding-left: 0;
-        font-size: 21px;
+        font-size: 20px;
     }
 
     .modal_estado_pago_editar_socio h4 {
@@ -1738,8 +1748,10 @@ td {
     }
 
     .modal_footer_editar_socio {
+        grid-area: footer;
+
         flex-direction: column-reverse;
-        gap: 10px;
+        gap: 8px;
         padding-top: 10px;
     }
 

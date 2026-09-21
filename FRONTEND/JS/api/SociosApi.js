@@ -1,6 +1,6 @@
 export class SocioApi {
     async obtenerSocios() {
-        const response = await fetch('http://localhost/Proyecto/BACKEND/controllers/SocioController.php');
+        const response = await fetch('/Proyecto/BACKEND/controllers/SocioController.php');
 
         const socios = await response.json();
 
@@ -8,7 +8,7 @@ export class SocioApi {
     }
 
     async obtenerCantidadSocios() {
-        const response = await fetch('http://localhost/Proyecto/BACKEND/controllers/SocioController.php?accion=cantidadSocios');
+        const response = await fetch('/Proyecto/BACKEND/controllers/SocioController.php?accion=cantidadSocios');
 
         const cantidadSocios = await response.json()
         
@@ -16,7 +16,7 @@ export class SocioApi {
     }
 
     async obtenerSociosCobranza() {
-        const response = await fetch('http://localhost/Proyecto/BACKEND/controllers/SocioController.php?accion=cobranza');
+        const response = await fetch('/Proyecto/BACKEND/controllers/SocioController.php?accion=cobranza');
 
         const socios = await response.json();
 
@@ -24,7 +24,7 @@ export class SocioApi {
     }
 
     async obtenerCantidadSociosCobranza() {
-        const response = await fetch('http://localhost/Proyecto/BACKEND/controllers/SocioController.php?accion=cantidadCobranza');
+        const response = await fetch('/Proyecto/BACKEND/controllers/SocioController.php?accion=cantidadCobranza');
 
         const cantidadSocios = await response.json()
         
@@ -32,7 +32,7 @@ export class SocioApi {
     }
 
     async obtenerSociosPorNombre(_busqueda) {
-        const response = await fetch('http://localhost/Proyecto/BACKEND/controllers/SocioController.php&buscar=' + _busqueda)
+        const response = await fetch('/Proyecto/BACKEND/controllers/SocioController.php&buscar=' + _busqueda)
 
         const socios = await response.json();
 
@@ -46,7 +46,7 @@ export class SocioApi {
             filtro = 'id';
         }
 
-        const response = await fetch(`http://localhost/Proyecto/BACKEND/controllers/SocioController.php?parametro=${filtro}`)
+        const response = await fetch(`/Proyecto/BACKEND/controllers/SocioController.php?parametro=${filtro}`)
         
         const socios = await response.json();
 

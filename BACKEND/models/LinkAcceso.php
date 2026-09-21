@@ -34,6 +34,24 @@ class LinkAcceso {
             'duracionToken' => $duracionToken
         ];
     }
+
+    function validarLinkAcceso($conexion, $token) {
+        $query = "SELECT destinado_a FROM link_acceso WHERE token = :token AND activo = 1 AND fecha_vencimiento > NOW()";
+
+        $stmt = $conexion->prepare($query);
+
+        $stmt->execute([
+            'token' => $token
+        ]);
+
+        $link = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$link) {
+            return false;
+        }
+
+        return $link;
+    }
 }
 
 ?>

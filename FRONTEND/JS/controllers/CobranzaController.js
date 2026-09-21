@@ -28,8 +28,11 @@ function iniciarCobranza() {
     // TABLA
     const tbodySocios = document.getElementById('tbodySocios');
     let socios = [];
+    let sociosFiltrados = [];
     let paginaActual = 1;
     const sociosPorPagina = 10;
+    const visitasCache = new Map();
+    let versionRender = 0;
     let cobradores = null;
     const contenedorPaginas = document.getElementById('contenedorPaginas');
     const btnAnterior = document.getElementById("btnAnterior");
@@ -76,11 +79,19 @@ function iniciarCobranza() {
     const txtDuracion = document.getElementById('txtDuracion');
 
     // MODAL PANTALLA DE IMPRESION
-    const btnAbrirModalPLantillaImpresion = document.getElementById('btnGenerarPlantillaImpresion');
-    const modalPlantillaImpresion = document.getElementById('modalPlantillaImpresion');
-    const btnImprimirPlantilla = document.getElementById('btnImprimirPlantilla');    
+    const btnAbrirPnatallaPLantillaImpresion = document.getElementById('btnGenerarPlantillaImpresion');
 
     // COMPORTAMIENTOS
+
+    txtBuscarSocio.addEventListener('input', (e) => {
+        let texto = txtBuscarSocio.value.trim();
+
+        filtrarSocios(texto);
+    });
+
+    txtSelectFiltro.addEventListener('change', async () => {
+        await filtrarSociosPorFiltro(txtSelectFiltro.value);
+    });
 
     btnAbrirModalLinkAcceso.addEventListener('click', async () => {
         openModal(modalLinkAcceso);
@@ -90,8 +101,8 @@ function iniciarCobranza() {
         }
     });
 
-    btnAbrirModalPLantillaImpresion.addEventListener('click', () => {
-        openModal(modalPlantillaImpresion);
+    btnAbrirPnatallaPLantillaImpresion.addEventListener('click', () => {
+        window.location.href = 'plantillaImprecion.php';
     });
 
     tbodySocios.addEventListener('click', async (e) => {
@@ -129,6 +140,26 @@ function iniciarCobranza() {
 
         if (botonEditar) {
             openModal(modalAccionesSocio);
+        }
+    });
+
+    btnAnterior.addEventListener('click', () => {
+        if (paginaActual > 1) {
+            paginaActual--;
+
+            mostrarPagina();
+            crearPaginacion();
+        }
+    });
+
+    btnSiguiente.addEventListener('click', () => {
+        const totalPaginas = Math.ceil(sociosFiltrados.length / sociosPorPagina);
+
+        if (paginaActual < totalPaginas) {
+            paginaActual++;
+
+            mostrarPagina();
+            crearPaginacion();
         }
     });
 
@@ -173,51 +204,10 @@ function iniciarCobranza() {
         alert(visitaCreada.message);
         closeModal(modalRegistrarVisita);
 
+        visitasCache.delete(idCuota);
+
         mostrarPagina();
         crearPaginacion();
-    });
-
-    txtBuscarSocio.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-            if (txtBuscarSocio.value.trim() === '') {
-                cargarSociosSocios();
-            } else {
-                cargarSociosPorNombre();
-            }
-        }
-
-        txtSelectFiltro.value = 'Filtros';
-    });
-
-    btnBuscarSocio.addEventListener('click', () => {
-        if (txtBuscarSocio.value.trim() === '') {
-            cargarSocios();
-        } else {
-            cargarSociosPorNombre();
-        }
-
-        txtSelectFiltro.value = 'Filtros';
-    });
-
-    btnAnterior.addEventListener("click", () => {
-        if (paginaActual > 1) {
-            paginaActual--;
-
-            mostrarPagina();
-            crearPaginacion();
-        }
-    });
-
-    btnSiguiente.addEventListener("click", () => {
-        const totalPaginas = Math.ceil(socios.length / sociosPorPagina);
-
-        if (paginaActual < totalPaginas) {
-
-            paginaActual++;
-
-            mostrarPagina();
-            crearPaginacion();
-        }
     });
 
     btnGenerarLinkAcceso.addEventListener('click', async () => {
@@ -264,6 +254,9 @@ function iniciarCobranza() {
     async function cargarSocios() {
         socios = await socioApi.obtenerSociosCobranza();
 
+        sociosFiltrados = socios;
+        paginaActual = 1;
+
         mostrarPagina();
         crearPaginacion();
     }
@@ -282,17 +275,31 @@ function iniciarCobranza() {
     }
 
     async function mostrarPagina() {
+        const versionActual = ++versionRender;
+
         const inicio = (paginaActual - 1) * sociosPorPagina;
         const fin = inicio + sociosPorPagina;
 
-        const sociosPagina = socios.slice(inicio, fin);
+        const sociosPagina = sociosFiltrados.slice(inicio, fin);
+
+        const cantidadesVisitas = await Promise.all(
+            sociosPagina.map(socio =>
+                obtenerCantidadVisitasPorCuota(socio.idCuota)
+            )
+        );
+
+        if (versionActual !== versionRender) {
+            return;
+        }
 
         let filas = '';
 
         for (let i = 0; i < sociosPagina.length; i++) {
+
             let estadoCuota = 'no-pagado';
             let estadoVisita = 'no-visitado';
-            const visitasCuota = await obtenerCantidadVisitasPorCuota(sociosPagina[i].idCuota);
+
+            const visitasCuota = cantidadesVisitas[i];
 
             if (sociosPagina[i].estadoCuota == 1) {
                 estadoCuota = 'pagado';
@@ -302,44 +309,57 @@ function iniciarCobranza() {
                 estadoVisita = 'visitado';
             }
 
-            filas += 
-                `<tr data-id="${sociosPagina[i].id}" data-id-cuota="${sociosPagina[i].idCuota}">
+            filas += `
+                <tr 
+                    data-id="${sociosPagina[i].id}" 
+                    data-id-cuota="${sociosPagina[i].idCuota}"
+                >
                     <td>${sociosPagina[i].id}</td>
                     <td>${sociosPagina[i].apellido}</td>
                     <td>${sociosPagina[i].nombre}</td>
                     <td>${sociosPagina[i].dni}</td>
                     <td>${sociosPagina[i].telefono}</td>
+
                     <td>
                         <div class="estado">
                             <span class="punto ${estadoCuota}"></span>
                             <span>Pagado</span>
                         </div>
-                    </td>    
+                    </td>
+
                     <td>
                         <div class="estado">
                             <span class="punto ${estadoVisita}"></span>
                             <span>Visitado</span>
                         </div>
                     </td>
+
                     <td>
-                        <i data-lucide="pencil" class="iconoTabla lapiz"></i>
+                        <i 
+                            data-lucide="pencil" 
+                            class="iconoTabla lapiz"
+                        ></i>
                     </td>
-                </tr>`;
+                </tr>
+            `;
         }
+
         tbodySocios.innerHTML = filas;
+
         lucide.createIcons();
     }
 
     function crearPaginacion() {
         contenedorPaginas.innerHTML = "";
 
-        const totalPaginas = Math.ceil(socios.length / sociosPorPagina);
+        const totalPaginas =
+            Math.ceil(sociosFiltrados.length / sociosPorPagina);
 
         for (let i = 1; i <= totalPaginas; i++) {
 
             const boton = document.createElement('button');
-            boton.classList.add('btnPagina');
 
+            boton.classList.add('btnPagina');
             boton.textContent = i;
 
             if (i === paginaActual) {
@@ -347,6 +367,7 @@ function iniciarCobranza() {
             }
 
             boton.addEventListener('click', () => {
+
                 paginaActual = i;
 
                 mostrarPagina();
@@ -357,21 +378,64 @@ function iniciarCobranza() {
         }
     }
 
-    async function cargarSociosPorNombre() {
-        socios = await socioApi.obtenerSociosPorNombre(txtBuscarSocio);
+    function filtrarSocios(texto) {
+        texto = texto.toLowerCase();
+
+        if (texto === '') {
+            sociosFiltrados = socios;
+        }
+        else {
+            sociosFiltrados = socios.filter(socio => {
+                const nombreCompleto = `${socio.nombre} ${socio.apellido}`.toLowerCase();
+                const dni = socio.dni.toString();
+
+                return nombreCompleto.includes(texto) || dni.includes(texto);
+            });
+        }
+
+        paginaActual = 1;
 
         mostrarPagina();
         crearPaginacion();
     }
 
-    async function cargarSociosPorFiltro() {
-        let filtro = txtSelectFiltro.value.toLowerCase();
+    async function filtrarSociosPorFiltro(filtro) {
+        paginaActual = 1;
 
-        if (filtro === 'numero socio') {
-            filtro = 'id';
+        if (filtro === 'Filtros') {
+            sociosFiltrados = socios;
+
+            mostrarPagina();
+            crearPaginacion();
+            return;
         }
 
-        socios = await socioApi.obtenerSociosPorFiltro(txtSelectFiltro)
+        if (filtro === 'Visitados' || filtro === 'No visitados') {
+            await cargarVisitasDeTodosLosSocios();
+        }
+
+        switch (filtro) {
+            case 'Pagados':
+                sociosFiltrados = socios.filter(socio => Number(socio.estadoCuota) === 1);
+                break;
+
+            case 'No pagados':
+                sociosFiltrados = socios.filter(socio => Number(socio.estadoCuota) === 0);
+                break;
+
+            case 'Visitados':
+                sociosFiltrados = socios.filter(socio => visitasCache.get(socio.idCuota) >= 1);
+                break;
+
+            case 'No visitados':
+                sociosFiltrados = socios.filter(socio => !visitasCache.get(socio.idCuota) ||
+                                visitasCache.get(socio.idCuota) === 0);
+                break;
+
+            default:
+                sociosFiltrados = socios;
+                break;
+        }
 
         mostrarPagina();
         crearPaginacion();
@@ -428,7 +492,7 @@ function iniciarCobranza() {
         const cobrador = await userApi.getUsuarioById(datosLinkGenerado.linkAcceso.destinado_a, 'Cobrador');
         txtCobradorAsignado.textContent = `${cobrador.nombre} ${cobrador.apellido}`;
         txtDNICobrador.textContent = `DNI: ${formatearDNI(cobrador.dni)}`;
-        txtToken.value = `${datosLinkGenerado.linkAcceso.token}`;
+        txtToken.value = `${datosLinkGenerado.linkAcceso.url}`;
         txtFechaVencimiento.textContent = `${datosLinkGenerado.linkAcceso.fecha_vencimiento}`;
         txtDuracion.textContent = `${datosLinkGenerado.linkAcceso.duracionToken} horas`;
     }
@@ -437,8 +501,26 @@ function iniciarCobranza() {
         return new Intl.NumberFormat('es-AR').format(dni);
     }
 
+    async function cargarVisitasDeTodosLosSocios() {
+        const sociosSinCache = socios.filter(
+            socio => !visitasCache.has(socio.idCuota)
+        );
+
+        await Promise.all(
+            sociosSinCache.map(async socio => {
+                await obtenerCantidadVisitasPorCuota(socio.idCuota);
+            })
+        );
+    }
+
     async function obtenerCantidadVisitasPorCuota(_idCuota) {
-        let visitas = await visitaApi.getCantidadVisitas(_idCuota);
+        if (visitasCache.has(_idCuota)) {
+            return visitasCache.get(_idCuota);
+        }
+
+        const visitas = await visitaApi.getCantidadVisitas(_idCuota);
+        visitasCache.set(_idCuota, visitas);
+
         return visitas;
     }
 

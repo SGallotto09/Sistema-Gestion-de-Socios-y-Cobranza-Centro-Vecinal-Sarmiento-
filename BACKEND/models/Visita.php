@@ -18,13 +18,11 @@ class VisitaModel {
     function getTotalVisitasSocios($conexion) {
         $query = "SELECT COUNT(DISTINCT s.id) FROM visita AS v 
             JOIN cuota AS c ON v.id_cuota = c.id 
-            JOIN socio AS s ON c.id_socio = s.id WHERE s.activo = 1 AND c.fecha_vencimiento >= :fecha_actual";
+            JOIN socio AS s ON c.id_socio = s.id WHERE s.activo = 1 AND c.fecha_vencimiento >= CURDATE()";
 
         $stmt = $conexion->prepare($query);
 
-        $stmt->execute([
-            'fecha_actual' => date('Y-m-d')
-        ]);
+        $stmt->execute();
 
         $totalVisitas = $stmt->fetchColumn();
 

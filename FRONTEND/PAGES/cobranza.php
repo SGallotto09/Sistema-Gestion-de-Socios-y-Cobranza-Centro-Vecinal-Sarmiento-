@@ -120,7 +120,9 @@ require_once '../../BACKEND/tasks/validarSesionIniciada.php'
                     <select id="selectFiltro">
                         <option disabled selected>Filtros</option>
                         <option>Pagados</option>
+                        <option>No pagados</option>
                         <option>Visitados</option>
+                        <option>No visitados</option>
                     </select>
                 </div>
             </div>
@@ -324,10 +326,9 @@ require_once '../../BACKEND/tasks/validarSesionIniciada.php'
                             <h4 class="modal_title">El link caducara en:</h4>
                             <div class="modal_input_tempo_general_link_socio">
                                 <select id="txtTempo">
-                                    <option value="24">24 horas</option>
-                                    <option value="12">12 horas</option>
                                     <option value="8">8 horas</option>
-                                    <option value="4">4 horas</option>
+                                    <option value="12">12 horas</option>
+                                    <option value="24">24 horas</option>  
                                 </select>
                             </div>
                         </div>
@@ -463,156 +464,6 @@ require_once '../../BACKEND/tasks/validarSesionIniciada.php'
                     <div class="modal_footer_link_generado">
                         <button class="modal_boton_cancelar">Cancelar</button>
                         <button class="modal_boton_accion" id="btnCopiarLink">Copiar link</button>
-                    </div>
-                </div>
-            </section>
-
-            <section class="modal modal_plantilla_impresion" id="modalPlantillaImpresion">
-                <div class="modal_content_plantilla_impresion">
-                    <div class="modal_header_plantilla_impresion">
-                        <h2 class="modal_title_header">Planilla de impresión</h2>
-                        <h2 class="modal_close">X</h2>
-                    </div>
-
-                    <div class="modal_data_plantilla_impresion">
-                        <h2>Planilla de cobranza del bimestre: Julio - Agosto 2026</h2>
-                    </div>
-
-                    <div class="modal_body_plantilla_impresion">
-                        <div class="modal_table_content_planilla_impresion">
-                            <table>
-                                <tr>
-                                    <th>Nº Socio</th>
-                                    <th>Apellido</th>
-                                    <th>Nombre</th>
-                                    <th>DNI</th>
-                                    <th>Telefono</th>
-                                    <th>Barrio</th>
-                                    <th>Calle</th>
-                                    <th>Altura</th>
-                                </tr>
-
-                                <tr>
-                                    <td>1001</td>
-                                    <td>Gallotto</td>
-                                    <td>Santiago</td>
-                                    <td>47.823.673</td>
-                                    <td>3562502652</td>
-                                    <td>Gandolfo</td>
-                                    <td>General la Valle</td>
-                                    <td>153</td>
-                                </tr>
-
-                                <tr>
-                                    <td>1001</td>
-                                    <td>Gallotto</td>
-                                    <td>Santiago</td>
-                                    <td>47.823.673</td>
-                                    <td>3562502652</td>
-                                    <td>Gandolfo</td>
-                                    <td>General la Valle</td>
-                                    <td>153</td>
-                                </tr>
-
-                                <tr>
-                                    <td>1001</td>
-                                    <td>Gallotto</td>
-                                    <td>Santiago</td>
-                                    <td>47.823.673</td>
-                                    <td>3562502652</td>
-                                    <td>Gandolfo</td>
-                                    <td>General la Valle</td>
-                                    <td>153</td>
-                                </tr>
-
-                                <tr>
-                                    <td>1001</td>
-                                    <td>Gallotto</td>
-                                    <td>Santiago</td>
-                                    <td>47.823.673</td>
-                                    <td>3562502652</td>
-                                    <td>Gandolfo</td>
-                                    <td>General la Valle</td>
-                                    <td>153</td>
-                                </tr>
-
-                                <tr>
-                                    <td>1001</td>
-                                    <td>Gallotto</td>
-                                    <td>Santiago</td>
-                                    <td>47.823.673</td>
-                                    <td>3562502652</td>
-                                    <td>Gandolfo</td>
-                                    <td>General la Valle</td>
-                                    <td>153</td>
-                                </tr>
-
-                                <tr>
-                                    <td>1001</td>
-                                    <td>Gallotto</td>
-                                    <td>Santiago</td>
-                                    <td>47.823.673</td>
-                                    <td>3562502652</td>
-                                    <td>Gandolfo</td>
-                                    <td>General la Valle</td>
-                                    <td>153</td>
-                                </tr>
-
-                                <tr>
-                                    <td>1001</td>
-                                    <td>Gallotto</td>
-                                    <td>Santiago</td>
-                                    <td>47.823.673</td>
-                                    <td>3562502652</td>
-                                    <td>Gandolfo</td>
-                                    <td>General la Valle</td>
-                                    <td>153</td>
-                                </tr>
-
-                                <tr>
-                                    <td>1001</td>
-                                    <td>Gallotto</td>
-                                    <td>Santiago</td>
-                                    <td>47.823.673</td>
-                                    <td>3562502652</td>
-                                    <td>Gandolfo</td>
-                                    <td>General la Valle</td>
-                                    <td>153</td>
-                                </tr>
-
-                                <tr>
-                                    <td>1001</td>
-                                    <td>Gallotto</td>
-                                    <td>Santiago</td>
-                                    <td>47.823.673</td>
-                                    <td>3562502652</td>
-                                    <td>Gandolfo</td>
-                                    <td>General la Valle</td>
-                                    <td>153</td>
-                                </tr>
-
-                                <tr>
-                                    <td>1001</td>
-                                    <td>Gallotto</td>
-                                    <td>Santiago</td>
-                                    <td>47.823.673</td>
-                                    <td>3562502652</td>
-                                    <td>Gandolfo</td>
-                                    <td>General la Valle</td>
-                                    <td>153</td>
-                                </tr>
-                            </table>
-                        </div>
-
-                        <div class="modal_data_table_planilla_impresion">
-                            <p>Ordenado por barrio (A - Z)</p>
-                        </div>
-                        
-                    </div>
-
-                    <div class="modal_footer_plantilla-impresion">
-                        <button class="modal_boton_cancelar">Cancelar</button>
-                        <button class="modal_boton_accion" id="btnImprimirPlantilla">Imprimir</button>
                     </div>
                 </div>
             </section>

@@ -2,9 +2,16 @@
 
 session_start();
 
-if (!isset($_SESSION['id'])) {
-    http_response_code(401);
+$method = $_SERVER['REQUEST_METHOD'];
 
+$esAdministrador = isset($_SESSION['id']);
+
+$esCobrador = isset($_SESSION['cobrador_autenticado']) &&
+                $_SESSION['cobrador_autenticado'] === true &&
+                isset($_SESSION['id_cobrador']);
+
+if (!$esAdministrador && !$esCobrador) {
+    http_response_code(401);
     echo json_encode([
         'message' => 'Usuario no autenticado.'
     ]);
@@ -12,24 +19,38 @@ if (!isset($_SESSION['id'])) {
     exit;
 }
 
+if ($method !== 'GET' && !$esAdministrador) {
+    http_response_code(403);
+    echo json_encode([
+        'message' => 'No tiene permisos para realizar esta acción.'
+    ]);
+
+    exit;
+}
+
 header('Content-Type: application/json');
 $input = json_decode(file_get_contents('php://input'), true);
-$method = $_SERVER['REQUEST_METHOD'];
 
 require_once '../database/database.php';
 require_once '../models/Socio.php';
 require_once '../models/Cuota.php';
 
 $cadenaConexion = Conexion::getInstance()->getConexion();
-$idUsuario = $_SESSION['id'];
+
+$idAdministrador = null;
+
+if ($esAdministrador) {
+    $idAdministrador = $_SESSION['id'];
+}
+
 $socio = new SocioModel();
 
 try {
     match (($method)) {
         'GET'       => getSociosController($socio, $cadenaConexion),
-        'POST'      => createSocioController($socio, $cadenaConexion, $input, $idUsuario),
-        'PUT'       => updateSocioCointroller($socio, $cadenaConexion, $input, $idUsuario),
-        'DELETE'    => deleteSocioController($socio, $cadenaConexion, $input, $idUsuario),
+        'POST'      => createSocioController($socio, $cadenaConexion, $input, $idAdministrador),
+        'PUT'       => updateSocioCointroller($socio, $cadenaConexion, $input, $idAdministrador),
+        'DELETE'    => deleteSocioController($socio, $cadenaConexion, $input, $idAdministrador),
         default     => throw new Exception('Método HTTP no permitido')
     };
 } catch (PDOException $e) {
@@ -39,7 +60,7 @@ try {
     ]);
 
 } catch (Exception $e) {
-    htpp_response_code(400);
+    http_response_code(400);
     echo json_encode([
         'message' => $e->getMessage()
     ]);
@@ -61,12 +82,12 @@ function getSociosController($socio, $conexion) {
     echo json_encode($resultado);
 }
 
-function createSocioController($_socio, $_cadenaConexion, $_input, $_idUsuario) {
-    if ($_idUsuario === null) throw new Exception('El usuario no se encuentra autenticado.');
+function createSocioController($_socio, $_cadenaConexion, $_input, $_idAdministrador) {
+    if ($_idAdministrador === null) throw new Exception('El usuario no se encuentra autenticado.');
 
     $datos = validarCampos($_input);
 
-    $socioCreado = $_socio->createSocio($_cadenaConexion, $datos, $_idUsuario);
+    $socioCreado = $_socio->createSocio($_cadenaConexion, $datos, $_idAdministrador);
 
     if (empty($socioCreado['idSocioCreado'])) throw new Exception('No se pudo crear el socio.');
 
@@ -81,28 +102,28 @@ function createSocioController($_socio, $_cadenaConexion, $_input, $_idUsuario) 
     ]);
 }
 
-function updateSocioCointroller($_socio, $_cadenaConexion, $_input, $_idUsuario) {
-    if ($_idUsuario === null) throw new Exception('El usuario no se encuentra autenticado.');
+function updateSocioCointroller($_socio, $_cadenaConexion, $_input, $_idAdministrador) {
+    if ($_idAdministrador === null) throw new Exception('El usuario no se encuentra autenticado.');
 
     $idUpdate = validarId($_input);
     $datos = validarCampos($_input);
 
-    $socioUpdated = $_socio->updatSocio($_cadenaConexion, $idUpdate, $datos, $_idUsuario);
+    $socioUpdated = $_socio->updateSocio($_cadenaConexion, $idUpdate, $datos, $_idAdministrador);
 
     if (!$socioUpdated) throw new Exception('No se pudo modificar el socio.');
 
-    htpp_response_code(200);
+    http_response_code(200);
     echo json_encode([
         'message' => 'Socio modificado correctamente.'
     ]);
 }
 
-function deleteSocioController($_socio, $_cadenaConexion, $_input, $_idUsuario) {
-    if ($_idUsuario === null) throw new Exception('El usuario no se encuentra autenticado.');
+function deleteSocioController($_socio, $_cadenaConexion, $_input, $_idAdministrador) {
+    if ($_idAdministrador === null) throw new Exception('El usuario no se encuentra autenticado.');
 
     $idEliminar = validarId($_input);
 
-    $socioEliminado = $_socio->deleteSocio($_cadenaConexion, $idEliminar, $_idUsuario);
+    $socioEliminado = $_socio->deleteSocio($_cadenaConexion, $idEliminar, $_idAdministrador);
 
     if (!$socioEliminado) throw new Exception('No se elimino ningun socio.');
 

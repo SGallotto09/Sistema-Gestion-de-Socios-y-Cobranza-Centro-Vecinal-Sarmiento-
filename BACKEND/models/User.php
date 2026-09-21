@@ -62,7 +62,7 @@ class UserModel {
         $stmt = $conexion->prepare($query);
 
         $stmt->execute([
-            'id' => $idCobrador,
+            'id' => $idAdministrador,
             'rol' => 'Administrador'
         ]);
 

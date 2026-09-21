@@ -1,6 +1,6 @@
 <?php 
 
-require_once '../../BACKEND/tasks/validarSesionIniciada.php'
+require_once '../../BACKEND/tasks/validarSesionCobrador.php';
 
 ?>
 
@@ -39,7 +39,7 @@ require_once '../../BACKEND/tasks/validarSesionIniciada.php'
         </section>
 
         <div class="informacion-listado">
-            <span id="txtCantidadSocios">10 socios</span>
+            <span id="txtCantidadSocios"></span>
         </div>
 
         <section class="lista-socios" id="listaSocios"></section>

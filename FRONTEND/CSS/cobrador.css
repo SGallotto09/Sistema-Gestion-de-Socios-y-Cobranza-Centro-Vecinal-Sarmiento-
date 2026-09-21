@@ -28,11 +28,26 @@
     box-sizing: border-box;
 }
 
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    touch-action: pan-y;
+    overscroll-behavior-y: auto;
+}
+
 body {
     margin: 0;
     background-color: var(--bg-body);
     color: var(--texto-principal);
     font-family: Arial, sans-serif;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+    touch-action: pan-y;
+    overscroll-behavior-y: auto;
 }
 
 
