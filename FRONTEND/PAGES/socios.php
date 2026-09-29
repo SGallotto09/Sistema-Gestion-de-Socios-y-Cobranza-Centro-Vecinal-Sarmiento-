@@ -9,6 +9,10 @@ require_once '../../BACKEND/tasks/validarSesionIniciada.php'
 <head>
     <meta charset="UTF-8">
     <title>Socios</title>
+    <script>
+        const tema = localStorage.getItem('tema') || 'light';
+        document.documentElement.setAttribute('data-theme', tema);
+    </script>
     <link rel="stylesheet" href="../CSS/style.css">
     <link rel="stylesheet" href="../CSS/menu.css">
     <link rel="stylesheet" href="../CSS/socios.css">
@@ -84,7 +88,7 @@ require_once '../../BACKEND/tasks/validarSesionIniciada.php'
 
                 <div class="modal_body_cerrar_sesion">
                     <div><i data-lucide="log-out"></i></div>
-                    <h3 class="modal_title">¿Estás seguro que deseas cerrar sesión de tu cuenta?</h3>
+                    <h3>¿Estás seguro que deseas cerrar sesión de tu cuenta?</h3>
                 </div>
 
                 <div class="modal_footer_cerrar_sesion">

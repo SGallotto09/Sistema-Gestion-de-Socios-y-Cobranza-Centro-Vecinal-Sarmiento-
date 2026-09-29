@@ -9,6 +9,10 @@ require_once '../../BACKEND/tasks/validarSesionIniciada.php'
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
+    <script>
+        const tema = localStorage.getItem('tema') || 'light';
+        document.documentElement.setAttribute('data-theme', tema);
+    </script>
     <link rel="stylesheet" href="../CSS/style.css">
     <link rel="stylesheet" href="../CSS/menu.css">
     <link rel="stylesheet" href="../CSS/dashboard.css">
@@ -84,7 +88,7 @@ require_once '../../BACKEND/tasks/validarSesionIniciada.php'
 
                 <div class="modal_body_cerrar_sesion">
                     <div><i data-lucide="log-out"></i></div>
-                    <h3 class="modal_title">¿Estás seguro que deseas cerrar sesión de tu cuenta?</h3>
+                    <h3>¿Estás seguro que deseas cerrar sesión de tu cuenta?</h3>
                 </div>
 
                 <div class="modal_footer_cerrar_sesion">
@@ -131,7 +135,7 @@ require_once '../../BACKEND/tasks/validarSesionIniciada.php'
                     <h2 id="h2PagaronBimestre"></h2>
                     <div class="contenedor-parrafos">
                         <p><b>Pagaron el bimestre</b></p>
-                        <p id="pagaronBimestre"><b>80% del total</b></p>
+                        <p><b id="pagaronBimestre"></b></p>
                     </div>
                 </div>
 
@@ -140,7 +144,7 @@ require_once '../../BACKEND/tasks/validarSesionIniciada.php'
                     <h2 id="h2SociosVisitados"></h2>
                     <div class="contenedor-parrafos">
                         <p><b>Socios visitados</b></p>
-                        <p id="pagaronBimestre"><b>91% del total</b></p>
+                        <p><b id="sociosVisitados"></b></p>
                     </div>
                 </div>
 
@@ -149,7 +153,7 @@ require_once '../../BACKEND/tasks/validarSesionIniciada.php'
                     <h2 id="h2PendientesPago"></h2>
                     <div class="contenedor-parrafos">
                         <p><b>Pendientes de pago</b></p>
-                        <p id="pagaronBimestre"><b>20% del total</b></p>
+                        <p><b id="pendientesDePago"></b></p>
                     </div>
                 </div>
             </div>
@@ -161,12 +165,12 @@ require_once '../../BACKEND/tasks/validarSesionIniciada.php'
                     </div>
 
                     <div class="barra">
-                        <div class="barra-completa"></div>
+                        <div class="barra-completa" id="barraCompleta"></div>
                     </div>
 
-                    <span id="txtPorcentajeBarra"><b>80%</b></span>
+                    <span id="txtPorcentajeBarra"><b></b></span>
 
-                    <p id="parrafoBarra"><b>280 de 350 socios pagaron el bimestre actual.</b></p>
+                    <p><b id="parrafoBarra"></b></p>
                 </div>
 
                 <div class="acceso">

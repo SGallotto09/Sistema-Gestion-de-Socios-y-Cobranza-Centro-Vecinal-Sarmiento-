@@ -24,6 +24,7 @@ function iniciarSocios() {
     // TABLA
     const tbodySocios = document.getElementById('tbodySocios');
     let socios = [];
+    let sociosFiltrados = [];
     let paginaActual = 1;
     const sociosPorPagina = 10;
 
@@ -61,6 +62,13 @@ function iniciarSocios() {
     let idEliminar = '';
 
     // COMPORTAMIENTOS
+
+    txtBuscarSocio.addEventListener('input', (e) => {
+        let texto = txtBuscarSocio.value.trim();
+
+        filtrarSocios(texto);
+    });
+
     btnNuevoSocio.addEventListener('click', () => {
         openModal(modalAltaSocio);
     })
@@ -93,34 +101,8 @@ function iniciarSocios() {
         }
     });
 
-    txtBuscarSocio.addEventListener("keydown", async (e) => {
-        if (e.key === "Enter") {
-            if (txtBuscarSocio.value.trim() === '') {
-                cargarSocios();;
-            } else {
-                cargarSociosPorNombre();
-            }
-        }
-
-        txtSelectFiltro.value = 'Filtros';
-    });
-
-    btnBuscarSocio.addEventListener('click', async () => {
-        if (txtBuscarSocio.value.trim() === '') {
-            cargarSocios();;
-        } else {
-            cargarSociosPorNombre();
-        }
-
-        txtSelectFiltro.value = 'Filtros';
-    });
-
-    txtSelectFiltro.addEventListener('change', async () => {
-        if (!txtSelectFiltro.value.trim() === 'Todos') {
-            cargarSocios();;
-        } else {
-            cargarSociosPorFiltro();
-        }
+    txtSelectFiltro.addEventListener('change', () => {
+        filtrarSociosPorFiltro(txtSelectFiltro.value);
     });
 
     tbodySocios.addEventListener('click', (e) => {
@@ -148,10 +130,9 @@ function iniciarSocios() {
     });
 
     btnSiguiente.addEventListener("click", () => {
-        const totalPaginas = Math.ceil(socios.length / sociosPorPagina);
+        const totalPaginas = Math.ceil(sociosFiltrados.length / sociosPorPagina);
 
         if (paginaActual < totalPaginas) {
-
             paginaActual++;
 
             mostrarPagina();
@@ -171,19 +152,8 @@ function iniciarSocios() {
     async function cargarSocios() {
         socios = await socioApi.obtenerSocios();
 
-        mostrarPagina();
-        crearPaginacion();
-    }
-
-    async function cargarSociosPorNombre() {
-        socios = await socioApi.obtenerSociosPorNombre(txtBuscarSocio.value);
-
-        mostrarPagina();
-        crearPaginacion();
-    }
-
-    async function cargarSociosPorFiltro() {
-        socios = await socioApi.obtenerSociosPorFiltro(txtSelectFiltro.value.trim());
+        sociosFiltrados = socios;
+        paginaActual = 1;
 
         mostrarPagina();
         crearPaginacion();
@@ -240,7 +210,7 @@ function iniciarSocios() {
         const inicio = (paginaActual - 1) * sociosPorPagina;
         const fin = inicio + sociosPorPagina;
 
-        const sociosPagina = socios.slice(inicio, fin);
+        const sociosPagina = sociosFiltrados.slice(inicio, fin);
 
         let filas = "";
 
@@ -269,20 +239,22 @@ function iniciarSocios() {
     function crearPaginacion() {
         contenedorPaginas.innerHTML = "";
 
-        const totalPaginas = Math.ceil(socios.length / sociosPorPagina);
+        const totalPaginas = Math.ceil(
+            sociosFiltrados.length / sociosPorPagina
+        );
 
-        for (let i = 1; i <= totalPaginas; i++) {
+        function agregarBoton(numero) {
             const boton = document.createElement('button');
+
             boton.classList.add('btnPagina');
+            boton.textContent = numero;
 
-            boton.textContent = i;
-
-            if (i === paginaActual) {
+            if (numero === paginaActual) {
                 boton.classList.add('paginaActiva');
             }
 
             boton.addEventListener('click', () => {
-                paginaActual = i;
+                paginaActual = numero;
 
                 mostrarPagina();
                 crearPaginacion();
@@ -290,6 +262,132 @@ function iniciarSocios() {
 
             contenedorPaginas.appendChild(boton);
         }
+
+        function agregarPuntos() {
+            const puntos = document.createElement('span');
+
+            puntos.textContent = '...';
+            puntos.classList.add('puntosPaginacion');
+
+            contenedorPaginas.appendChild(puntos);
+        }
+
+        // Si hay pocas páginas, mostramos todas
+        if (totalPaginas <= 7) {
+            for (let i = 1; i <= totalPaginas; i++) {
+                agregarBoton(i);
+            }
+
+            return;
+        }
+
+        // SI ESTAMOS CERCA DEL PRINCIPIO
+        if (paginaActual <= 3) {
+
+            agregarBoton(1);
+            agregarBoton(2);
+            agregarBoton(3);
+            agregarBoton(4);
+
+            agregarPuntos();
+
+            agregarBoton(totalPaginas);
+        }   
+
+        // SI ESTAMOS EN EL MEDIO
+        else if (paginaActual < totalPaginas - 2) {
+            agregarBoton(1);
+
+            agregarPuntos();
+
+            agregarBoton(paginaActual - 1);
+            agregarBoton(paginaActual);
+            agregarBoton(paginaActual + 1);
+
+            agregarPuntos();
+
+            agregarBoton(totalPaginas);
+        }
+
+        // SI ESTAMOS CERCA DEL FINAL
+        else {
+            agregarBoton(1);
+
+            agregarPuntos();
+
+            agregarBoton(totalPaginas - 3);
+            agregarBoton(totalPaginas - 2);
+            agregarBoton(totalPaginas - 1);
+            agregarBoton(totalPaginas);
+        }
+    }
+
+    function filtrarSocios(texto) {
+        texto = texto.toLowerCase().trim();
+
+        if (texto === '') {
+            sociosFiltrados = socios;
+        }
+        else {
+            sociosFiltrados = socios.filter(socio => {
+                const nombreCompleto = `${socio.apellido} ${socio.nombre}`.toLowerCase();
+                const dni = socio.dni.toString();
+
+                return nombreCompleto.includes(texto) || dni.includes(texto);
+            });
+        }
+
+        paginaActual = 1;
+
+        mostrarPagina();
+        crearPaginacion();
+    }
+
+    function filtrarSociosPorFiltro(filtro) {
+        paginaActual = 1;
+
+        if (filtro === '' || filtro === 'Filtro') {
+            sociosFiltrados = socios;
+
+            mostrarPagina();
+            crearPaginacion();
+            return;
+        }
+
+        sociosFiltrados = [...socios];
+
+        switch (filtro) {
+            case 'Numero socio':
+                sociosFiltrados.sort((a, b) => a.id - b.id);
+                break;
+
+            case 'DNI':
+                sociosFiltrados.sort((a, b) => a.dni - b.dni);
+                break;
+
+            case 'Barrio':
+                sociosFiltrados.sort((a, b) => {
+                    const comparacionBarrio = a.barrio.toLowerCase().localeCompare(b.barrio.toLowerCase());
+
+                    if (comparacionBarrio !== 0) {
+                        return comparacionBarrio;
+                    }
+
+                    return a.calle.toLowerCase().localeCompare(b.calle.toLowerCase());
+                });
+                break;
+
+            case 'Calle':
+                sociosFiltrados.sort((a, b) => a.calle.toLowerCase().localeCompare(b.calle.toLowerCase()));
+                break;
+
+            default:
+                sociosFiltrados = socios;
+                break;
+        }
+
+        mostrarPagina();
+        crearPaginacion();
     }
 
     function completarCamposConDatosFila(fila) {
@@ -306,10 +404,18 @@ function iniciarSocios() {
 
     function validarCampos(nombre, apellido, dni, telefono, barrio, calle, altura) {
 
-        if (nombre.value.trim() === '') {
-            alert('El nombre del socio es obligatorio.');
-            nombre.focus();
-            return false;
+        const apellidoLimpio = apellido.value.trim(); 
+
+        if (apellidoLimpio === '') { 
+            alert('El apellido del socio es obligatorio.'); 
+            apellido.focus(); 
+            return false; 
+        } 
+        
+        if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/.test(apellidoLimpio)) { 
+            alert('El apellido solo puede contener letras y espacios.'); 
+            apellido.focus(); 
+            return false; 
         }
 
         if (apellido.value.trim() === '') {
@@ -318,12 +424,31 @@ function iniciarSocios() {
             return false;
         }
 
+        const nombreLimpio = nombre.value.trim(); 
+        
+        if (nombreLimpio === '') { 
+            alert('El nombre del socio es obligatorio.'); 
+            nombre.focus(); 
+            return false; 
+        } 
+        
+        if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/.test(nombreLimpio)) { 
+            alert('El nombre solo puede contener letras y espacios.'); 
+            nombre.focus(); return false; 
+        } 
+
         const dniLimpio = dni.value.trim();
 
         if (dniLimpio === '') {
             alert('El DNI del socio es obligatorio.');
             dni.focus();
             return false;
+        }
+
+        if (dniLimpio <= -1) {
+            alert('El DNI no puede ser negativo.')
+            dni.focus();
+            return;
         }
 
         if (!/^\d+$/.test(dniLimpio)) {
@@ -349,6 +474,11 @@ function iniciarSocios() {
         if (!/^\d+$/.test(telefonoLimpio)) {
             alert('El teléfono solo puede contener números.');
             telefono.focus();
+            return false;
+        }
+
+        if (telefonoLimpio.length < 10 || telefonoLimpio.length > 12) {
+            alert('El numero de teléfono debe contener entre 10 y 12 digitos');
             return false;
         }
 

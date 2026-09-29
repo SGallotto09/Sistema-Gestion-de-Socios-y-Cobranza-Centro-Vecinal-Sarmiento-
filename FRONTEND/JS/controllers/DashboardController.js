@@ -18,12 +18,21 @@ function iniciarDashboard() {
     const btnIrASocios = document.getElementById('btnNuevoSocioDashboard')
     const btnIrACobranza = document.getElementById('btnCobranzaDashboard');
 
+    let cantidadSocios = null;
+    let cantidadPagos = null;
     const spanNombreUsuario = document.getElementById('spanNombreUsuario');
     const h2BimestreActual = document.getElementById('h2BimestreActual');
     const h2TotalSocios = document.getElementById('h2TotalSocios');
     const h2PagaronBimestre = document.getElementById('h2PagaronBimestre');
+    const pagaronBimestre = document.getElementById('pagaronBimestre');
     const h2PendientesPago = document.getElementById('h2PendientesPago');
+    const pendientesDePago = document.getElementById('pendientesDePago');
     const h2SociosVisitados = document.getElementById('h2SociosVisitados');
+    const sociosVisitados = document.getElementById('sociosVisitados');
+
+    const barraCompleta = document.getElementById('barraCompleta');
+    const txtPorcentajeBarra = document.getElementById('txtPorcentajeBarra');
+    const parrafoBarra = document.getElementById('parrafoBarra');
 
     // COMPORTAMIENTOS
     btnIrASocios.addEventListener('click', () => {
@@ -65,29 +74,67 @@ function iniciarDashboard() {
     }
 
     async function obtenerCantidadSocios() {
-        const cantidadSocios = await sociosApi.obtenerCantidadSociosCobranza();
+        cantidadSocios = await sociosApi.obtenerCantidadSociosCobranza();
         h2TotalSocios.textContent = cantidadSocios.cantidad;
     }
 
     async function obtenerCantidadTotalDePagos() {
-        const cantidadPagos = await pagosApi.getCantidadDePagos();
+        cantidadPagos = await pagosApi.getCantidadDePagos();
         h2PagaronBimestre.textContent = cantidadPagos.cantidadPagos;
+
+        pagaronBimestre.textContent = `${calcularPorcentaje(cantidadPagos.cantidadPagos, cantidadSocios.cantidad)}% del total`;
     }
 
     async function obtenerTotalSociosVisitados() {
         const totalVisitas = await visitaApi.getTotalVisitas();
         h2SociosVisitados.textContent = totalVisitas.totalVisitas;
+
+        sociosVisitados.textContent = `${calcularPorcentaje(totalVisitas.totalVisitas, cantidadSocios.cantidad)}% del total`;
     }
 
     async function obtenerCantidadCuotasSinPagar() {
         const cantidadCuotasSinPagar = await cuotaApi.getCantidadCuotasSinPagar();
         h2PendientesPago.textContent = cantidadCuotasSinPagar.cuotasSinPagar;
+
+        pendientesDePago.textContent = `${calcularPorcentaje(cantidadCuotasSinPagar.cuotasSinPagar, cantidadSocios.cantidad)}% del total`;
     }
 
-    asignarNombreAdministrador();
-    obtenerBimestreActual();
-    obtenerCantidadSocios();
-    obtenerCantidadTotalDePagos();
-    obtenerTotalSociosVisitados();
-    obtenerCantidadCuotasSinPagar();
+    function calcularPorcentaje(cantidad, total) {
+        return Math.round((cantidad/ total) * 100);
+    }
+
+    function completarParrafoBarra() {
+        const porcentaje = calcularPorcentaje(cantidadPagos.cantidadPagos, cantidadSocios.cantidad);
+
+        barraCompleta.style.width = `${porcentaje}%`;
+
+        txtPorcentajeBarra.innerHTML = `<b>${porcentaje}%</b>`;    
+
+        parrafoBarra.textContent = `${cantidadPagos.cantidadPagos} de ${cantidadSocios.cantidad} socios pagaron el bimestre actual.`;
+    }
+
+    async function cargarDatos() {
+        asignarNombreAdministrador();
+        obtenerBimestreActual();
+
+        await obtenerCantidadSocios();
+
+        const resultados = await Promise.allSettled([
+            obtenerCantidadTotalDePagos(),
+            obtenerTotalSociosVisitados(),
+            obtenerCantidadCuotasSinPagar()
+        ]);
+
+        resultados.forEach((resultado, index) => {
+            if (resultado.status === 'rejected') {
+                console.error(`Error en la función ${index}:`, resultado.reason);
+            }
+        });
+
+        if (cantidadSocios && cantidadPagos) {
+            completarParrafoBarra();
+        }
+    }
+
+    cargarDatos();
 }

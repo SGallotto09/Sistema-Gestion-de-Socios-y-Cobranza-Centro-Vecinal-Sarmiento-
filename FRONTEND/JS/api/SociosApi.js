@@ -20,6 +20,11 @@ export class SocioApi {
 
         const socios = await response.json();
 
+        if (!response.ok) {
+            alert(socios.message);
+            return;
+        }
+
         return socios;
     }
 

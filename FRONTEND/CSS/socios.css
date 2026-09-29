@@ -1,26 +1,3 @@
-:root {
-    /* FONDOS */
-    --bg-body: #F9FAFB; 
-    --bg-card: white;
-    --bg-input: white;
-    --bg-delete: #FCE6E4;
-    --bg-delete-hover: #F9D4CF;
-
-    /* BOTONES */
-    --boton: #4CAF50;
-    --boton-hover: #43A047;
-
-    /* LETRAS */
-    --placeholder: #4B5563; 
-
-    /* BORDES */
-    --border-color: #E5E7EB;
-
-    /* ICONOS */
-    --icon-delete: #FD2D22;
-    --icon-delete-hover: #E11D15;
-}
-
 .contenedor-socios {
     display: grid;
     grid-template-areas:'header'
@@ -30,6 +7,7 @@
     grid-template-rows: 15% 15% 60% 10%;
     padding: 20px 40px;
     background-color: var(--bg-body);
+    color: var(--texto-principal);
 }
 
 .header {
@@ -48,7 +26,7 @@
     outline: none;
     background-color: var(--boton);
     border-radius: 10px;
-    color: var(--bg-input);
+    color: white;
     font-size: 20px;
 
     display: flex;
@@ -90,6 +68,9 @@
     border: none;
     outline: none;
     font-size: 20px;
+
+    color: var(--texto-principal);
+    background-color: transparent;
 }
 
 .input-socio div {
@@ -120,9 +101,13 @@
     width: 100%;
     height: 100%;
     font-size: 20px;
+
     background-color: var(--bg-card);
+    color: var(--texto-principal);
+
     border: 2px solid var(--border-color);
     border-radius: 10px;
+
     text-align: center;
     appearance: none;
 }
@@ -140,6 +125,7 @@
     text-align: center;
     border-collapse: collapse;
     table-layout: fixed;
+    color: var(--texto-principal);
 }
 
 th,
@@ -153,16 +139,25 @@ td {
     border-top: 1px solid var(--border-color);
 }
 
+.cuerpo_tabla td:last-child {
+    overflow: visible;
+}
+
 .iconoTabla {
-    padding: 0px 12px;
-    height: 100%;
-    max-height: 40px;
+    width: 34px;
+    height: 34px;
+    padding: 5px;
+    box-sizing: border-box;
+
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
 }
 
 .iconoTabla:hover {
+    background-color: var(--boton-hover);
     border-radius: 10px;
     color: white;
-    cursor: pointer;
 }
 
 .lapiz {
@@ -174,11 +169,11 @@ td {
 }
 
 .tacho {
-    color: red;
+    color: var(--icon-delete);
 }
 
 .tacho:hover {
-    background-color: rgb(255, 43, 43);
+    background-color: var(--icon-delete-hover);
 }
 
 .footer {
@@ -187,7 +182,6 @@ td {
     display: flex;
     justify-content: end;
     align-items: center;
-    padding-right: 30px;
 }
 
 .texto-footer {
@@ -195,9 +189,11 @@ td {
 }
 
 .siguiente-pagina {
-    width: 30%;
+    width: 40%;
+    height: 100%;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 .btnPagina {
@@ -207,7 +203,9 @@ td {
 
     border: none;
     outline: none;
+
     background-color: var(--bg-body);
+    color: var(--texto-principal);
 }
 
 .btnPagina:hover {
@@ -215,6 +213,14 @@ td {
     color: var(--bg-input);
     border-radius: 10px;
     cursor: pointer;
+    transition: 0.3s;
+}
+
+.btnPagina.paginaActiva {
+    background-color: var(--boton);
+    color: var(--bg-input);
+    border-radius: 10px;
+    font-weight: 700;
 }
 
 .modal_alta_socio,
@@ -224,7 +230,7 @@ td {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #111111bd;
+    background-color: var(--bg-overlay);
 
     height: auto;
     padding: 30px;
@@ -290,6 +296,8 @@ td {
 .modal_body_alta_socio {
     grid-area: body;
     background-color: var(--bg-card);
+    color: var(--texto-principal);
+
     border: 2px solid var(--border-color);
     border-radius: 10px;
 
@@ -356,15 +364,20 @@ td {
     flex-direction: column;
     justify-content: center;
     gap: 10px;
+
+    color: var(--texto-principal);
 }
 
 .input_form_alta_socio {
     height: 40%;
     font-size: 15px;
     padding-left: 10px;
+    
     border: 2px solid var(--border-color);
     border-radius: 10px;
+
     background-color: var(--bg-body);
+    color: var(--texto-principal);
 }
 
 .modal_footer_alta_socio,
@@ -390,6 +403,8 @@ td {
 
 .modal_boton_cancelar {
     background-color: var(--bg-card);
+    color: var(--texto-principal);
+
     border: 2px solid var(--border-color);
     border-radius: 15px;
 }
@@ -402,7 +417,7 @@ td {
 
 .modal_boton_accion {
     background-color: var(--boton);
-    color: var(--bg-input);
+    color: white;
     border-radius: 15px;
 
     display: flex;
@@ -430,6 +445,7 @@ td {
     grid-template-rows: 15% 1fr 20%;
 
     background-color: var(--bg-body);
+    color: var(--texto-principal);
 }
 
 .modal_header_eliminar_socio {
@@ -452,13 +468,17 @@ td {
 }
 
 .modal_body_eliminar_socio svg {
+    box-sizing: content-box;
+
     padding: 35px;
     width: 55px;
     height: 55px;
     border-radius: 50%;
+
     background-color: var(--bg-delete);
     color: var(--icon-delete);
-    margin-bottom: 15px;
+
+    margin-bottom: 10px;
 }
 
 .modal_body_eliminar_socio h3 {

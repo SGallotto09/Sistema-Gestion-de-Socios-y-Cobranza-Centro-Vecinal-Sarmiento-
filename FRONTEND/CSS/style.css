@@ -1,12 +1,209 @@
+:root {
+
+    /* ========================= FONDOS ========================= */
+
+    --bg-body: #F9FAFB;
+    --bg-card: #FFFFFF;
+    --bg-input: #FFFFFF;
+
+    --bg-info: #ECF2F7;
+    --bg-visita: #E3F1FE;
+    --bg-visita-hover: #D0E7FC;
+    --bg-pago: #E6F6EC;
+    --bg-pago-hover: #D1F0DC;
+
+    --bg-aviso: #E8EEE9;
+
+            /* MENÚ */
+    --bg-menu: #0B0F14;
+    --texto-menu: #FFFFFF;
+    --border-menu: #374151;
+
+    /* OVERLAY DE MODALES */
+    --bg-overlay: rgba(17, 17, 17, 0.74);
+
+    /* ESTADOS */
+    --bg-success: #DDF0DD;
+    --texto-success: #2D7A32;
+
+    /* SOMBRA DEL MENÚ */
+    --menu-shadow: 0 6px 15px rgba(76, 175, 80, 0.35);
+
+    /* ========================= TEXTOS ========================= */
+
+    --texto-principal: #111827;
+    --texto-secundario: #4B5563;
+
+    --texto-exito: #16A34A;
+    --texto-error: #DC2626;
+
+    --texto-visita: #065DB7;
+    --texto-pago: #078A33;
+
+    --placeholder: #6B7280;
+
+    /* ========================= BORDES ========================= */
+
+    --border-color: #E5E7EB;
+    --border-info: #287BD2;
+    --border-pago: #168A3A;
+
+    /* ========================= BOTONES ========================= */
+
+    --boton: #4CAF50;
+    --boton-hover: #43A047;
+    --borde-boton: #BFE5C1;
+
+    /* ========================= ICONOS ========================= */
+
+    --icono-azul: #2563EB;
+
+    /* ========================= ELIMINAR ========================= */
+
+    --bg-delete: #FCE6E4;
+    --bg-delete-hover: #F9D4CF;
+    --icon-delete: #FD2D22;
+    --icon-delete-hover: #E11D15;
+
+    /* ========================= SOMBRAS ========================= */
+
+    --sombra-card: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+}
+
+/* ========================= TEMA OSCURO ========================= */
+
+[data-theme="dark"] {
+
+        /* OVERLAY DE MODALES */
+    --bg-overlay: rgba(0, 0, 0, 0.78);
+    
+    /* FONDOS */
+
+    --bg-body: #0B1016;
+    --bg-card: #111A26;
+    --bg-input: #162231;
+
+    --bg-info: #1A2633;
+    --bg-visita: #172A3E;
+    --bg-visita-hover: #203B55;
+    --bg-pago: #18301D;
+    --bg-pago-hover: #214528;
+
+    --bg-aviso: #1B3020;
+
+        /* MENÚ */
+    --bg-menu: #070B10;
+    --texto-menu: #FFFFFF;
+    --border-menu: #26384D;
+
+    /* TEXTOS */
+
+    --texto-principal: #F9FAFB;
+    --texto-secundario: #D1D5DB;
+
+    --texto-exito: #4ADE80;
+    --texto-error: #F87171;
+
+    --texto-visita: #76B8F2;
+    --texto-pago: #6FCF82;
+
+    --placeholder: #9CA3AF;
+
+    /* BORDES */
+
+    --border-color: #26384D;
+
+    /* BOTONES */
+
+    --boton: #4CAF50;
+    --boton-hover: #43A047;
+    --borde-boton: #386D3B;
+
+    --border-info: #4A9AE8;
+    --border-pago: #4DBA69;
+
+    /* ICONOS */
+
+    --icono-azul: #60A5FA;
+
+    /* ELIMINAR */
+
+    --bg-delete: #351817;
+    --bg-delete-hover: #47201D;
+    --icon-delete: #FF5148;
+    --icon-delete-hover: #FF6B63;
+
+    /* SOMBRAS */
+
+    --sombra-card: 0 2px 12px rgba(0, 0, 0, 0.35);
+
+    /* ESTADOS */
+    --bg-success: #19351C;
+    --texto-success: #6FC276;
+
+    /* SOMBRA DEL MENÚ */
+    --menu-shadow: 0 6px 18px rgba(76, 175, 80, 0.20);
+}
+
+body,
+.contenedor-general,
+.menu,
+.contenedor-configuracion,
+.contenedor-dashboard,
+.contenedor-socios,
+.contenedor-cobranza,
+.apariencia,
+.informacion,
+.tabla-socios,
+.tema_card,
+input,
+select,
+button,
+.card-socio {
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    touch-action: pan-y;
+    overscroll-behavior-y: auto;
+}
+
 body {
     margin: 0;
-    font-family: 'Inter', sans-serif;
+
+    background-color: var(--bg-body);
+    color: var(--texto-principal);
+
+    font-family: Arial, sans-serif;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    touch-action: pan-y;
+    overscroll-behavior-y: auto;
 }
+
 
 .contenedor-general {
     height: 100vh;
 
     display: grid;
-    grid-template-areas:'menu contenedor-general';
+    grid-template-areas: 'menu contenedor-general';
     grid-template-columns: 20% 1fr;
 }

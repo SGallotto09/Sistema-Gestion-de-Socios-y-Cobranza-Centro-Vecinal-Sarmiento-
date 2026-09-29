@@ -1,25 +1,39 @@
-async function cargarSocios() {
-    try {
-        const response = await fetch('http://localhost/Proyecto/BACKEND/controllers/SocioController.php');
-        
-        if (!response.ok) {
-            throw new Error('Error al obtener los socios');
-        }
+import { SocioApi } from "../api/SociosApi.js";
 
-        const socios = await response.json();
+async function cargarSocios() {
+    const socioApi = new SocioApi();
+
+    try {
+        const socios = await socioApi.obtenerSociosCobranza();
 
         const tbody = document.getElementById('tablaSocios');
 
         tbody.innerHTML = "";
 
-        socios.forEach(socio => {
+        const sociosImpresion = [...socios].sort((a, b) => {
+            const comparacionBarrio = a.barrio.toLowerCase().localeCompare(b.barrio.toLowerCase());
+
+            if (comparacionBarrio !== 0) {
+                return comparacionBarrio;
+            }
+
+            const comparacionCalle = a.calle.localeCompare(b.calle);
+
+            if (comparacionCalle !== 0) {
+                return comparacionCalle;
+            }
+
+            return Number(a.altura) - Number(b.altura);
+        });
+
+        sociosImpresion.forEach(socio => {
             const fila = document.createElement('tr');
 
             fila.innerHTML = `
                 <td>${socio.id}</td>
                 <td>${socio.apellido}</td>
                 <td>${socio.nombre}</td>
-                <td>${socio.dni}</td>
+                <td>${formatearDNI(socio.dni)}</td>
                 <td>${socio.telefono}</td>
                 <td>${socio.barrio}</td>
                 <td>${socio.calle}</td>
@@ -45,6 +59,10 @@ function mostrarFecha() {
     const fechaFormateada = fecha.toLocaleDateString('es-AR');
 
     document.getElementById('fecha').textContent = `Fecha de impresión: ${fechaFormateada}`;
+}
+
+function formatearDNI(dni) {
+    return new Intl.NumberFormat('es-AR').format(dni);
 }
 
 document.getElementById('btnImprimir').addEventListener('click', () => {

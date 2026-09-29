@@ -18,7 +18,7 @@ export class LoginApi {
             return false;
         }
         else {
-            alert(usuarioEncontrado.message + ', ' + usuarioEncontrado.usuarioEncontrado.nombre + '!');
+            alert(`${usuarioEncontrado.message} ${usuarioEncontrado.usuarioEncontrado.nombre}, bienvenido al sistema!`);
             sessionStorage.setItem('tokenPestania', usuarioEncontrado.token);
             
             window.location.href = 'dashboard.php';

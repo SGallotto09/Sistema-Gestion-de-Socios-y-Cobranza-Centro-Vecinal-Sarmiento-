@@ -1,20 +1,3 @@
-:root {
-    /* FONDOS */
-    --bg-body: #F9FAFB; 
-    --bg-card: white;
-    --bg-input: white;
-
-    /* BOTONES */
-    --boton: #4CAF50;
-    --boton-hover: #43A047;
-
-    /* BORDES */
-    --border-color: #E5E7EB;
-
-    /* ICONOS */
-    --icono-azul: #2563EB;
-}
-
 .contenedor-dashboard {
     grid-area: contenedor-general;
 
@@ -109,11 +92,11 @@
 }
 
 .cobrados {
-    color: green;
+    color: var(--texto-exito);
 }
 
 .pendiente {
-    color: red;
+    color: var(--texto-error);
 }
 
 #h2TotalSocios,
@@ -174,10 +157,12 @@
 }
 
 .barra-completa{
-    width: 80%;
+    width: 0%;
     height: 100%;
     background: var(--boton);
     border-radius: 20px;
+
+    transition: width 1s ease;
 }
 
 #txtPorcentajeBarra {
@@ -185,7 +170,7 @@
     font-size: 25px;
 }
 
-.parrafoBarra {
+#parrafoBarra {
     grid-area: parrafo;
 }
 
@@ -227,12 +212,12 @@
 
 #btnNuevoSocioDashboard {
     background-color: var(--boton);
-    color: var(--bg-input);
+    color: white;
 }
 
 #btnCobranzaDashboard {
     background-color: var(--bg-card);
-    color: black;
+    color: var(--texto-principal);
     border: 1px solid var(--boton);
 }
 

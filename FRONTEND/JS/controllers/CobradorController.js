@@ -215,7 +215,23 @@ function iniciarCobrador() {
     async function cargarSocios() {
         socios = await socioApi.obtenerSociosCobranza();
 
-        compaginarSocios(socios);
+        const sociosImpresion = [...socios].sort((a, b) => {
+            const comparacionBarrio = a.barrio.toLowerCase().localeCompare(b.barrio.toLowerCase());
+
+            if (comparacionBarrio !== 0) {
+                return comparacionBarrio;
+            }
+
+            const comparacionCalle = a.calle.localeCompare(b.calle);
+
+            if (comparacionCalle !== 0) {
+                return comparacionCalle;
+            }
+
+            return Number(a.altura) - Number(b.altura);
+        });
+
+        compaginarSocios(sociosImpresion);
     }
 
     async function obtenerCantidadSocios() {

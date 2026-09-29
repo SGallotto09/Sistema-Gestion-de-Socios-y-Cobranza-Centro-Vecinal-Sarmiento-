@@ -3,15 +3,26 @@ document.addEventListener('DOMContentLoaded', iniciarConfiguracion);
 function iniciarConfiguracion() {
     lucide.createIcons();
 
-    // VARIABLES
-    const tarjetasTema = document.querySelectorAll(".tema-card");
+    const radioClaro = document.getElementById('claro');
+    const radioOscuro = document.getElementById('oscuro');
+    const btnGuardarCambios = document.getElementById('btnGuardarCambios');
 
-    // COMPORTAMIENTOS
+    const temaGuardado = localStorage.getItem('tema') || 'light';
 
-    tarjetasTema.forEach(tarjeta => {
-        tarjeta.addEventListener("click", () => {
-            tarjetasTema.forEach(t => t.classList.remove("activa"));
-            tarjeta.classList.add("activa");
-        });
+    if (temaGuardado === 'dark') {
+        radioOscuro.checked = true;
+    } else {
+        radioClaro.checked = true;
+    }
+
+    btnGuardarCambios.addEventListener('click', () => {
+
+        const temaSeleccionado = radioOscuro.checked
+            ? 'dark'
+            : 'light';
+
+        document.documentElement.setAttribute('data-theme', temaSeleccionado);
+
+        localStorage.setItem('tema', temaSeleccionado);
     });
 }

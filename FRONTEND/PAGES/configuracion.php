@@ -9,6 +9,10 @@ require_once '../../BACKEND/tasks/validarSesionIniciada.php'
 <head>
     <meta charset="UTF-8">
     <title>Configuración</title>
+    <script>
+        const tema = localStorage.getItem('tema') || 'light';
+        document.documentElement.setAttribute('data-theme', tema);
+    </script>
     <link rel="stylesheet" href="../CSS/style.css">
     <link rel="stylesheet" href="../CSS/menu.css">
     <link rel="stylesheet" href="../CSS/configuracion.css">
@@ -84,7 +88,7 @@ require_once '../../BACKEND/tasks/validarSesionIniciada.php'
 
                 <div class="modal_body_cerrar_sesion">
                     <div><i data-lucide="log-out"></i></div>
-                    <h3 class="modal_title">¿Estás seguro que deseas cerrar sesión de tu cuenta?</h3>
+                    <h3>¿Estás seguro que deseas cerrar sesión de tu cuenta?</h3>
                 </div>
 
                 <div class="modal_footer_cerrar_sesion">
@@ -125,7 +129,7 @@ require_once '../../BACKEND/tasks/validarSesionIniciada.php'
                         <input type="radio" id="claro" name="tema" checked>
 
                         <label for="claro" class="tema_card" id="temaClaro">
-                            <img src="../Image/Imagen de configuracion. Tema claro.png" alt="Fondo claro">
+                            <img src="../Image/Imgen tema claro.png" alt="Fondo claro">
 
                             <div class="footer_tema">
                                 <span><b>Claro</b></span>

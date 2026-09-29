@@ -74,9 +74,11 @@ function iniciarCobranza() {
     const modalLinkGenerado = document.getElementById('modalLinkGenerado');
     const txtCobradorAsignado = document.getElementById('txtCobradorAsignado');
     const txtDNICobrador = document.getElementById('txtDNICobrador');
+    const btnCopiar = document.getElementById('btnCopiar');
     const txtToken = document.getElementById('txtToken');
     const txtFechaVencimiento = document.getElementById('txtFechaVencimiento');
     const txtDuracion = document.getElementById('txtDuracion');
+    const btnCopiarLink = document.getElementById('btnCopiarLink');
 
     // MODAL PANTALLA DE IMPRESION
     const btnAbrirPnatallaPLantillaImpresion = document.getElementById('btnGenerarPlantillaImpresion');
@@ -241,6 +243,28 @@ function iniciarCobranza() {
         completarDatosLinkGenerado();
     });
 
+    btnCopiar.addEventListener('click', async () => {
+        try {
+            await navigator.clipboard.writeText(txtToken.value);
+
+            alert('Link de acceso copiado correctamente.');
+        } catch (error) {
+            console.error('Error al copiar:', error);
+            alert('No se pudo copiar el token.');
+        }
+    });
+
+    btnCopiarLink.addEventListener('click', async () => {
+        try {
+            await navigator.clipboard.writeText(txtToken.value);
+
+            alert('Link de acceso copiado correctamente.');
+        } catch (error) {
+            console.error('Error al copiar:', error);
+            alert('No se pudo copiar el token.');
+        }
+    });
+
     // FUNCIONES
 
     function openModal(modal) {
@@ -282,11 +306,9 @@ function iniciarCobranza() {
 
         const sociosPagina = sociosFiltrados.slice(inicio, fin);
 
-        const cantidadesVisitas = await Promise.all(
-            sociosPagina.map(socio =>
-                obtenerCantidadVisitasPorCuota(socio.idCuota)
-            )
-        );
+        const cantidadesVisitas = await Promise.all(sociosPagina.map(
+            socio => obtenerCantidadVisitasPorCuota(socio.idCuota)
+        ));
 
         if (versionActual !== versionRender) {
             return;
@@ -352,29 +374,84 @@ function iniciarCobranza() {
     function crearPaginacion() {
         contenedorPaginas.innerHTML = "";
 
-        const totalPaginas =
-            Math.ceil(sociosFiltrados.length / sociosPorPagina);
+        const totalPaginas = Math.ceil(sociosFiltrados.length / sociosPorPagina);
 
-        for (let i = 1; i <= totalPaginas; i++) {
-
+        function agregarBoton(numero) {
             const boton = document.createElement('button');
 
             boton.classList.add('btnPagina');
-            boton.textContent = i;
+            boton.textContent = numero;
 
-            if (i === paginaActual) {
+            if (numero === paginaActual) {
                 boton.classList.add('paginaActiva');
             }
 
             boton.addEventListener('click', () => {
-
-                paginaActual = i;
+                paginaActual = numero;
 
                 mostrarPagina();
                 crearPaginacion();
             });
 
             contenedorPaginas.appendChild(boton);
+        }
+
+        function agregarPuntos() {
+            const puntos = document.createElement('span');
+
+            puntos.textContent = '...';
+            puntos.classList.add('puntosPaginacion');
+
+            contenedorPaginas.appendChild(puntos);
+        }
+
+        // Si hay pocas páginas, mostramos todas
+        if (totalPaginas <= 7) {
+            for (let i = 1; i <= totalPaginas; i++) {
+                agregarBoton(i);
+            }
+
+            return;
+        }
+
+        // SI ESTAMOS CERCA DEL PRINCIPIO
+        if (paginaActual <= 3) {
+
+            agregarBoton(1);
+            agregarBoton(2);
+            agregarBoton(3);
+            agregarBoton(4);
+
+            agregarPuntos();
+
+            agregarBoton(totalPaginas);
+        }   
+
+        // SI ESTAMOS EN EL MEDIO
+        else if (paginaActual < totalPaginas - 2) {
+            agregarBoton(1);
+
+            agregarPuntos();
+
+            agregarBoton(paginaActual - 1);
+            agregarBoton(paginaActual);
+            agregarBoton(paginaActual + 1);
+
+            agregarPuntos();
+
+            agregarBoton(totalPaginas);
+        }
+
+        // SI ESTAMOS CERCA DEL FINAL
+        else {
+            agregarBoton(1);
+
+            agregarPuntos();
+
+            agregarBoton(totalPaginas - 3);
+            agregarBoton(totalPaginas - 2);
+            agregarBoton(totalPaginas - 1);
+            agregarBoton(totalPaginas);
         }
     }
 

@@ -1,18 +1,3 @@
-:root {
-    /* FONDOS */
-    --bg-menu: #0B0F14;
-
-    /* LETRAS */
-    --texto-menu: white;
-    --placeholder: #4B5563; 
-
-    /* BOTONES */
-    --boton-hover: #43A047;
-
-    /* SOMBRAS */
-    --boton-shadow: 0 6px 15px rgba(76, 175, 80, .35);
-}
-
 .menu {
     grid-area: menu;
     background-color: var(--bg-menu);
@@ -23,7 +8,7 @@
 
 .titulo-menu {
     color: var(--texto-menu);
-    border-bottom: 1px solid #374151;
+    border-bottom: 1px solid var(--border-menu);
 
     display: flex;
     align-items: center;
@@ -85,7 +70,7 @@
 
 .boton.activo {
     background-color: var(--boton-hover);
-    box-shadow: var(--boton-shadow);
+    box-shadow: var(--menu-shadow);
     border-radius: 10px;
 }
 
@@ -112,7 +97,8 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #111111bd;
+
+    background-color: var(--bg-overlay);
 
     height: auto;
     padding: 30px;
@@ -191,7 +177,7 @@
 
 .modal_body_cerrar_sesion div {
     padding: 35px;
-    background-color: #DDF0DD;
+    background-color: var(--bg-success);
     border-radius: 50%;
     margin-bottom: 20px;
 }
@@ -204,6 +190,7 @@
 
 .modal_body_cerrar_sesion h3 {
     color: var(--placeholder);
+    margin: 0;
 }
 
 .modal_footer_cerrar_sesion {
@@ -228,6 +215,7 @@
 .modal_boton_cancelar {
     background-color: var(--bg-card);
     border: 2px solid var(--border-color);
+    color: var(--texto-principal);
     border-radius: 15px;
 }
 
@@ -239,7 +227,7 @@
 
 .modal_boton_accion {
     background-color: var(--boton);
-    color: var(--bg-input);
+    color: white;
     border-radius: 15px;
 
     display: flex;

@@ -54,7 +54,7 @@ function userLoged($_cadenaConexion, $_usuario, $_contrasenia) {
 
     http_response_code(200);
     echo json_encode([
-        'message'           => 'Bienvenido al sistema',
+        'message'           => 'Hola',
         'usuarioEncontrado' => $logueado,
         'token'             => $_SESSION['token_pestania']
     ]);
