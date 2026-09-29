@@ -10,6 +10,7 @@ require_once '../../BACKEND/tasks/validarSesionCobrador.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cobranza - Cobrador</title>
+    <link rel="stylesheet" href="../CSS/style.css">
     <link rel="stylesheet" href="../CSS/menu.css">
     <link rel="stylesheet" href="../CSS/cobrador.css">
     <link rel="stylesheet" href="../CSS/cobranza.css">
