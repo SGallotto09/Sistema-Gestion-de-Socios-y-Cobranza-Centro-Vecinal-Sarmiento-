@@ -287,6 +287,7 @@ function iniciarCobranza() {
 
     async function cargarSocios() {
         socios = await socioApi.obtenerSociosCobranza();
+        socios = Array.isArray(socios) ? socios : [];
 
         sociosFiltrados = socios;
         paginaActual = 1;
@@ -315,6 +316,29 @@ function iniciarCobranza() {
         const fin = inicio + sociosPorPagina;
 
         const sociosPagina = sociosFiltrados.slice(inicio, fin);
+
+        if (sociosPagina.length === 0) {
+            tbodySocios.innerHTML = `
+                <tr>
+                    <td colspan="10" class="mensaje-sin-socios">
+                        <div class="sin-socios-contenido">
+                            <div class="sin-socios-icono">
+                                <i data-lucide="users-round"></i>
+                            </div>
+
+                            <h3>No hay socios registrados</h3>
+
+                            <p>
+                                Actualmente no hay socios para mostrar.
+                            </p>
+                        </div>
+                    </td>
+                </tr>
+            `;
+
+            lucide.createIcons();
+            return;
+        }
 
         const cantidadesVisitas = await Promise.all(sociosPagina.map(
             socio => obtenerCantidadVisitasPorCuota(socio.idCuota)

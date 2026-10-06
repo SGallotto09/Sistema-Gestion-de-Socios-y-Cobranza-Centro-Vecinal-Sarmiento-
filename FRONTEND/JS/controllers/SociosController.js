@@ -81,7 +81,7 @@ function iniciarSocios() {
         if (creado) {
             closeModal(modalAltaSocio);
             limpiarCamposAltaSocio();
-            cargarSocios();
+            await cargarSocios();
         } 
     });
 
@@ -90,7 +90,7 @@ function iniciarSocios() {
 
         if (editado) {
             closeModal(modalEditarSocio);
-            cargarSocios();
+            await cargarSocios();
         }
     });
 
@@ -99,8 +99,10 @@ function iniciarSocios() {
 
         if (eliminado) {
             closeModal(modalEliminarSocio);
-            cargarSocios();;
-            obtenerCantidadSocios();
+
+            await cargarSocios();
+            await obtenerCantidadSocios();
+            idEliminar = '';
         }
     });
 
@@ -164,6 +166,7 @@ function iniciarSocios() {
 
     async function cargarSocios() {
         socios = await socioApi.obtenerSocios();
+        socios = Array.isArray(socios) ? socios : [];
 
         sociosFiltrados = socios;
         paginaActual = 1;
@@ -173,7 +176,7 @@ function iniciarSocios() {
     }
 
     async function obtenerCantidadSocios() {
-        let cantidadSocios = await socioApi.obtenerCantidadSocios();
+        let cantidadSocios = await socioApi.obtenerCantidadSociosCobranza();
         tituloCantiadSocios.textContent = `Mostrando 1 a 10 de ${cantidadSocios.cantidad} socios`
     }
 
@@ -255,6 +258,29 @@ function iniciarSocios() {
         const fin = inicio + sociosPorPagina;
 
         const sociosPagina = sociosFiltrados.slice(inicio, fin);
+
+        if (sociosPagina.length === 0) {
+            tbodySocios.innerHTML = `
+                <tr>
+                    <td colspan="10" class="mensaje-sin-socios">
+                        <div class="sin-socios-contenido">
+                            <div class="sin-socios-icono">
+                                <i data-lucide="users-round"></i>
+                            </div>
+
+                            <h3>No hay socios registrados</h3>
+
+                            <p>
+                                Actualmente no hay socios para mostrar.
+                            </p>
+                        </div>
+                    </td>
+                </tr>
+            `;
+
+            lucide.createIcons();
+            return;
+        }
 
         let filas = "";
 

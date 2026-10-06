@@ -61,9 +61,7 @@ function iniciarDashboard() {
         ];
 
         const mesActual = fecha.getMonth();
-
         const mesProximo = (mesActual + 1) % 12;
-
         h2BimestreActual.textContent = `${meses[mesActual]} - ${meses[mesProximo]}`;
     }
 
@@ -82,12 +80,22 @@ function iniciarDashboard() {
         cantidadPagos = await pagosApi.getCantidadDePagos();
         h2PagaronBimestre.textContent = cantidadPagos.cantidadPagos;
 
+        if (cantidadSocios.cantidad === 0) {
+            pagaronBimestre.textContent = 'No hay socios registrados.';
+            return;
+        }
+
         pagaronBimestre.textContent = `${calcularPorcentaje(cantidadPagos.cantidadPagos, cantidadSocios.cantidad)}% del total`;
     }
 
     async function obtenerTotalSociosVisitados() {
         const totalVisitas = await visitaApi.getTotalVisitas();
         h2SociosVisitados.textContent = totalVisitas.totalVisitas;
+
+        if (cantidadSocios.cantidad === 0) {
+            sociosVisitados.textContent = 'No hay socios registrados.';
+            return;
+        }
 
         sociosVisitados.textContent = `${calcularPorcentaje(totalVisitas.totalVisitas, cantidadSocios.cantidad)}% del total`;
     }
@@ -96,10 +104,18 @@ function iniciarDashboard() {
         const cantidadCuotasSinPagar = await cuotaApi.getCantidadCuotasSinPagar();
         h2PendientesPago.textContent = cantidadCuotasSinPagar.cuotasSinPagar;
 
+        if (cantidadSocios.cantidad === 0) {
+            pendientesDePago.textContent = 'No hay socios registrados.';
+            return;
+        }
+
         pendientesDePago.textContent = `${calcularPorcentaje(cantidadCuotasSinPagar.cuotasSinPagar, cantidadSocios.cantidad)}% del total`;
     }
 
     function calcularPorcentaje(cantidad, total) {
+        if (total === 0) {
+            return 0;
+        }
         return Math.round((cantidad/ total) * 100);
     }
 
