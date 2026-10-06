@@ -4,7 +4,7 @@
                         'filtro'
                         'tabla'
                         'footer';
-    grid-template-rows: 15% 15% 60% 10%;
+    grid-template-rows: 15% 15% 390px 1fr;
     padding: 20px 40px;
     background-color: var(--bg-body);
     color: var(--texto-principal);
@@ -121,7 +121,6 @@
 
 .tabla-socios table {
     width: 100%;
-    height: 100%;
     text-align: center;
     border-collapse: collapse;
     table-layout: fixed;

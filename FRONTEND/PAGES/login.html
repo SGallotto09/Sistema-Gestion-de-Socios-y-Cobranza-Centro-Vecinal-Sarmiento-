@@ -6,8 +6,10 @@
     <title>Login usuario</title>
     <link rel="stylesheet" href="../CSS/style.css">
     <link rel="stylesheet" href="../CSS/login.css">
+    <link rel="stylesheet" href="../CSS/modalExitoYError.css">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script type="module" src="../JS/controllers/LoginController.js"></script>
+    <script type="module" src="../JS/controllers/ModalExitoYErrorController.js"></script>
 </head>
 <body>  
     <div class="contenedor-general-login">
@@ -37,7 +39,7 @@
 
                     <div class="input">
                         <h4>Constraseña:</h4>
-                        <input type="text" placeholder="Ingrese su constraseña" id="txtContrasenia">
+                        <input type="password" autocomplete="off" placeholder="Ingrese su constraseña" id="txtContrasenia">
                     </div>
                 </div>
 
@@ -50,6 +52,46 @@
         <div class="footer">
             <h4>© Copyright 2026 Sistema de Socios y Cobranzas - Centro vecinal Sarmiento</h4>
         </div>
+
+        <section id="modalExito" class="modal-exito">
+            <div class="modal-exito-contenido">
+                <div class="icono-exito">
+                    <i data-lucide="check"></i>
+                </div>
+
+                <h2 id="modalExitoTitulo">
+                    Operación exitosa
+                </h2>
+
+                <p id="modalExitoMensaje">
+                    La operación se realizó correctamente.
+                </p>
+
+                <button id="btnAceptarExito" class="btn-aceptar-exito">
+                    Aceptar
+                </button>
+            </div>
+        </section>
+
+        <section id="modalError" class="modal-error">
+            <div class="modal-error-contenido">
+                <div class="icono-error">
+                    <i data-lucide="x"></i>
+                </div>
+
+                <h2 id="modalErrorTitulo">
+                    Ocurrió un error
+                </h2>
+
+                <p id="modalErrorMensaje">
+                    No se pudo realizar la operación.
+                </p>
+
+                <button id="btnAceptarError" class="btn-aceptar-error">
+                    Aceptar
+                </button>
+            </div>
+        </section>
     </div>
 </body>
 </html>

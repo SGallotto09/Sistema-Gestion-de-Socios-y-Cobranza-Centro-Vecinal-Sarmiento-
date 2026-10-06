@@ -8,7 +8,7 @@
 
     --bg-info: #ECF2F7;
     --bg-visita: #E3F1FE;
-    --bg-visita-hover: #D0E7FC;
+    --bg-visita-hover: #4da7fb;
     --bg-pago: #E6F6EC;
     --bg-pago-hover: #D1F0DC;
 
@@ -68,7 +68,6 @@
     /* ========================= SOMBRAS ========================= */
 
     --sombra-card: 0 2px 8px rgba(0, 0, 0, 0.05);
-
 }
 
 /* ========================= TEMA OSCURO ========================= */
@@ -86,7 +85,7 @@
 
     --bg-info: #1A2633;
     --bg-visita: #172A3E;
-    --bg-visita-hover: #203B55;
+    --bg-visita-hover: #065DB7;
     --bg-pago: #18301D;
     --bg-pago-hover: #214528;
 

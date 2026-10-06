@@ -14,7 +14,7 @@ export class LinkAccesoApi {
         const linkAcceso = await response.json();
 
         if (!response.ok) {
-            alert(linkAcceso.message);
+            throw new Error(data.message);
             return;
         }
 

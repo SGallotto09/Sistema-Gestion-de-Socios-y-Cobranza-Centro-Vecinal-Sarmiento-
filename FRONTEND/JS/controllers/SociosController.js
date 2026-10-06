@@ -1,4 +1,5 @@
 import { SocioApi } from "../api/SociosApi.js";
+import {mostrarModalExito, mostrarModalError} from "./ModalExitoYErrorController.js";
 
 document.addEventListener('DOMContentLoaded', iniciarSocios);
 
@@ -48,6 +49,7 @@ function iniciarSocios() {
     const txtAlturaAlta = document.getElementById('txtAlturaSocioAlta');
 
     // VARIABLES DE EDITAR SOCIO
+    let socioAEditar = {};
     const txtIdSocioEditar = document.getElementById('txtIdSocioEditar');
     const txtApellidoEditar = document.getElementById('txtApellidoSocioEditar');
     const txtNombreEditar = document.getElementById('txtNombreSocioEditar');
@@ -78,6 +80,7 @@ function iniciarSocios() {
 
         if (creado) {
             closeModal(modalAltaSocio);
+            limpiarCamposAltaSocio();
             cargarSocios();
         } 
     });
@@ -87,7 +90,7 @@ function iniciarSocios() {
 
         if (editado) {
             closeModal(modalEditarSocio);
-            cargarSocios();;
+            cargarSocios();
         }
     });
 
@@ -110,8 +113,18 @@ function iniciarSocios() {
         const botonEliminar = e.target.closest('.tacho');
 
         if (botonEditar) {
-            openModal(modalEditarSocio);
             completarCamposConDatosFila(botonEditar.closest('tr'));
+            socioAEditar = {
+                id: txtIdSocioEditar.value,
+                nombre: txtNombreEditar.value, 
+                apellido: txtApellidoEditar.value,
+                dni: txtDniEditar.value,
+                telefono: txtTelefonoEditar.value,
+                barrio: txtBarrioEditar.value,
+                calle: txtCalleEditar.value,
+                altura: txtAlturaEditar.value
+            };
+            openModal(modalEditarSocio);
         }
 
         if (botonEliminar) {
@@ -165,45 +178,76 @@ function iniciarSocios() {
     }
 
     async function darDeAltaSocio() {
-        if (!validarCampos(txtNombreAlta, txtApellidoAlta, txtDniAlta, txtTelefonoAlta, txtBarrioAlta, txtCalleAlta, txtAlturaAlta)) return;
+        if (!validarCampos(txtNombreAlta, txtApellidoAlta, txtDniAlta, txtTelefonoAlta, txtBarrioAlta, txtCalleAlta,
+            txtAlturaAlta)) return;
 
-        const nuevoSocio = await socioApi.darDeAltaSocio(
-            txtNombreAlta.value, 
-            txtApellidoAlta.value, 
-            txtDniAlta.value, 
-            txtTelefonoAlta.value, 
-            txtBarrioAlta.value, 
-            txtCalleAlta.value, 
-            txtAlturaAlta.value
-        )
+        try {
+            const nuevoSocio = await socioApi.darDeAltaSocio(
+                txtNombreAlta.value,
+                txtApellidoAlta.value,
+                txtDniAlta.value,
+                txtTelefonoAlta.value,
+                txtBarrioAlta.value,
+                txtCalleAlta.value,
+                txtAlturaAlta.value
+            );
 
-        alert(nuevoSocio.message);
-        return true;
+            mostrarModalExito('Socio creado', nuevoSocio.message);
+            return true;
+        } catch (error) {
+            mostrarModalError('Error al crear el socio', error.message);
+            return false;
+        }
     }
 
     async function editarSocio() {
         if (!validarCampos(txtNombreEditar, txtApellidoEditar, txtDniEditar, txtTelefonoEditar, txtBarrioEditar, txtCalleEditar, txtAlturaEditar)) return;
 
-        const socioEditado = await socioApi.editarSocio(
-            txtIdSocioEditar.value,
-            txtNombreEditar.value, 
-            txtApellidoEditar.value, 
-            txtDniEditar.value, 
-            txtTelefonoEditar.value, 
-            txtBarrioEditar.value, 
-            txtCalleEditar.value, 
-            txtAlturaEditar.value
-        );
+        if (
+            socioAEditar.id         ===     txtIdSocioEditar.value  &&
+            socioAEditar.nombre     ===     txtNombreEditar.value   &&    
+            socioAEditar.apellido   ===     txtApellidoEditar.value &&
+            socioAEditar.dni        ===     txtDniEditar.value      &&
+            socioAEditar.telefono   ===     txtTelefonoEditar.value &&
+            socioAEditar.barrio     ===     txtBarrioEditar.value   &&
+            socioAEditar.calle      ===     txtCalleEditar.value    &&
+            socioAEditar.altura     ===     txtAlturaEditar.value
+        ) {
+            alert('No se realizaron cambios');
+            return;
+        }
 
-        alert(socioEditado.message);
-        return true;
+        try {
+            const socioEditado = await socioApi.editarSocio(
+                txtIdSocioEditar.value,
+                txtNombreEditar.value,
+                txtApellidoEditar.value,
+                txtDniEditar.value,
+                txtTelefonoEditar.value,
+                txtBarrioEditar.value,
+                txtCalleEditar.value,
+                txtAlturaEditar.value
+            );
+
+            mostrarModalExito('Socio editado', socioEditado.message);
+            return true;
+
+        } catch (error) {
+            mostrarModalError('Error al editar el socio', error.message);
+            return false;
+        }
     }
 
     async function eliminarSocio() {
-        const data = await socioApi.eliminarSocio(idEliminar);
+        try {
+            const data = await socioApi.eliminarSocio(idEliminar);
+            mostrarModalExito('Socio eliminado', data.message);
 
-        alert(data.message);
-        return true;
+            return true;
+        } catch (error) {
+            mostrarModalError('Error al eliminar el socio', error.message);
+            return false;
+        }
     }
 
     function mostrarPagina() {
@@ -509,6 +553,16 @@ function iniciarSocios() {
         }
 
         return true;
+    }
+
+    function limpiarCamposAltaSocio() {
+        txtApellidoAlta.value = '';
+        txtNombreAlta.value = '';
+        txtDniAlta.value = '';
+        txtTelefonoAlta.value = '';
+        txtBarrioAlta.value = '';
+        txtCalleAlta.value = '';
+        txtAlturaAlta.value = '';
     }
 
     cargarSocios();

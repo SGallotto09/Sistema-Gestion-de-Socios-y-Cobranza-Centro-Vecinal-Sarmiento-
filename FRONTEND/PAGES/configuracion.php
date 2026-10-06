@@ -16,8 +16,9 @@ require_once '../../BACKEND/tasks/validarSesionIniciada.php'
     <link rel="stylesheet" href="../CSS/style.css">
     <link rel="stylesheet" href="../CSS/menu.css">
     <link rel="stylesheet" href="../CSS/configuracion.css">
+    <link rel="stylesheet" href="../CSS/modalExitoYError.css">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="../JS/controllers/MenuController.js"></script>
+    <script type="module" src="../JS/controllers/MenuController.js"></script>
     <script src="../JS/controllers/ConfiguracionController.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
@@ -203,6 +204,46 @@ require_once '../../BACKEND/tasks/validarSesionIniciada.php'
                 </div>
             </div>
         </div>
+
+        <section id="modalExito" class="modal-exito">
+            <div class="modal-exito-contenido">
+                <div class="icono-exito">
+                    <i data-lucide="check"></i>
+                </div>
+
+                <h2 id="modalExitoTitulo">
+                    Operación exitosa
+                </h2>
+
+                <p id="modalExitoMensaje">
+                    La operación se realizó correctamente.
+                </p>
+
+                <button id="btnAceptarExito" class="btn-aceptar-exito">
+                    Aceptar
+                </button>
+            </div>
+        </section>
+
+        <section id="modalError" class="modal-error">
+            <div class="modal-error-contenido">
+                <div class="icono-error">
+                    <i data-lucide="x"></i>
+                </div>
+
+                <h2 id="modalErrorTitulo">
+                    Ocurrió un error
+                </h2>
+
+                <p id="modalErrorMensaje">
+                    No se pudo realizar la operación.
+                </p>
+
+                <button id="btnAceptarError" class="btn-aceptar-error">
+                    Aceptar
+                </button>
+            </div>
+        </section>
     </div>
 
     <script src="../JS/verificarPestania.js"></script>

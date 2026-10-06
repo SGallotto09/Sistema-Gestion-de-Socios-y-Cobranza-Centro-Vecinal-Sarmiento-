@@ -1,3 +1,5 @@
+import {mostrarModalExitoConAccion, mostrarModalError} from "./ModalExitoYErrorController.js";
+
 document.addEventListener('DOMContentLoaded', iniciarMenu);
 
 function iniciarMenu() {
@@ -40,8 +42,8 @@ function iniciarMenu() {
 
     btnCerrarSesionModal.addEventListener('click', async () => {
         closeModal(modalCerrarSesion);
-        cerrarSesion();
-    })
+        await cerrarSesion();
+    });
 
     // TODOS LOS BOTONES PARA CANCELAR Y CERRAR MODALES
     botonesCancelar.forEach(boton => {
@@ -64,15 +66,29 @@ function iniciarMenu() {
     }
 
     async function cerrarSesion() {
-        const response = await fetch('http://localhost/Proyecto/BACKEND/controllers/LogoutController.php', {
-            method: 'POST'
-        });
+        try {
+            const response = await fetch(
+                'http://localhost/Proyecto/BACKEND/controllers/LogoutController.php',
+                {
+                    method: 'POST'
+                }
+            );
 
-        const data = await response.json();
+            const data = await response.json();
 
-        if (response.ok) {
-            window.location.href = 'login.html';
-            alert(data.message);
+            if (!response.ok) {
+                throw new Error(data.message);
+            }
+
+            sessionStorage.removeItem('tokenPestania');
+            sessionStorage.removeItem('usuarioLogeado');
+
+            mostrarModalExitoConAccion('Sesión cerrada correctamente', data.message, () => {
+                    window.location.href = 'login.html';
+                }
+            );
+        } catch (error) {
+            mostrarModalError('Error al cerrar sesión', error.message);
         }
     }
 }

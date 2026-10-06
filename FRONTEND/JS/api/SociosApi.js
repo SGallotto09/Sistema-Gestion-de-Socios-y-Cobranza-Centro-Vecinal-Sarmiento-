@@ -78,8 +78,7 @@ export class SocioApi {
         const nuevoSocio = await response.json();
 
         if (!response.ok) {
-            alert(nuevoSocio.message);
-            return;
+            throw new Error(nuevoSocio.message);
         }
 
         return nuevoSocio;
@@ -106,8 +105,7 @@ export class SocioApi {
         const socioEditado = await response.json();
 
         if (!response.ok) {
-            alert(data.message);
-            return;
+            throw new Error(socioEditado.message);
         }
 
         return socioEditado;
@@ -124,13 +122,12 @@ export class SocioApi {
             }),
         })
 
-        const data = await response.json();
+        const socioEliminado = await response.json();
 
         if (!response.ok) {
-            alert(data.message);
-            return;
+            throw new Error(socioEliminado.message);
         }
 
-        return data;
+        return socioEliminado;
     }
 }

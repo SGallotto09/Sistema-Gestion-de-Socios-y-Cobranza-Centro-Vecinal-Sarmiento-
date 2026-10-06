@@ -16,9 +16,11 @@ require_once '../../BACKEND/tasks/validarSesionIniciada.php'
     <link rel="stylesheet" href="../CSS/style.css">
     <link rel="stylesheet" href="../CSS/menu.css">
     <link rel="stylesheet" href="../CSS/cobranza.css">
+    <link rel="stylesheet" href="../CSS/modalExitoYError.css">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="../JS/controllers/MenuController.js"></script>
+    <script type="module" src="../JS/controllers/MenuController.js"></script>
     <script type="module" src="../JS/controllers/CobranzaController.js"></script>
+    <script type="module" src="../JS/controllers/ModalExitoYErrorController.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -100,7 +102,7 @@ require_once '../../BACKEND/tasks/validarSesionIniciada.php'
 
         <div class="contenedor-cobranza">
             <div class="header">
-                <h2>Cobranza: Bimestre Julio - Agosto 2026</h2>
+                <h2 id="h2BimestreActual"></h2>
                 <div class="botonesHeader">
                     <button class="btnHeader" id="btnAbrirModalLinkAcceso">
                         <i data-lucide="link-2"></i>
@@ -207,7 +209,7 @@ require_once '../../BACKEND/tasks/validarSesionIniciada.php'
                             </div>
                             <div class="titulo_accion">
                                 <h4 class="p_texto_cobrador">Modificar estado de pago</h4>
-                                <p class="p_texto">Cambia el estado de pago de la cuota del socio.</p>
+                                <p>Cambia el estado de pago de la cuota del socio.</p>
                             </div>
                             <div class="footer_content_accion">
                                 <i data-lucide="arrow-right" class="flecha_pago"></i>
@@ -220,7 +222,7 @@ require_once '../../BACKEND/tasks/validarSesionIniciada.php'
                             </div>
                             <div class="titulo_accion">
                                 <h4 class="p_texto_cobrador">Registrar visita</h4>
-                                <p class="p_texto">Registra una nueva visita a este socio.</p>
+                                <p>Registra una nueva visita a este socio.</p>
                             </div>
                             <div class="footer_content_accion">
                                 <i data-lucide="arrow-right" class="flecha_visita"></i>
@@ -469,6 +471,46 @@ require_once '../../BACKEND/tasks/validarSesionIniciada.php'
                         <button class="modal_boton_cancelar">Cancelar</button>
                         <button class="modal_boton_accion" id="btnCopiarLink">Copiar link</button>
                     </div>
+                </div>
+            </section>
+
+            <section id="modalExito" class="modal-exito">
+                <div class="modal-exito-contenido">
+                    <div class="icono-exito">
+                        <i data-lucide="check"></i>
+                    </div>
+
+                    <h2 id="modalExitoTitulo">
+                        Operación exitosa
+                    </h2>
+
+                    <p id="modalExitoMensaje">
+                        La operación se realizó correctamente.
+                    </p>
+
+                    <button id="btnAceptarExito" class="btn-aceptar-exito">
+                        Aceptar
+                    </button>
+                </div>
+            </section>
+
+            <section id="modalError" class="modal-error">
+                <div class="modal-error-contenido">
+                    <div class="icono-error">
+                        <i data-lucide="x"></i>
+                    </div>
+
+                    <h2 id="modalErrorTitulo">
+                        Ocurrió un error
+                    </h2>
+
+                    <p id="modalErrorMensaje">
+                        No se pudo realizar la operación.
+                    </p>
+
+                    <button id="btnAceptarError" class="btn-aceptar-error">
+                        Aceptar
+                    </button>
                 </div>
             </section>
         </div>

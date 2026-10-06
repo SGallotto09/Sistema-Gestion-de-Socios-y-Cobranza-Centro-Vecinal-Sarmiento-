@@ -4,7 +4,7 @@
                         'filtro'
                         'tabla'
                         'footer';
-    grid-template-rows: 15% 15% 60% 10%;
+    grid-template-rows: 15% 15% 390px 1fr;
     padding: 20px 40px;
     background-color: var(--bg-body);
     color: var(--texto-principal);
@@ -132,7 +132,6 @@
 
 .tabla-socios table {
     width: 100%;
-    height: 100%;
     text-align: center;
     border-collapse: collapse;
     table-layout: fixed;
@@ -355,7 +354,7 @@ td {
 
 .datos_socio_acciones {
     grid-area: datos_socio_acciones;
-    border: 1px solid var(--border-info);
+    border: 1px solid var(--border-color);
     background-color: var(--bg-info);
 
     display: grid;
@@ -452,15 +451,15 @@ td {
 
 .content_registrar_visita {
     grid-area: content_visita;
-    background-color: var(--bg-visita);
-    border: 2px solid var(--border-info);
+    color: white;
+    background-color: var(--texto-visita);
     border-radius: 10px;
 }
 
 .content_registrar_pago {
     grid-area: content_pago;
-    background-color: var(--bg-pago);
-    border: 2px solid var(--border-pago);
+    color: white;
+    background-color: var(--boton);
     border-radius: 10px;
 }
 
@@ -469,7 +468,7 @@ td {
 }
 
 .content_registrar_pago:hover {
-    background-color: var(--bg-pago-hover);
+    background-color: var(--boton-hover);
 }
 
 .content_registrar_visita:hover,
@@ -493,18 +492,21 @@ td {
 
 .icono_visita {
     color: white;
-    background-color: var(--texto-visita);
 }
 
 .icono_pago {
     color: white;
-    background-color: var(--texto-pago);
 }
 
 .titulo_accion {
     grid-area: datos_titulo_accion;
     padding: 0px 10px;
     gap: 10px;
+}
+
+.titulo_accion p {
+    margin: 0;
+    color: white;
 }
 
 .footer_content_accion {
@@ -518,11 +520,11 @@ td {
 }
 
 .flecha_visita {
-    color: var(--texto-visita);
+    color: white;
 }
 
 .flecha_pago {
-    color: var(--texto-pago);
+    color: white;
 }
 
 .icono_accion,
@@ -1259,6 +1261,7 @@ td {
     color: var(--boton);
 }
 
+
 /* =========================================================
    RESPONSIVE - COBRANZA
    ========================================================= */
@@ -1775,7 +1778,7 @@ td {
     }
 
     .modal_estado_pago_editar_socio div {
-        padding: 10px 0;
+        padding: 5px 0;
     }
 
     .modal_estado_pago_editar_socio span {
@@ -1783,8 +1786,8 @@ td {
     }
 
     .modal_radio_editar_socio {
-        width: 25px;
-        height: 25px;
+        width: 30px;
+        height: 30px;
     }
 
     .modal_footer_editar_socio {

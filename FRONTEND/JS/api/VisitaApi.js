@@ -33,8 +33,7 @@ export class VisitaApi {
         const visitaCreada = await response.json();
 
         if (!response.ok) {
-            alert(visitaCreada.message);
-            return;
+            throw new Error(visitaCreada.message);
         }
 
         return visitaCreada;

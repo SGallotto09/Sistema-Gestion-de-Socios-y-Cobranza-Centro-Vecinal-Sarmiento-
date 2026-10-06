@@ -1,9 +1,11 @@
 import { LoginApi } from "../api/AuthApi.js";
+import {mostrarModalExitoConAccion, mostrarModalError} from "./ModalExitoYErrorController.js";
 
 document.addEventListener('DOMContentLoaded', iniciarLogin);
 
 function iniciarLogin() {
     const loginApi = new LoginApi();
+
     lucide.createIcons();
 
     const txtUsuario = document.getElementById('txtUsuario');
@@ -21,13 +23,23 @@ function iniciarLogin() {
             return;
         }
 
-        let usuarioLogeado = await loginApi.iniciarSesion(txtUsuario.value, txtContrasenia.value);
+        try {
+            const usuarioEncontrado = await loginApi.iniciarSesion(txtUsuario.value, txtContrasenia.value);
 
-        if (!usuarioLogeado) {
-            txtContrasenia.value = '';
+            sessionStorage.setItem('usuarioLogeado', JSON.stringify(usuarioEncontrado));
+
+            mostrarModalExitoConAccion(
+                'Inicio de sesión exitoso',
+                `${usuarioEncontrado.message} ${usuarioEncontrado.usuarioEncontrado.nombre}, ¡bienvenido al sistema!`,
+                () => {
+                    window.location.href = 'dashboard.php';
+                }
+            );
+        } catch (error) {
+            mostrarModalError('Error al iniciar sesión', error.message);
+
             txtUsuario.value = '';
+            txtContrasenia.value = '';
         }
-
-        sessionStorage.setItem("usuarioLogeado", JSON.stringify(usuarioLogeado));
     });
 }

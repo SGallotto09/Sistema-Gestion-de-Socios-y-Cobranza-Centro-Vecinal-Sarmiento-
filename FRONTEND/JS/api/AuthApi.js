@@ -1,29 +1,30 @@
 export class LoginApi {
+
     async iniciarSesion(usuario, contrasenia) {
-        const response = await fetch('/Proyecto/BACKEND/controllers/AuthController.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify ({
-                usuario: usuario,
-                contrasenia: contrasenia
-            })
-        });
+
+        const response = await fetch(
+            '/Proyecto/BACKEND/controllers/AuthController.php',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    usuario: usuario,
+                    contrasenia: contrasenia
+                })
+            }
+        );
 
         const usuarioEncontrado = await response.json();
 
         if (!response.ok) {
-            alert(usuarioEncontrado.message);
-            return false;
+            throw new Error(usuarioEncontrado.message);
         }
-        else {
-            alert(`${usuarioEncontrado.message} ${usuarioEncontrado.usuarioEncontrado.nombre}, bienvenido al sistema!`);
-            sessionStorage.setItem('tokenPestania', usuarioEncontrado.token);
-            
-            window.location.href = 'dashboard.php';
-            return usuarioEncontrado;
-        }
+
+        sessionStorage.setItem('tokenPestania', usuarioEncontrado.token);
+
+
+        return usuarioEncontrado;
     }
 }
-

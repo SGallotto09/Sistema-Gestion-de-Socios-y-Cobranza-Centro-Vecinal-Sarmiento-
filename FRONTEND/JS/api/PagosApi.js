@@ -21,8 +21,7 @@ export class PagosApi {
         const data = await response.json();
 
         if (!response.ok) {
-            alert(data.message);
-            return null;
+            throw new Error(data.message);
         }
 
         return data;

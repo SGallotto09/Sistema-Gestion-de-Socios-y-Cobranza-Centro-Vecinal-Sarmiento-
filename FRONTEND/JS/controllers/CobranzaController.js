@@ -3,6 +3,7 @@ import { PagosApi } from "../api/PagosApi.js";
 import { LinkAccesoApi } from "../api/LinkAccesoApi.js";
 import { UserApi } from "../api/UsuariosApi.js";
 import { VisitaApi } from "../api/VisitaApi.js";
+import {mostrarModalExito, mostrarModalError} from "./ModalExitoYErrorController.js";
 
 document.addEventListener('DOMContentLoaded', iniciarCobranza);
 
@@ -24,6 +25,7 @@ function iniciarCobranza() {
     let txtBuscarSocio = document.getElementById('txtBuscarSocio');
     const btnBuscarSocio = document.getElementById('btnBuscarSocio');
     const txtSelectFiltro = document.getElementById('selectFiltro');
+    const h2BimestreActual = document.getElementById('h2BimestreActual');
 
     // TABLA
     const tbodySocios = document.getElementById('tbodySocios');
@@ -184,12 +186,15 @@ function iniciarCobranza() {
         }
 
         if (radioPagado.value !== estadoOriginalPago) {
-            let pago = await pagosApi.registerPago(idCuota);
-            if (pago !== null) {
-                alert(pago.message);
-            }
+            try {
+                const pago = await pagosApi.registerPago(idCuota);
 
-            cargarSocios();
+                mostrarModalExito('Pago actualizado', pago.message);
+
+                cargarSocios();
+            } catch (error) {
+                mostrarModalError('Error al actualizar el pago', error.message);
+            }
         }
 
         closeModal(modalEditarEstadoPagoSocio);
@@ -201,15 +206,20 @@ function iniciarCobranza() {
     });
 
     btnRegistrarVisita.addEventListener('click', async () => {
-        const visitaCreada = await visitaApi.createVisita(idCuota);
+        try {
+            const visitaCreada = await visitaApi.createVisita(idCuota);
 
-        alert(visitaCreada.message);
-        closeModal(modalRegistrarVisita);
+            mostrarModalExito("Visita registrada", visitaCreada.message);
+            closeModal(modalRegistrarVisita);
 
-        visitasCache.delete(idCuota);
+            visitasCache.delete(idCuota);
 
-        mostrarPagina();
-        crearPaginacion();
+            mostrarPagina();
+            crearPaginacion();
+
+        } catch (error) {
+            mostrarModalError("Error al registrar la visita", error.message);
+        }
     });
 
     btnGenerarLinkAcceso.addEventListener('click', async () => {
@@ -236,6 +246,10 @@ function iniciarCobranza() {
             promesaCarga
         ]);
 
+        if (!linkAcceso) {
+            return;
+        }
+
         datosLinkGenerado = linkAcceso;
 
         openModal(modalLinkGenerado);
@@ -246,22 +260,18 @@ function iniciarCobranza() {
     btnCopiar.addEventListener('click', async () => {
         try {
             await navigator.clipboard.writeText(txtToken.value);
-
-            alert('Link de acceso copiado correctamente.');
+            mostrarModalExito('Link copiado', 'El link de acceso se copió correctamente.');
         } catch (error) {
-            console.error('Error al copiar:', error);
-            alert('No se pudo copiar el token.');
+            mostrarModalError('Error al copiar', 'No se pudo copiar el link de acceso.');
         }
     });
 
     btnCopiarLink.addEventListener('click', async () => {
         try {
             await navigator.clipboard.writeText(txtToken.value);
-
-            alert('Link de acceso copiado correctamente.');
+            mostrarModalExito('Link copiado', 'El link de acceso se copió correctamente.');
         } catch (error) {
-            console.error('Error al copiar:', error);
-            alert('No se pudo copiar el token.');
+            mostrarModalError('Error al copiar', 'No se pudo copiar el link de acceso.');
         }
     });
 
@@ -524,15 +534,16 @@ function iniciarCobranza() {
     }
 
     async function generarLinkAcceso(_idCobrador, _duracionToken) {
-        const linkAcceso = await linkAccesoApi.registerLinkAcceso(_idCobrador, _duracionToken);
+        try {
+            const linkAcceso = await linkAccesoApi.registerLinkAcceso(_idCobrador, _duracionToken);
+            closeModal(modalLinkAcceso);
 
-        if (linkAcceso === null) {
-            alert(linkAcceso.message);
-            return;
+            return linkAcceso;
+
+        } catch (error) {
+            mostrarModalError("Error al generar el link", error.message);
+            return null;
         }
-
-        closeModal(modalLinkAcceso);
-        return linkAcceso;
     }
 
     function iniciarCarga() {
@@ -601,6 +612,32 @@ function iniciarCobranza() {
         return visitas;
     }
 
+    function obtenerBimestreActual() {
+        const fecha = new Date();
+
+        const meses = [
+            "Enero",
+            "Febrero",
+            "Marzo",
+            "Abril",
+            "Mayo",
+            "Junio",
+            "Julio",
+            "Agosto",
+            "Septiembre",
+            "Octubre",
+            "Noviembre",
+            "Diciembre"
+        ];
+
+        const mesActual = fecha.getMonth();
+
+        const mesProximo = (mesActual + 1) % 12;
+
+        h2BimestreActual.textContent = `Cobranza: ${meses[mesActual]} - ${meses[mesProximo]}`;
+    }
+
+    obtenerBimestreActual();
     cargarSocios();
     obtenerCantidadSocios();
 }
