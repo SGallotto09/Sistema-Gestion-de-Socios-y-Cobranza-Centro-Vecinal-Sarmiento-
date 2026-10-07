@@ -1,6 +1,7 @@
 import { SocioApi } from "../api/SociosApi.js";
 import { VisitaApi } from "../api/VisitaApi.js";
 import { PagosApi } from "../api/PagosApi.js";
+import {mostrarModalExito, mostrarModalError} from "./ModalExitoYErrorController.js";
 
 document.addEventListener('DOMContentLoaded', iniciarCobrador);
 
@@ -110,12 +111,13 @@ function iniciarCobrador() {
         }
 
         if (radioPagado.value !== estadoOriginalPago) {
-            let pago = await pagosApi.registerPago(idCuota);
-            if (pago !== null) {
-                alert(pago.message);
+            try {
+                const pago = await pagosApi.registerPago(idCuota);
+                mostrarModalExito('Pago actualizado', pago.message);
+                await cargarSocios();
+            } catch (error) {
+                mostrarModalError('Error al actualizar el pago', error.message);
             }
-
-            cargarSocios();
         }
 
         closeModal(modalEditarEstadoPagoSocio);
@@ -127,10 +129,14 @@ function iniciarCobrador() {
     });
 
     btnRegistrarVisita.addEventListener('click', async () => {
-        const visitaCreada = await visitaApi.createVisita(idCuota);
+        try {
+            const visitaCreada = await visitaApi.createVisita(idCuota);
+            mostrarModalExito('Visita registrada', visitaCreada.message);
 
-        alert(visitaCreada.message);
-        closeModal(modalRegistrarVisita);
+            closeModal(modalRegistrarVisita);
+        } catch (error) {
+            mostrarModalError('Error al registrar la visita', error.message);
+        }
     });
 
     botonesCancelar.forEach(boton => {
@@ -172,13 +178,34 @@ function iniciarCobrador() {
         ];
 
         const mesActual = fecha.getMonth();
-
         const mesProximo = (mesActual + 1) % 12;
-
         h2BimestreActual.textContent = `${meses[mesActual]} - ${meses[mesProximo]}`;
     }
 
     function compaginarSocios(sociosAMostrar) {
+        if (sociosAMostrar.length === 0) {
+            listaSocios.innerHTML = `
+                <div class="mensaje-sin-socios">
+                    <div class="sin-socios-contenido">
+
+                        <div class="sin-socios-icono">
+                            <i data-lucide="users-round"></i>
+                        </div>
+
+                        <h3>No hay socios registrados</h3>
+
+                        <p>
+                            Actualmente no hay socios para mostrar.
+                        </p>
+
+                    </div>
+                </div>
+            `;
+
+            lucide.createIcons();
+            return;
+        }
+        
         let filas = '';
 
         for (let i = 0; i < sociosAMostrar.length; i++) {
@@ -214,6 +241,8 @@ function iniciarCobrador() {
 
     async function cargarSocios() {
         socios = await socioApi.obtenerSociosCobranza();
+
+        socios = Array.isArray(socios) ? socios : [];
 
         const sociosImpresion = [...socios].sort((a, b) => {
             const comparacionBarrio = a.barrio.toLowerCase().localeCompare(b.barrio.toLowerCase());

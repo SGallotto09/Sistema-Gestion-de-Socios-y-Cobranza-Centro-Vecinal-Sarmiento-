@@ -30,8 +30,8 @@ function iniciarSocios() {
     const sociosPorPagina = 10;
 
     const contenedorPaginas = document.getElementById('contenedorPaginas');
-    const btnAnterior = document.getElementById("btnAnterior");
-    const btnSiguiente = document.getElementById("btnSiguiente");
+    const btnAnterior = document.getElementById('btnAnterior');
+    const btnSiguiente = document.getElementById('btnSiguiente');
     const tituloCantiadSocios = document.getElementById('tituloCantiadSocios');
 
     // FILTRO
@@ -82,6 +82,7 @@ function iniciarSocios() {
             closeModal(modalAltaSocio);
             limpiarCamposAltaSocio();
             await cargarSocios();
+            await obtenerCantidadSocios();
         } 
     });
 
@@ -278,9 +279,16 @@ function iniciarSocios() {
                 </tr>
             `;
 
+            tituloCantiadSocios.style.display = 'none';
+            btnAnterior.style.display = 'none';
+            btnSiguiente.style.display = 'none';
+
             lucide.createIcons();
             return;
         }
+        tituloCantiadSocios.style.display = 'flex';
+        btnAnterior.style.display = 'flex';
+        btnSiguiente.style.display = 'flex';
 
         let filas = "";
 
@@ -309,9 +317,7 @@ function iniciarSocios() {
     function crearPaginacion() {
         contenedorPaginas.innerHTML = "";
 
-        const totalPaginas = Math.ceil(
-            sociosFiltrados.length / sociosPorPagina
-        );
+        const totalPaginas = Math.ceil(sociosFiltrados.length / sociosPorPagina);
 
         function agregarBoton(numero) {
             const boton = document.createElement('button');

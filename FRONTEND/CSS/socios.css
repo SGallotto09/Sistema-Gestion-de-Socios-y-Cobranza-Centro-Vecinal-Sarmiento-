@@ -276,6 +276,12 @@ td {
     font-weight: 700;
 }
 
+#tituloCantiadSocios,
+#btnAnterior,
+#btnSiguiente {
+    display: none;
+}
+
 .modal_alta_socio,
 .modal_eliminar_socio {
     position: fixed;
@@ -543,9 +549,8 @@ td {
 }
 
 .modal_boton_eliminar {
-    background-color: var(--bg-delete);
-    color: var(--icon-delete);
-    border: 2px solid var(--icon-delete);
+    background-color: var(--icon-delete);
+    color: white;
     border-radius: 15px;
     overflow: hidden;
 }

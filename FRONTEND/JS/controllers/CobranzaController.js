@@ -336,9 +336,16 @@ function iniciarCobranza() {
                 </tr>
             `;
 
+            tituloCantiadSocios.style.display = 'none';
+            btnAnterior.style.display = 'none';
+            btnSiguiente.style.display = 'none';
+
             lucide.createIcons();
             return;
         }
+        tituloCantiadSocios.style.display = 'flex';
+        btnAnterior.style.display = 'flex';
+        btnSiguiente.style.display = 'flex';
 
         const cantidadesVisitas = await Promise.all(sociosPagina.map(
             socio => obtenerCantidadVisitasPorCuota(socio.idCuota)

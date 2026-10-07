@@ -252,6 +252,8 @@ td {
 .footer {
     grid-area: footer;
 
+    display: none;
+
     display: flex;
     justify-content: end;
     align-items: center;
@@ -292,6 +294,12 @@ td {
     color: var(--bg-input);
     border-radius: 10px;
     font-weight: 700;
+}
+
+#tituloCantiadSocios,
+#btnAnterior,
+#btnSiguiente {
+    display: none;
 }
 
 .modal_acciones_socio,
