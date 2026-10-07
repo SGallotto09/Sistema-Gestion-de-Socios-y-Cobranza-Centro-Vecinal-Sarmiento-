@@ -56,6 +56,28 @@ class CuotaModel {
         return $cuotasSinPagar;
     }
 
+    function getSociosConDosCuotasImpagas($conexion) {
+        $query = "WITH cuotas_vencidas AS (SELECT c.id, c.id_socio, c.estado, c.fecha_vencimiento,
+                    ROW_NUMBER() OVER (PARTITION BY c.id_socio ORDER BY c.fecha_vencimiento DESC) AS numero_cuota
+                FROM cuota c
+                WHERE c.fecha_vencimiento < CURDATE())
+
+                SELECT cv.id_socio FROM cuotas_vencidas cv INNER JOIN socio s ON s.id = cv.id_socio WHERE s.activo = 1
+                AND cv.numero_cuota <= 2 GROUP BY cv.id_socio HAVING COUNT(*) = 2 AND SUM(cv.estado = 'No Pagado') = 2";
+
+        $stmt = $conexion->prepare($query);
+
+        $stmt->execute();
+
+        $sociosConCuotasImpagas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!$sociosConCuotasImpagas) {
+            return null;
+        }
+
+        return $sociosConCuotasImpagas;
+    }
+
     function createCuotaSocio($conexion, $idSocio, $idPeriodoSocio) {
         $query = "INSERT INTO cuota (fecha_creacion, fecha_vencimiento, estado, id_socio, id_periodo)
                     VALUES (:fecha_creacion, :fecha_vencimiento, :estado, :id_socio, :id_periodo)";

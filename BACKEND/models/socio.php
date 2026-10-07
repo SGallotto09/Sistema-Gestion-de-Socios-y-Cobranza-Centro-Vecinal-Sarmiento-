@@ -213,6 +213,16 @@ class SocioModel {
 
         return true;
     }
+
+    function darDeBajaSocio($conexion, $idSocio) {
+        $sql = "UPDATE socio SET activo = 0 WHERE id = :id_socio";
+
+        $stmt = $conexion->prepare($sql);
+
+        $stmt->execute([
+            ':id_socio' => $idSocio
+        ]);
+    }
 }
 
 ?>
