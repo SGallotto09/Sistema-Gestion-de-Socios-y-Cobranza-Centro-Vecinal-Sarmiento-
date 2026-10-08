@@ -101,7 +101,7 @@ function iniciarCobranza() {
         openModal(modalLinkAcceso);
 
         if (cobradores === null) {
-            cargarCobradores();
+            await cargarCobradores();
         }
     });
 
@@ -189,9 +189,13 @@ function iniciarCobranza() {
             try {
                 const pago = await pagosApi.registerPago(idCuota);
 
-                mostrarModalExito('Pago actualizado', pago.message);
+                if (pago.message.includes('creado')) {
+                    mostrarModalExito('Pago registrado', pago.message);
+                } else {
+                    mostrarModalExito('Pago actualizado', pago.message);
+                }
 
-                cargarSocios();
+                await cargarSocios();
             } catch (error) {
                 mostrarModalError('Error al actualizar el pago', error.message);
             }

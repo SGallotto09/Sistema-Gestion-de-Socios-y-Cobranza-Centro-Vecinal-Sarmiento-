@@ -113,7 +113,13 @@ function iniciarCobrador() {
         if (radioPagado.value !== estadoOriginalPago) {
             try {
                 const pago = await pagosApi.registerPago(idCuota);
-                mostrarModalExito('Pago actualizado', pago.message);
+
+                if (pago.message.includes('creado')) {
+                    mostrarModalExito('Pago registrado', pago.message);
+                } else {
+                    mostrarModalExito('Pago actualizado', pago.message);
+                }
+                
                 await cargarSocios();
             } catch (error) {
                 mostrarModalError('Error al actualizar el pago', error.message);
