@@ -189,7 +189,7 @@ require_once '../../BACKEND/tasks/validarSesionIniciada.php'
                             <tr>
                                 <td>
                                     <p><b>Última actualización:</b></p>
-                                    <p>07/07/2026 08:43 hs</p>
+                                    <p>08/10/2026 15:50 hs</p>
                                 </td>
                             </tr>
 

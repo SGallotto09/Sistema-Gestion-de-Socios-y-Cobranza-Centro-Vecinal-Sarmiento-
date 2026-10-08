@@ -412,7 +412,7 @@ function iniciarCobranza() {
         }
 
         tbodySocios.innerHTML = filas;
-
+        tituloCantiadSocios.textContent = `Mostrando 1 a 10 de ${sociosFiltrados.length} socios`;
         lucide.createIcons();
     }
 
@@ -563,11 +563,6 @@ function iniciarCobranza() {
         crearPaginacion();
     }
 
-    async function obtenerCantidadSocios() {
-        let cantidadSocios = await socioApi.obtenerCantidadSociosCobranza();
-        tituloCantiadSocios.textContent = `Mostrando 1 a 10 de ${cantidadSocios.cantidad} socios`;
-    }
-
     async function generarLinkAcceso(_idCobrador, _duracionToken) {
         try {
             const linkAcceso = await linkAccesoApi.registerLinkAcceso(_idCobrador, _duracionToken);
@@ -674,5 +669,4 @@ function iniciarCobranza() {
 
     obtenerBimestreActual();
     cargarSocios();
-    obtenerCantidadSocios();
 }

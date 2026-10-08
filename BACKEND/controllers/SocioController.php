@@ -70,8 +70,7 @@ function getSociosController($socio, $conexion) {
     $accion = $_GET['accion'] ?? null;
 
     $resultado = match ($accion) {
-        'cantidadSocios'    => $socio->getCantidadSocios($conexion, null),
-        'cantidadCobranza'  => $socio->getCantidadSocios($conexion, 'cobranza'),
+        'cantidadSocios'    => $socio->getCantidadSocios($conexion),
         'nombreSocio'       => $socio->getSocioPorNombre($conexion),
         'cobranza'          => $socio->getSociosCobranza($conexion),
         'filtro'            => $socio->getSociosFiltro($conexion, $_GET['parametro'] ?? ''),

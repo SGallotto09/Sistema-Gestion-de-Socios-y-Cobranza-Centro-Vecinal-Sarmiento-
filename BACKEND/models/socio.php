@@ -21,6 +21,20 @@ class SocioModel {
         return $socios;
     }
 
+    function getCantidadSocios($conexion) {
+        $query = "SELECT COUNT(*) AS cantidad FROM socio AS s 
+                JOIN cuota AS c ON c.id_socio = s.id 
+                AND s.eliminado IS NULL";
+        
+        $stmt = $conexion->prepare($query);
+
+        $stmt->execute();
+
+        $cantidad = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $cantidad;
+    }
+
     function getSociosCobranza($conexion) {
         $querySocios = "SELECT s.id, s.nombre, s.apellido, s.dni, s.telefono, s.barrio, s.calle, s.altura, 
                         c.id AS idCuota, c.estado AS estadoCuota FROM socio AS s
@@ -59,34 +73,6 @@ class SocioModel {
         }
 
         return $socio;
-    }
-
-    function getCantidadSocios($conexion, $busqueda) {
-        if ($busqueda === 'cobranza') {
-            $query = "SELECT COUNT(DISTINCT s.id) AS cantidad FROM socio AS s 
-                    JOIN periodo AS pe ON s.id_periodo = pe.id 
-                    JOIN cuota AS c ON c.id_socio = s.id 
-                    AND s.eliminado IS NULL";
-            
-            $stmt = $conexion->prepare($query);
-
-            $stmt->execute();
-
-            $cantidad = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            return $cantidad;
-        }
-        else {
-            $query = "SELECT COUNT(*) AS cantidad FROM socio";
-
-            $stmt = $conexion->prepare($query);
-
-            $stmt->execute();
-
-            $cantidad = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            return $cantidad;
-        }
     }
 
     function getSociosFiltro($conexion, $parametro) {

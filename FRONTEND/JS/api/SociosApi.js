@@ -7,14 +7,6 @@ export class SocioApi {
         return socios;
     }
 
-    async obtenerCantidadSocios() {
-        const response = await fetch('/Proyecto/BACKEND/controllers/SocioController.php?accion=cantidadSocios');
-
-        const cantidadSocios = await response.json()
-        
-        return cantidadSocios;
-    }
-
     async obtenerSociosCobranza() {
         const response = await fetch('/Proyecto/BACKEND/controllers/SocioController.php?accion=cobranza');
 
@@ -28,8 +20,8 @@ export class SocioApi {
         return socios;
     }
 
-    async obtenerCantidadSociosCobranza() {
-        const response = await fetch('/Proyecto/BACKEND/controllers/SocioController.php?accion=cantidadCobranza');
+    async obtenerCantidadSocios() {
+        const response = await fetch('/Proyecto/BACKEND/controllers/SocioController.php?accion=cantidadSocios');
 
         const cantidadSocios = await response.json()
         

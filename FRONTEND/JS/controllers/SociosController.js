@@ -82,7 +82,6 @@ function iniciarSocios() {
             closeModal(modalAltaSocio);
             limpiarCamposAltaSocio();
             await cargarSocios();
-            await obtenerCantidadSocios();
         } 
     });
 
@@ -102,7 +101,6 @@ function iniciarSocios() {
             closeModal(modalEliminarSocio);
 
             await cargarSocios();
-            await obtenerCantidadSocios();
             idEliminar = '';
         }
     });
@@ -174,11 +172,6 @@ function iniciarSocios() {
 
         mostrarPagina();
         crearPaginacion();
-    }
-
-    async function obtenerCantidadSocios() {
-        let cantidadSocios = await socioApi.obtenerCantidadSociosCobranza();
-        tituloCantiadSocios.textContent = `Mostrando 1 a 10 de ${cantidadSocios.cantidad} socios`
     }
 
     async function darDeAltaSocio() {
@@ -311,6 +304,7 @@ function iniciarSocios() {
                 </tr>`;
         }
         tbodySocios.innerHTML = filas;
+        tituloCantiadSocios.textContent = `Mostrando 1 a 10 de ${sociosFiltrados.length} socios`;
         lucide.createIcons();
     }
 
@@ -598,5 +592,4 @@ function iniciarSocios() {
     }
 
     cargarSocios();
-    obtenerCantidadSocios();
 }

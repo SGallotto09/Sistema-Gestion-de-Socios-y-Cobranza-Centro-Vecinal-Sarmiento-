@@ -250,7 +250,7 @@ function iniciarCobrador() {
 
         socios = Array.isArray(socios) ? socios : [];
 
-        const sociosImpresion = [...socios].sort((a, b) => {
+        const sociosImpresion = socios.filter(socio => Number(socio.estadoCuota === 0)).sort((a, b) => {
             const comparacionBarrio = a.barrio.toLowerCase().localeCompare(b.barrio.toLowerCase());
 
             if (comparacionBarrio !== 0) {
@@ -266,12 +266,8 @@ function iniciarCobrador() {
             return Number(a.altura) - Number(b.altura);
         });
 
+        txtCantidadSocios.textContent = sociosImpresion.length + ' socios:';
         compaginarSocios(sociosImpresion);
-    }
-
-    async function obtenerCantidadSocios() {
-        let cantidadSocios = await socioApi.obtenerCantidadSociosCobranza();
-        txtCantidadSocios.textContent = cantidadSocios.cantidad + ' socios:';
     }
 
     async function obtenerCantidadVisitasPorCuota(_idCuota) {

@@ -10,7 +10,7 @@ async function cargarSocios() {
 
         tbody.innerHTML = "";
 
-        const sociosImpresion = [...socios].sort((a, b) => {
+        const sociosImpresion = socios.filter(socio => Number(socio.estadoCuota) === 0).sort((a, b) => {
             const comparacionBarrio = a.barrio.toLowerCase().localeCompare(b.barrio.toLowerCase());
 
             if (comparacionBarrio !== 0) {

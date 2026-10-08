@@ -72,7 +72,7 @@ function iniciarDashboard() {
     }
 
     async function obtenerCantidadSocios() {
-        cantidadSocios = await sociosApi.obtenerCantidadSociosCobranza();
+        cantidadSocios = await sociosApi.obtenerCantidadSocios();
         h2TotalSocios.textContent = cantidadSocios.cantidad;
     }
 
